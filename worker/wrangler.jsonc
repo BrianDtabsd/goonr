@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "shopsite-stripe-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-04-27",
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "vars": {
+    // Public (per-deploy) — set per client. Leave DESTINATION_ACCOUNT empty to disable Connect.
+    "STRIPE_CONNECT_DESTINATION_ACCOUNT": "",
+    "STRIPE_CONNECT_APPLICATION_FEE_PERCENT": "",
+    "STRIPE_CONNECT_APPLICATION_FEE_AMOUNT": "",
+    // Comma-separated allowed origins for CORS, e.g. "https://client.com,https://www.client.com".
+    // Empty = allow all (only do this in dev).
+    "ALLOWED_ORIGINS": ""
+  }
+  // Secrets (NEVER inline here):
+  //   wrangler secret put STRIPE_SECRET_KEY
+  //
+  // Per-client deploy pattern:
+  //   1) cp wrangler.jsonc wrangler.<client>.jsonc, edit `name` and `vars` for that client.
+  //   2) wrangler deploy --config wrangler.<client>.jsonc
+  //   3) wrangler secret put STRIPE_SECRET_KEY --config wrangler.<client>.jsonc
+  //   4) Set the client site's VITE_STRIPE_API_BASE to the deployed Worker URL.
+}

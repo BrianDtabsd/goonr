@@ -29,20 +29,37 @@ import { DSAppShell, DSThemeProvider } from './components/ds';
 
 ---
 
-## 2. Calm palette — non-negotiable
+## 2. Brand palette — your four colors (canonical)
 
-### Allowed colors
+```css
+:root {
+  --color-1: #1B1B1B;  /* ink — primary text, dark buttons */
+  --color-2: #434A53;  /* slate — secondary text, borders, labels */
+  --color-3: #FF5722;  /* ember — accent CTA, highlights (sparingly) */
+  --color-4: #EEEEEE;  /* mist — workplace page background */
+}
+```
+
+Import via `brand` from `designTokens.js`:
+
+| Token | Hex | Use |
+|-------|-----|-----|
+| `brand.ink` | `#1B1B1B` | Headings, primary buttons |
+| `brand.slate` | `#434A53` | Body secondary, borders, labels |
+| `brand.ember` | `#FF5722` | "+ New Analysis" accent button, links, focus ring |
+| `brand.mist` | `#EEEEEE` | Workplace page background |
+
+**Ember rule:** Use for one primary action per view (e.g. New Analysis). Do not use for errors or large backgrounds.
+
+### Secondary accents (supporting)
 
 | Name | Hex | Use |
 |------|-----|-----|
-| Charcoal | `#1A1A1A` | Primary text, primary buttons (light mode) |
-| Cream | `#F4F1EA` | Workplace page background |
 | Warm white | `#FFFFFF` | Cards, inputs (light mode) |
-| Stone | `#78716C` | Muted text, labels |
-| Sage | `#78BDA7` | Active status, online indicators, success |
-| Ice blue | `#C8E6EA` | Info, focus rings, glass glow (dark mode) |
-| Pale gold | `#E8DFA8` | Primary CTA (dark mode) |
-| Sand | `#C4A574` | Warning, pending, in-progress |
+| Sage | `#78BDA7` | Active/online status dots |
+| Ice blue | `#C8E6EA` | Info, glass glow (dark mode) |
+| Pale gold | `#E8DFA8` | Primary CTA (dark case file mode) |
+| Sand | `#C4A574` | Warning, pending |
 | Clay | `#C4886A` | Needs attention (NOT red) |
 | Dark page | `#0D0D0D` | Case file background |
 

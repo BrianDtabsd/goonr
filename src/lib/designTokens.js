@@ -30,15 +30,32 @@ export const themes = {
 };
 
 // ---------------------------------------------------------------------------
-// 2. COLOR PALETTE (calm — no corporate blue / red / neon)
+// 2. BRAND PALETTE (user-defined — canonical)
+// ---------------------------------------------------------------------------
+
+/** Your four brand colors. Map all UI through these before using secondary accents. */
+export const brand = {
+  ink: '#1B1B1B',       // --color-1: primary text, dark buttons
+  slate: '#434A53',     // --color-2: secondary text, borders, labels
+  ember: '#FF5722',     // --color-3: accent CTA, highlights (use sparingly)
+  mist: '#EEEEEE',      // --color-4: page background, light surfaces
+  emberHover: '#E64A19',
+  emberSubtle: 'rgba(255, 87, 34, 0.12)',
+  emberBorder: 'rgba(255, 87, 34, 0.28)',
+};
+
+// ---------------------------------------------------------------------------
+// 3. COLOR PALETTE (calm — no corporate blue / red / neon)
 // ---------------------------------------------------------------------------
 
 export const palette = {
-  /** Shared brand neutrals */
+  brand,
+
+  /** Shared brand neutrals (aligned to brand.ink) */
   charcoal: {
-    DEFAULT: '#1A1A1A',
+    DEFAULT: '#1B1B1B',
     soft: '#2A2A2A',
-    muted: '#3D3D3D',
+    muted: '#434A53',
   },
   cream: {
     DEFAULT: '#F4F1EA',
@@ -80,23 +97,25 @@ export const palette = {
   },
 
   workplace: {
-    page: '#F4F1EA',
-    sidebar: '#EAE6DE',
+    page: '#EEEEEE',
+    sidebar: '#E4E4E4',
     surface: '#FFFFFF',
-    surfaceRaised: '#FAFAF8',
-    border: '#E5E0D8',
-    borderStrong: '#D6D0C6',
-    text: '#1A1A1A',
-    textSecondary: '#57534E',
-    textMuted: '#78716C',
-    textLabel: '#9C958D',
-    navActive: '#DDD8CE',
-    navHover: '#E8E4DC',
-    primary: '#1A1A1A',
+    surfaceRaised: '#F8F8F8',
+    border: 'rgba(67, 74, 83, 0.18)',
+    borderStrong: 'rgba(67, 74, 83, 0.28)',
+    text: '#1B1B1B',
+    textSecondary: '#434A53',
+    textMuted: '#5C636B',
+    textLabel: '#434A53',
+    navActive: '#D8D8D8',
+    navHover: '#E0E0E0',
+    primary: '#1B1B1B',
     primaryHover: '#2A2A2A',
-    focus: 'rgba(120, 189, 167, 0.45)',
-    shadow: '0 4px 24px rgba(26, 26, 26, 0.06)',
-    shadowHover: '0 8px 32px rgba(26, 26, 26, 0.1)',
+    accent: '#FF5722',
+    accentHover: '#E64A19',
+    focus: 'rgba(255, 87, 34, 0.35)',
+    shadow: '0 4px 24px rgba(27, 27, 27, 0.06)',
+    shadowHover: '0 8px 32px rgba(27, 27, 27, 0.1)',
   },
 
   casefile: {
@@ -167,16 +186,23 @@ export const semantic = {
   },
 };
 
-/** Six categorical accent names — ONLY these in data/config */
-export const accentNames = ['charcoal', 'sage', 'ice', 'gold', 'sand', 'stone'];
+/** Categorical accent names — ONLY these in data/config */
+export const accentNames = ['charcoal', 'ember', 'sage', 'ice', 'gold', 'sand', 'stone'];
 
 export const accents = {
   charcoal: {
-    text: 'text-[#1A1A1A] dark:text-stone-200',
-    bg: 'bg-[#1A1A1A]/8',
-    border: 'border-[#1A1A1A]/15',
-    dot: 'bg-[#1A1A1A]',
-    pill: 'bg-[#1A1A1A]/8 text-[#1A1A1A] border-[#1A1A1A]/15',
+    text: 'text-[#1B1B1B] dark:text-stone-200',
+    bg: 'bg-[#1B1B1B]/8',
+    border: 'border-[#1B1B1B]/15',
+    dot: 'bg-[#1B1B1B]',
+    pill: 'bg-[#1B1B1B]/8 text-[#1B1B1B] border-[#1B1B1B]/15',
+  },
+  ember: {
+    text: 'text-[#FF5722]',
+    bg: 'bg-[#FF5722]/12',
+    border: 'border-[#FF5722]/28',
+    dot: 'bg-[#FF5722]',
+    pill: 'bg-[#FF5722]/12 text-[#E64A19] border-[#FF5722]/28',
   },
   sage: {
     text: 'text-[#78BDA7]',
@@ -359,11 +385,13 @@ export const element = {
 
   button: {
     primaryWorkplace:
-      'inline-flex items-center justify-center gap-2 rounded-xl bg-[#1A1A1A] px-5 py-2.5 text-sm font-medium text-white transition-all duration-250 hover:bg-[#2A2A2A] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#78BDA7]/40',
+      'inline-flex items-center justify-center gap-2 rounded-xl bg-[#1B1B1B] px-5 py-2.5 text-sm font-medium text-white transition-all duration-250 hover:bg-[#2A2A2A] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5722]/35',
+    accentWorkplace:
+      'inline-flex items-center justify-center gap-2 rounded-xl bg-[#FF5722] px-5 py-2.5 text-sm font-medium text-white transition-all duration-250 hover:bg-[#E64A19] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5722]/40',
     secondaryWorkplace:
-      'inline-flex items-center justify-center gap-2 rounded-xl border border-[#1A1A1A]/20 bg-transparent px-5 py-2.5 text-sm font-medium text-[#1A1A1A] transition-all duration-250 hover:bg-[#1A1A1A]/5 hover:-translate-y-0.5 active:scale-[0.98]',
+      'inline-flex items-center justify-center gap-2 rounded-xl border border-[#434A53]/25 bg-transparent px-5 py-2.5 text-sm font-medium text-[#1B1B1B] transition-all duration-250 hover:bg-[#1B1B1B]/5 hover:-translate-y-0.5 active:scale-[0.98]',
     ghostWorkplace:
-      'inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-stone-600 transition-colors hover:bg-stone-200/50 hover:text-[#1A1A1A]',
+      'inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-[#434A53] transition-colors hover:bg-[#434A53]/10 hover:text-[#1B1B1B]',
     primaryCasefile:
       'inline-flex items-center justify-center gap-2 rounded-xl bg-[#E8DFA8] px-5 py-2.5 text-sm font-medium text-[#1A1A1A] transition-all duration-250 hover:bg-[#D9CE9E] hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(232,223,168,0.15)] active:scale-[0.98]',
     secondaryCasefile:
@@ -376,8 +404,8 @@ export const element = {
 
   card: {
     workplace:
-      'rounded-2xl border border-[#E5E0D8] bg-white p-6 transition-all duration-250 hover:-translate-y-0.5 shadow-[0_4px_24px_rgba(26,26,26,0.06)] hover:shadow-[0_8px_32px_rgba(26,26,26,0.1)]',
-    workplaceFlat: 'rounded-2xl border border-[#E5E0D8] bg-white p-6',
+      'rounded-2xl border border-[#434A53]/15 bg-white p-6 transition-all duration-250 hover:-translate-y-0.5 shadow-[0_4px_24px_rgba(27,27,27,0.06)] hover:shadow-[0_8px_32px_rgba(27,27,27,0.1)]',
+    workplaceFlat: 'rounded-2xl border border-[#434A53]/15 bg-white p-6',
     casefile:
       'rounded-2xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl p-6 transition-all duration-250',
     casefileGlow:
@@ -385,9 +413,9 @@ export const element = {
     stat: 'rounded-2xl border border-[#E5E0D8] bg-white p-5 lg:p-6',
   },
 
-  input: {
+    input: {
     workplace:
-      'w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-3 text-sm text-[#1A1A1A] placeholder:text-stone-400 transition-colors focus:outline-none focus:border-[#78BDA7]/50 focus:ring-2 focus:ring-[#78BDA7]/20',
+      'w-full rounded-xl border border-[#434A53]/20 bg-white px-4 py-3 text-sm text-[#1B1B1B] placeholder:text-[#434A53]/60 transition-colors focus:outline-none focus:border-[#FF5722]/45 focus:ring-2 focus:ring-[#FF5722]/15',
     casefile:
       'w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-stone-100 placeholder:text-stone-500 backdrop-blur-sm transition-colors focus:outline-none focus:border-[#C8E6EA]/30 focus:ring-2 focus:ring-[#C8E6EA]/15',
     label: 'block font-mono text-[11px] uppercase tracking-[0.14em] text-stone-500 mb-2',
@@ -398,30 +426,30 @@ export const element = {
   sidebar: {
     shell: 'flex h-full flex-col',
     item: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-stone-600 transition-all duration-200 hover:bg-stone-200/40',
-    itemActive: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium bg-[#DDD8CE] text-[#1A1A1A]',
+    itemActive: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium bg-[#D8D8D8] text-[#1B1B1B]',
     itemActiveCasefile: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium bg-white/[0.08] text-stone-100',
     sectionLabel: 'px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-stone-400',
     statusDot: 'w-2 h-2 rounded-full bg-[#78BDA7]',
   },
 
   tabs: {
-    listWorkplace: 'inline-flex items-center gap-1 rounded-xl border border-[#E5E0D8] bg-[#EDE9E1]/60 p-1',
-    tabWorkplace: 'rounded-lg px-4 py-2 text-sm text-stone-500 transition-all duration-200 hover:text-[#1A1A1A]',
-    tabActiveWorkplace: 'rounded-lg px-4 py-2 text-sm font-medium bg-white text-[#1A1A1A] shadow-sm',
+    listWorkplace: 'inline-flex items-center gap-1 rounded-xl border border-[#434A53]/15 bg-[#E4E4E4]/80 p-1',
+    tabWorkplace: 'rounded-lg px-4 py-2 text-sm text-[#434A53] transition-all duration-200 hover:text-[#1B1B1B]',
+    tabActiveWorkplace: 'rounded-lg px-4 py-2 text-sm font-medium bg-white text-[#1B1B1B] shadow-sm',
     listCasefile: 'inline-flex items-center gap-1 rounded-xl border border-white/10 bg-white/[0.03] p-1',
     tabCasefile: 'rounded-lg px-4 py-2 text-sm text-stone-500 transition-all duration-200 hover:text-stone-200',
     tabActiveCasefile: 'rounded-lg px-4 py-2 text-sm font-medium bg-white/10 text-stone-100',
   },
 
   table: {
-    wrapperWorkplace: 'rounded-2xl border border-[#E5E0D8] bg-white overflow-hidden',
+    wrapperWorkplace: 'rounded-2xl border border-[#434A53]/15 bg-white overflow-hidden',
     wrapperCasefile: 'rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl overflow-hidden',
     th: 'px-5 py-3 text-left font-mono text-[10px] uppercase tracking-[0.14em] text-stone-400',
     td: 'px-5 py-3.5 text-sm text-stone-700',
     tdCasefile: 'px-5 py-3.5 text-sm text-stone-300',
     trHover: 'transition-colors hover:bg-stone-50',
     trHoverCasefile: 'transition-colors hover:bg-white/[0.03]',
-    divider: 'divide-y divide-[#E5E0D8]',
+    divider: 'divide-y divide-[#434A53]/10',
     dividerCasefile: 'divide-y divide-white/[0.05]',
   },
 
@@ -452,13 +480,13 @@ export const element = {
 
   fileChip: {
     workplace:
-      'inline-flex items-center gap-2 rounded-xl border border-[#E5E0D8] bg-[#FAFAF8] px-3 py-2 text-sm text-stone-700',
+      'inline-flex items-center gap-2 rounded-xl border border-[#434A53]/15 bg-[#F8F8F8] px-3 py-2 text-sm text-[#434A53]',
     casefile:
       'inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-stone-300',
   },
 
   statCard: {
-    value: 'text-4xl font-semibold tracking-[-0.03em] leading-none tabular-nums text-[#1A1A1A]',
+    value: 'text-4xl font-semibold tracking-[-0.03em] leading-none tabular-nums text-[#1B1B1B]',
     valueCasefile: 'text-4xl font-semibold tracking-[-0.03em] leading-none tabular-nums text-stone-100',
     label: 'font-mono text-[10px] uppercase tracking-[0.14em] text-stone-400 mt-2',
     icon: 'text-stone-300',
@@ -583,6 +611,10 @@ export function themeElement(theme, key) {
 /** CSS variables for each theme — applied via class on root element */
 export const cssVariables = {
   workplace: {
+    '--color-1': brand.ink,
+    '--color-2': brand.slate,
+    '--color-3': brand.ember,
+    '--color-4': brand.mist,
     '--ds-page': palette.workplace.page,
     '--ds-sidebar': palette.workplace.sidebar,
     '--ds-surface': palette.workplace.surface,

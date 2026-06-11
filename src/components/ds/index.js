@@ -1,6 +1,6 @@
 export { DSThemeProvider, useDSTheme } from './ThemeProvider';
 export { default as DSAppShell } from './DSAppShell';
-export { DSSidebar, DSSidebarItem } from './DSSidebar';
+export { DSSidebar, DSSidebarItem, DSSidebarProfile } from './DSSidebar';
 export { default as DSButton } from './DSButton';
 export { default as DSCard } from './DSCard';
 export { default as DSStatCard } from './DSStatCard';

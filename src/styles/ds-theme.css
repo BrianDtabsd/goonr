@@ -5,24 +5,30 @@
 
 /* ─── Workplace Light ─────────────────────────────────────────────────────── */
 .ds-theme-workplace {
-  --ds-page: #F4F1EA;
-  --ds-sidebar: #EAE6DE;
+  --color-1: #1B1B1B;
+  --color-2: #434A53;
+  --color-3: #FF5722;
+  --color-4: #EEEEEE;
+  --ds-page: #EEEEEE;
+  --ds-sidebar: #E4E4E4;
   --ds-surface: #FFFFFF;
-  --ds-surface-raised: #FAFAF8;
-  --ds-border: #E5E0D8;
-  --ds-border-strong: #D6D0C6;
-  --ds-text: #1A1A1A;
-  --ds-text-secondary: #57534E;
-  --ds-text-muted: #78716C;
-  --ds-text-label: #9C958D;
-  --ds-primary: #1A1A1A;
+  --ds-surface-raised: #F8F8F8;
+  --ds-border: rgba(67, 74, 83, 0.18);
+  --ds-border-strong: rgba(67, 74, 83, 0.28);
+  --ds-text: #1B1B1B;
+  --ds-text-secondary: #434A53;
+  --ds-text-muted: #5C636B;
+  --ds-text-label: #434A53;
+  --ds-primary: #1B1B1B;
   --ds-primary-hover: #2A2A2A;
-  --ds-accent: #78BDA7;
+  --ds-accent: #FF5722;
+  --ds-accent-hover: #E64A19;
+  --ds-accent-sage: #78BDA7;
   --ds-accent-ice: #C8E6EA;
   --ds-accent-gold: #E8DFA8;
-  --ds-nav-active: #DDD8CE;
-  --ds-nav-hover: #E8E4DC;
-  --ds-focus: rgba(120, 189, 167, 0.45);
+  --ds-nav-active: #D8D8D8;
+  --ds-nav-hover: #E0E0E0;
+  --ds-focus: rgba(255, 87, 34, 0.35);
   --ds-shadow: 0 4px 24px rgba(26, 26, 26, 0.06);
   --ds-shadow-hover: 0 8px 32px rgba(26, 26, 26, 0.1);
   --ds-radius-card: 1rem;

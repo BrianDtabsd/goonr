@@ -1,6 +1,6 @@
 # DocuMind CMS Design System
 
-> **Authoritative decision record:** [`DESIGN_DECISIONS.md`](./DESIGN_DECISIONS.md) — every component choice you made, with IDs.  
+> **Authoritative decision record:** [`DESIGN_DECISIONS.md`](./DESIGN_DECISIONS.md) — every component choice you made, with `DF-xxx` IDs (same style as your data field registry).  
 > **Machine-readable:** `src/lib/designDecisions.js`  
 > **Tokens:** `src/lib/designTokens.js` · **Components:** `src/components/ds/` · **Brand:** `src/config/caseAppMeta.js`
 

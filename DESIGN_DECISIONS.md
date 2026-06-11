@@ -19,7 +19,20 @@ Every visual decision for the case management app lives in **this document**. An
 3. Use components from `src/components/ds/` — never restyle from scratch  
 4. If something is **not listed here** → **stop and ask you** — do not guess  
 
-Each decision has an ID (`DC-xxx`) for traceability.
+Each decision has an ID (`DF-xxx`) for traceability — same numbering style as your data field registry (e.g. `DF-012`).
+
+---
+
+## ID numbering (`DF-xxx`)
+
+Matches your **data field registry** format across projects.
+
+| Range | Category | Examples |
+|-------|----------|----------|
+| `DF-001` – `DF-099` | Foundation (brand, color, type, motion) | `DF-003` brand colors · `DF-012` status colors |
+| `DF-100` – `DF-199` | Components (buttons, cards, inputs) | `DF-102` button · `DF-106` case header |
+
+Always three digits with leading zeros. New decisions take the next free ID in the right range.
 
 ---
 
@@ -27,22 +40,22 @@ Each decision has an ID (`DC-xxx`) for traceability.
 
 | ID | Your decision | Value / rule |
 |----|---------------|--------------|
-| **DC-001** | Product name | **DocuMind cms** |
-| **DC-002** | Two themes | **Workplace Light** (lists, forms, dashboard) + **Case File Dark Glass** (case detail) |
-| **DC-003** | Brand colors (you provided) | `#1B1B1B` ink · `#434A53` slate · `#FF5722` ember · `#EEEEEE` mist |
-| **DC-004** | Calm accents (you approved) | Sage `#78BDA7` · Ice `#C8E6EA` · Gold `#E8DFA8` · Sand `#C4A574` · Clay `#C4886A` |
-| **DC-005** | Forbidden | No corporate blue, red, neon green, purple gradients, JetBrains Mono, invented branding |
-| **DC-006** | Typography | **Inter only** · 16px body · line-height 1.65 · one H1 per view |
-| **DC-007** | Spacing | Generous — 44px touch targets · 24px card padding · 240px sidebar |
-| **DC-008** | Corners | Rounded modern — 12px inputs/buttons · 16px cards · never sharp 4px |
-| **DC-009** | Shadows | Soft only — no harsh drop shadows |
-| **DC-010** | Motion | Hover lift + press bounce **OK** · no flash, no infinite pulse |
-| **DC-011** | Icons | Solar set via iconify only |
-| **DC-012** | Status colors | See [Domain mappings](#domain-mappings) — no ad-hoc status colors |
+| **DF-001** | Product name | **DocuMind cms** |
+| **DF-002** | Two themes | **Workplace Light** (lists, forms, dashboard) + **Case File Dark Glass** (case detail) |
+| **DF-003** | Brand colors (you provided) | `#1B1B1B` ink · `#434A53` slate · `#FF5722` ember · `#EEEEEE` mist |
+| **DF-004** | Calm accents (you approved) | Sage `#78BDA7` · Ice `#C8E6EA` · Gold `#E8DFA8` · Sand `#C4A574` · Clay `#C4886A` |
+| **DF-005** | Forbidden | No corporate blue, red, neon green, purple gradients, JetBrains Mono, invented branding |
+| **DF-006** | Typography | **Inter only** · 16px body · line-height 1.65 · one H1 per view |
+| **DF-007** | Spacing | Generous — 44px touch targets · 24px card padding · 240px sidebar |
+| **DF-008** | Corners | Rounded modern — 12px inputs/buttons · 16px cards · never sharp 4px |
+| **DF-009** | Shadows | Soft only — no harsh drop shadows |
+| **DF-010** | Motion | Hover lift + press bounce **OK** · no flash, no infinite pulse |
+| **DF-011** | Icons | Solar set via iconify only |
+| **DF-012** | Status colors | See [Domain mappings](#domain-mappings) — no ad-hoc status colors |
 
 ---
 
-## DC-003 — Brand colors (your four)
+## DF-003 — Brand colors (your four)
 
 ```css
 :root {
@@ -64,7 +77,7 @@ Each decision has an ID (`DC-xxx`) for traceability.
 
 ---
 
-## DC-004 — Calm accents (you approved)
+## DF-004 — Calm accents (you approved)
 
 | Name | Hex | Use |
 |------|-----|-----|
@@ -77,7 +90,7 @@ Each decision has an ID (`DC-xxx`) for traceability.
 
 ---
 
-## DC-005 — Forbidden (you said no to these)
+## DF-005 — Forbidden (you said no to these)
 
 | Category | Forbidden |
 |----------|-----------|
@@ -89,7 +102,7 @@ Each decision has an ID (`DC-xxx`) for traceability.
 
 ---
 
-## DC-006 — Typography (your ADHD rules)
+## DF-006 — Typography (your ADHD rules)
 
 | Rule | Your decision |
 |------|---------------|
@@ -103,7 +116,7 @@ Each decision has an ID (`DC-xxx`) for traceability.
 
 ---
 
-## DC-007 — Spacing (your generous layout rule)
+## DF-007 — Spacing (your generous layout rule)
 
 | Token | Value |
 |-------|-------|
@@ -116,7 +129,7 @@ Each decision has an ID (`DC-xxx`) for traceability.
 
 ---
 
-## DC-010 — Motion (you said bounces are OK)
+## DF-010 — Motion (you said bounces are OK)
 
 | State | Your decision |
 |-------|---------------|
@@ -135,7 +148,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-100 — App shell (`DSAppShell`)
+## DF-100 — App shell (`DSAppShell`)
 
 | Property | Your decision |
 |----------|---------------|
@@ -145,7 +158,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-101 — Sidebar (`DSSidebar`)
+## DF-101 — Sidebar (`DSSidebar`)
 
 ### Workplace theme
 
@@ -171,7 +184,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-102 — Button (`DSButton`)
+## DF-102 — Button (`DSButton`)
 
 ### Sizes
 
@@ -210,7 +223,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-103 — Card (`DSCard`)
+## DF-103 — Card (`DSCard`)
 
 | Property | Workplace | Case file |
 |----------|-----------|-----------|
@@ -225,7 +238,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-104 — Stat card (`DSStatCard`)
+## DF-104 — Stat card (`DSStatCard`)
 
 | Element | Your decision |
 |---------|---------------|
@@ -236,7 +249,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-105 — Page header (`DSPageHeader`)
+## DF-105 — Page header (`DSPageHeader`)
 
 | Element | Your decision |
 |---------|---------------|
@@ -247,7 +260,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-106 — Case header (`DSCaseHeader`)
+## DF-106 — Case header (`DSCaseHeader`)
 
 | Element | Your decision |
 |---------|---------------|
@@ -261,7 +274,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-107 — Input (`DSInput`, `DSTextarea`)
+## DF-107 — Input (`DSInput`, `DSTextarea`)
 
 | Property | Workplace | Case file |
 |----------|-----------|-----------|
@@ -277,7 +290,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-108 — Tabs (`DSTabs`)
+## DF-108 — Tabs (`DSTabs`)
 
 | Property | Workplace | Case file |
 |----------|-----------|-----------|
@@ -288,7 +301,7 @@ Each component: **anatomy → variants → states → when to use → do not**.
 
 ---
 
-## DC-109 — Badge (`DSBadge`)
+## DF-109 — Badge (`DSBadge`)
 
 | Variant | Color | Use |
 |---------|-------|-----|
@@ -300,7 +313,7 @@ Shape: pill · 10px uppercase · always include dot for live status.
 
 ---
 
-## DC-110 — Table
+## DF-110 — Table
 
 | Element | Your decision |
 |---------|---------------|
@@ -312,7 +325,7 @@ Shape: pill · 10px uppercase · always include dot for live status.
 
 ---
 
-## DC-111 — Alert banner
+## DF-111 — Alert banner
 
 Case file pending data banner:
 - Ice tint background — informational, not alarming
@@ -323,7 +336,7 @@ Case file pending data banner:
 
 ---
 
-## DC-112 — Advisor panel (`DSAdvisorPanel`)
+## DF-112 — Advisor panel (`DSAdvisorPanel`)
 
 ### Floating pill (dashboard + case file)
 
@@ -344,7 +357,7 @@ Case file pending data banner:
 
 ---
 
-## DC-113 — File chip
+## DF-113 — File chip
 
 Upload list row: icon + filename + type/size + remove (×)  
 Background `#F8F8F8` workplace · 12px radius · slate border.
@@ -353,7 +366,7 @@ Background `#F8F8F8` workplace · 12px radius · slate border.
 
 ## Domain mappings
 
-### Case status → color (DC-012)
+### Case status → color (DF-012)
 
 | Status | Accent | Never use |
 |--------|--------|-----------|

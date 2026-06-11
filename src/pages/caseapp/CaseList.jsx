@@ -4,12 +4,13 @@ import { DSPageHeader, DSButton } from '../../components/ds';
 import { element, icons, resolveCaseStatus, statusChipClasses } from '../../lib/designTokens';
 import { cn } from '../../lib/cn';
 import { recentCases } from '../../content/caseAppMock';
+import { caseAppBreadcrumb } from '../../config/caseAppMeta';
 
 export default function CaseList() {
   return (
     <>
       <DSPageHeader
-        breadcrumb="core / cases"
+        breadcrumb={caseAppBreadcrumb('cases')}
         title="Cases"
         actions={
           <DSButton variant="accent">

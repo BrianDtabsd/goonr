@@ -15,6 +15,7 @@ import {
   recentCases,
   favoriteIncidents,
 } from '../../content/caseAppMock';
+import { caseAppBreadcrumb } from '../../config/caseAppMeta';
 
 export default function DecisionCenter() {
   const [actionTab, setActionTab] = useState('Automate Process');
@@ -22,7 +23,7 @@ export default function DecisionCenter() {
   return (
     <>
       <DSPageHeader
-        breadcrumb="core / dashboard"
+        breadcrumb={caseAppBreadcrumb('dashboard')}
         title="Decision Center"
         actions={
           <>

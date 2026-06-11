@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { DSSidebar, DSSidebarItem, DSSidebarProfile } from '../ds/DSSidebar';
 import { icons } from '../../lib/designTokens';
+import { getCaseAppMeta } from '../../config/caseAppMeta';
 
 const navItems = [
   { to: '/app', label: 'Mission Control', icon: icons.nav.dashboard, end: true },
@@ -22,10 +23,11 @@ function isActive(pathname, to, end) {
 
 export default function AppSidebar() {
   const { pathname } = useLocation();
+  const { brandName } = getCaseAppMeta();
 
   return (
     <DSSidebar
-      brand="GAQO"
+      brand={brandName}
       status="Inference Active"
       footer={
         <DSSidebarProfile name="Brian Onufrejow" role="Super Admin" initials="BO" />

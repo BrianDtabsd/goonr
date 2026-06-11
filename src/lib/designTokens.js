@@ -1,5 +1,5 @@
 /**
- * GAQO Workplace Design System — canonical tokens (case management UI).
+ * DocuMind CMS Design System — canonical tokens (case management UI).
  *
  * TWO THEMES:
  *   workplace  — light mode dashboard (Decision Center, Analysis, lists)

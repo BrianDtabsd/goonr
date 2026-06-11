@@ -15,6 +15,7 @@ import {
   analysisArtifacts,
   advisorLog,
 } from '../../content/caseAppMock';
+import { caseAppBreadcrumb } from '../../config/caseAppMeta';
 
 export default function Analysis() {
   const [form, setForm] = useState(analysisDefaults);
@@ -28,7 +29,7 @@ export default function Analysis() {
     <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1fr_340px]">
       <div>
         <DSPageHeader
-          breadcrumb="core / advisor"
+          breadcrumb={caseAppBreadcrumb('advisor')}
           title="Analysis"
           actions={
             <>

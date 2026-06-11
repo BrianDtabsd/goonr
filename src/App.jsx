@@ -31,12 +31,12 @@ function AppRoutes() {
         <Route path="analysis" element={<Analysis />} />
         <Route path="cases" element={<CaseList />} />
         <Route path="cases/:caseId" element={<CaseFileDetail />} />
-        <Route path="incidents" element={<PlaceholderPage title="Incidents" breadcrumb="core / incidents" />} />
-        <Route path="decisions" element={<PlaceholderPage title="Decisions" breadcrumb="core / decisions" />} />
-        <Route path="people" element={<PlaceholderPage title="People" breadcrumb="core / people" />} />
-        <Route path="evidence" element={<PlaceholderPage title="Evidence" breadcrumb="core / evidence" />} />
-        <Route path="reports" element={<PlaceholderPage title="Reports" breadcrumb="core / reports" />} />
-        <Route path="settings" element={<PlaceholderPage title="Settings" breadcrumb="core / settings" />} />
+        <Route path="incidents" element={<PlaceholderPage title="Incidents" section="incidents" />} />
+        <Route path="decisions" element={<PlaceholderPage title="Decisions" section="decisions" />} />
+        <Route path="people" element={<PlaceholderPage title="People" section="people" />} />
+        <Route path="evidence" element={<PlaceholderPage title="Evidence" section="evidence" />} />
+        <Route path="reports" element={<PlaceholderPage title="Reports" section="reports" />} />
+        <Route path="settings" element={<PlaceholderPage title="Settings" section="settings" />} />
       </Route>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />

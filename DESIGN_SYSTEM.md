@@ -1,12 +1,13 @@
-# GAQO Workplace Design System
+# DocuMind CMS Design System
 
-**Version:** 2.1  
-**Based on:** GAQO marketing site + your workplace UI references (light) + case file glass UI (dark) + your brand colors  
+**Brand:** DocuMind cms  
+**Config:** `src/config/caseAppMeta.js` (override via `VITE_CASE_APP_BRAND_NAME`)  
+**Version:** 2.2  
 **Tokens:** `src/lib/designTokens.js`  
 **Components:** `src/components/ds/`  
 **Theme CSS:** `src/styles/ds-theme.css`
 
-Hand this document + the `ds/` folder to any agent building the case management spine pipeline frontend. All visual decisions are made. Do not invent alternatives.
+Hand this document + the `ds/` folder to any agent building the case management spine pipeline frontend. All visual decisions are made. Do not invent alternative branding or fonts.
 
 ---
 
@@ -188,7 +189,7 @@ import { icons } from './lib/designTokens';
 <DSAppShell
   theme="workplace"
   sidebar={
-    <DSSidebar brand="GAQO" status="Inference Active">
+    <DSSidebar brand="DocuMind cms" status="Inference Active">
       <DSSidebarItem icon={icons.nav.dashboard} label="Mission Control" active />
       <DSSidebarItem icon={icons.nav.cases} label="Cases" />
       <DSSidebarItem icon={icons.nav.analysis} label="Analysis" />
@@ -197,7 +198,7 @@ import { icons } from './lib/designTokens';
   advisor={<DSAdvisorPanel floating title="Senior Advisor" />}
 >
   <DSPageHeader
-    breadcrumb="core / dashboard"
+    breadcrumb="documind cms / dashboard"
     title="Decision Center"
     actions={
       <>
@@ -429,6 +430,7 @@ Mock data (replace with API): `src/content/caseAppMock.js`
 | `src/components/ds/` | Primitive components |
 | `src/pages/caseapp/` | Scaffolded page templates |
 | `src/content/caseAppMock.js` | Mock data for templates |
-| `src/index.css` | Legacy marketing glass (GAQO site only) |
+| `src/config/caseAppMeta.js` | **Brand name and breadcrumb prefix** |
+| `src/index.css` | Legacy template marketing site only (not DocuMind) |
 
-**Note:** The GAQO marketing site (`src/components/`) uses the old blue glass theme. The case management app at `/app/*` must use `ds/` components and tokens exclusively.
+**Note:** The root `/` marketing template is unrelated to DocuMind CMS. The case management app at `/app/*` must use `ds/` components, `caseAppMeta.js`, and tokens exclusively.

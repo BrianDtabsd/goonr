@@ -1,7 +1,9 @@
 import React from 'react';
 import { DSPageHeader, DSCard } from '../../components/ds';
+import { caseAppBreadcrumb } from '../../config/caseAppMeta';
 
-export default function PlaceholderPage({ title, breadcrumb }) {
+export default function PlaceholderPage({ title, section }) {
+  const breadcrumb = caseAppBreadcrumb(section);
   return (
     <>
       <DSPageHeader breadcrumb={breadcrumb} title={title} />

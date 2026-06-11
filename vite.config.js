@@ -219,5 +219,12 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), stripeEmbeddedSessionPlugin()],
+    server: {
+      port: 5173,
+      strictPort: true,
+      host: 'localhost',
+      // Opens your system browser (Safari/Chrome) — not the Cursor IDE panel
+      open: '/design-system',
+    },
   };
 });

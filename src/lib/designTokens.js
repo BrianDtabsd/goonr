@@ -1,502 +1,607 @@
 /**
- * GAQO Design System — canonical tokens for all UI surfaces.
+ * CaseLogic Design System — canonical tokens.
  *
- * RULES FOR CONSUMERS (including AI agents building new frontends):
- * 1. Import tokens from this file — do NOT invent new hex values or Tailwind colors.
- * 2. Use only the six accent names for categorical color (blue, emerald, amber, rose, purple, white).
- * 3. Use semantic.* tokens for status, feedback, and interactive states.
- * 4. Use element.* tokens for component class strings — copy verbatim.
- * 5. For case-management UI, use domain.* mappings — do not create ad-hoc status colors.
+ * TWO THEMES:
+ *   workplace  — light mode dashboard (Decision Center, Analysis, lists)
+ *   casefile   — dark glass mode (case detail, document hub)
+ *
+ * CALM PALETTE RULES (non-negotiable):
+ *   ✗ corporate blue, bright red, neon green, purple gradients
+ *   ✓ charcoal, warm cream, soft sage, ice blue, pale gold, warm stone
+ *
+ * Import from this file only. Do not invent colors or spacing.
  */
 
-import { accentColors, getAccent, getHeadingSize } from './cardTokens';
-
-// Re-export card token helpers so consumers have a single import path.
-export { accentColors, getAccent, getHeadingSize };
-
 // ---------------------------------------------------------------------------
-// 1. COLOR PALETTE
+// 1. THEMES
 // ---------------------------------------------------------------------------
 
-/** Page-level and structural colors (dark glass theme). */
-export const palette = {
-  page: {
-    background: '#020617', // slate-950 — fallback behind bg image
-    overlay: 'rgba(15, 23, 42, 0.4)', // slate-900/40 scrim over background image
-    scrimHeavy: 'rgba(2, 6, 23, 0.72)',
+export const themes = {
+  workplace: {
+    name: 'Workplace Light',
+    usage: 'Dashboard, analysis forms, lists, navigation shell',
+    className: 'ds-theme-workplace',
   },
-  primary: {
-    DEFAULT: '#3b82f6', // blue-500 — CTAs, links, focus rings
-    hover: '#2563eb', // blue-600
-    active: '#1d4ed8', // blue-700
-    muted: '#60a5fa', // blue-400 — secondary emphasis
-    subtle: 'rgba(59, 130, 246, 0.15)', // blue-500/15 — tinted surfaces
-    border: 'rgba(96, 165, 250, 0.3)', // blue-400/30
-  },
-  text: {
-    heading: '#ffffff',
-    body: '#cbd5e1', // slate-300
-    muted: '#94a3b8', // slate-400
-    disabled: 'rgba(148, 163, 184, 0.5)', // slate-400/50
-    inverse: '#0f172a', // slate-900 — text on light chips inside footer etc.
-    link: '#60a5fa', // blue-400
-    linkHover: '#93c5fd', // blue-300
-  },
-  surface: {
-    glass: 'rgba(255, 255, 255, 0.1)',
-    glassHover: 'rgba(255, 255, 255, 0.14)',
-    glassActive: 'rgba(255, 255, 255, 0.18)',
-    glassSubtle: 'rgba(255, 255, 255, 0.05)',
-    glassStrong: 'rgba(255, 255, 255, 0.2)',
-    frostRgb: '255, 255, 255',
-  },
-  border: {
-    DEFAULT: 'rgba(255, 255, 255, 0.15)',
-    subtle: 'rgba(255, 255, 255, 0.08)',
-    strong: 'rgba(255, 255, 255, 0.25)',
-    divider: 'rgba(255, 255, 255, 0.05)',
-    focus: 'rgba(59, 130, 246, 0.6)',
+  casefile: {
+    name: 'Case File Dark Glass',
+    usage: 'Case detail, document hub, dense information panels',
+    className: 'ds-theme-casefile',
   },
 };
 
-/** Semantic feedback and status colors — use ONLY these for success/warning/error/info. */
+// ---------------------------------------------------------------------------
+// 2. COLOR PALETTE (calm — no corporate blue / red / neon)
+// ---------------------------------------------------------------------------
+
+export const palette = {
+  /** Shared brand neutrals */
+  charcoal: {
+    DEFAULT: '#1A1A1A',
+    soft: '#2A2A2A',
+    muted: '#3D3D3D',
+  },
+  cream: {
+    DEFAULT: '#F4F1EA',
+    warm: '#EDE9E1',
+    deep: '#E5E0D6',
+  },
+  stone: {
+    DEFAULT: '#78716C',
+    light: '#A8A29E',
+    muted: '#9C958D',
+  },
+
+  /** Accent hues — desaturated, workplace-safe */
+  sage: {
+    DEFAULT: '#78BDA7',
+    muted: '#8FAE9F',
+    subtle: 'rgba(120, 189, 167, 0.15)',
+    dot: '#78BDA7',
+  },
+  ice: {
+    DEFAULT: '#C8E6EA',
+    glow: '#E0F2F7',
+    subtle: 'rgba(200, 230, 234, 0.12)',
+    border: 'rgba(200, 230, 234, 0.35)',
+  },
+  gold: {
+    DEFAULT: '#D9CE9E',
+    warm: '#E8DFA8',
+    subtle: 'rgba(217, 206, 158, 0.15)',
+    glow: 'rgba(232, 223, 168, 0.25)',
+  },
+  sand: {
+    DEFAULT: '#C4A574',
+    subtle: 'rgba(196, 165, 116, 0.15)',
+  },
+  clay: {
+    DEFAULT: '#C4886A',
+    subtle: 'rgba(196, 136, 106, 0.12)',
+  },
+
+  workplace: {
+    page: '#F4F1EA',
+    sidebar: '#EAE6DE',
+    surface: '#FFFFFF',
+    surfaceRaised: '#FAFAF8',
+    border: '#E5E0D8',
+    borderStrong: '#D6D0C6',
+    text: '#1A1A1A',
+    textSecondary: '#57534E',
+    textMuted: '#78716C',
+    textLabel: '#9C958D',
+    navActive: '#DDD8CE',
+    navHover: '#E8E4DC',
+    primary: '#1A1A1A',
+    primaryHover: '#2A2A2A',
+    focus: 'rgba(120, 189, 167, 0.45)',
+    shadow: '0 4px 24px rgba(26, 26, 26, 0.06)',
+    shadowHover: '0 8px 32px rgba(26, 26, 26, 0.1)',
+  },
+
+  casefile: {
+    page: '#0D0D0D',
+    pageGradient: 'radial-gradient(ellipse at 30% 20%, rgba(30, 45, 38, 0.4) 0%, transparent 60%)',
+    sidebar: '#111111',
+    surface: 'rgba(255, 255, 255, 0.04)',
+    surfaceRaised: 'rgba(255, 255, 255, 0.07)',
+    border: 'rgba(255, 255, 255, 0.08)',
+    borderStrong: 'rgba(255, 255, 255, 0.14)',
+    text: '#F5F5F4',
+    textSecondary: '#A8A29E',
+    textMuted: '#78716C',
+    textLabel: '#6B6560',
+    navActive: 'rgba(255, 255, 255, 0.08)',
+    primary: '#E8DFA8',
+    primaryHover: '#D9CE9E',
+    primaryText: '#1A1A1A',
+    focus: 'rgba(200, 230, 234, 0.4)',
+    glow: '0 0 20px rgba(232, 223, 168, 0.15)',
+    shadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+  },
+};
+
+/** Semantic feedback — calm alternatives to red/green/blue alerts */
 export const semantic = {
+  active: {
+    text: 'text-[#78BDA7]',
+    bg: 'bg-[#78BDA7]/15',
+    border: 'border-[#78BDA7]/25',
+    dot: 'bg-[#78BDA7]',
+    hex: '#78BDA7',
+  },
   success: {
-    text: 'text-emerald-300',
-    textStrong: 'text-emerald-400',
-    bg: 'bg-emerald-500/10',
-    border: 'border-emerald-400/25',
-    dot: 'bg-emerald-400',
-    icon: '#34d399', // emerald-400
+    text: 'text-[#8FAE9F]',
+    bg: 'bg-[#78BDA7]/12',
+    border: 'border-[#78BDA7]/20',
+    dot: 'bg-[#78BDA7]',
+    hex: '#78BDA7',
   },
   warning: {
-    text: 'text-amber-300',
-    textStrong: 'text-amber-400',
-    bg: 'bg-amber-500/10',
-    border: 'border-amber-400/25',
-    dot: 'bg-amber-400',
-    icon: '#fbbf24', // amber-400
+    text: 'text-[#C4A574]',
+    bg: 'bg-[#C4A574]/12',
+    border: 'border-[#C4A574]/22',
+    dot: 'bg-[#C4A574]',
+    hex: '#C4A574',
   },
-  error: {
-    text: 'text-rose-300',
-    textStrong: 'text-rose-400',
-    bg: 'bg-rose-500/10',
-    border: 'border-rose-400/25',
-    dot: 'bg-rose-400',
-    icon: '#fb7185', // rose-400
+  attention: {
+    text: 'text-[#C4886A]',
+    bg: 'bg-[#C4886A]/10',
+    border: 'border-[#C4886A]/20',
+    dot: 'bg-[#C4886A]',
+    hex: '#C4886A',
   },
   info: {
-    text: 'text-blue-300',
-    textStrong: 'text-blue-400',
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-400/25',
-    dot: 'bg-blue-400',
-    icon: '#60a5fa', // blue-400
+    text: 'text-[#C8E6EA]',
+    bg: 'bg-[#C8E6EA]/10',
+    border: 'border-[#C8E6EA]/22',
+    dot: 'bg-[#C8E6EA]',
+    hex: '#C8E6EA',
   },
   neutral: {
-    text: 'text-slate-300',
-    textStrong: 'text-slate-200',
+    text: 'text-stone-400',
     bg: 'bg-white/5',
-    border: 'border-white/15',
-    dot: 'bg-slate-400',
-    icon: '#94a3b8', // slate-400
+    border: 'border-white/10',
+    dot: 'bg-stone-400',
+    hex: '#A8A29E',
   },
 };
 
-/** Allowed accent names — the ONLY categorical color keys permitted in data/config. */
-export const accentNames = ['blue', 'emerald', 'amber', 'rose', 'purple', 'white'];
+/** Six categorical accent names — ONLY these in data/config */
+export const accentNames = ['charcoal', 'sage', 'ice', 'gold', 'sand', 'stone'];
+
+export const accents = {
+  charcoal: {
+    text: 'text-[#1A1A1A] dark:text-stone-200',
+    bg: 'bg-[#1A1A1A]/8',
+    border: 'border-[#1A1A1A]/15',
+    dot: 'bg-[#1A1A1A]',
+    pill: 'bg-[#1A1A1A]/8 text-[#1A1A1A] border-[#1A1A1A]/15',
+  },
+  sage: {
+    text: 'text-[#78BDA7]',
+    bg: 'bg-[#78BDA7]/12',
+    border: 'border-[#78BDA7]/22',
+    dot: 'bg-[#78BDA7]',
+    pill: 'bg-[#78BDA7]/15 text-[#5A9A84] border-[#78BDA7]/25',
+  },
+  ice: {
+    text: 'text-[#C8E6EA]',
+    bg: 'bg-[#C8E6EA]/10',
+    border: 'border-[#C8E6EA]/22',
+    dot: 'bg-[#C8E6EA]',
+    pill: 'bg-[#C8E6EA]/12 text-[#A8D4DA] border-[#C8E6EA]/25',
+  },
+  gold: {
+    text: 'text-[#D9CE9E]',
+    bg: 'bg-[#D9CE9E]/12',
+    border: 'border-[#D9CE9E]/22',
+    dot: 'bg-[#D9CE9E]',
+    pill: 'bg-[#D9CE9E]/15 text-[#B8AD7A] border-[#D9CE9E]/25',
+  },
+  sand: {
+    text: 'text-[#C4A574]',
+    bg: 'bg-[#C4A574]/12',
+    border: 'border-[#C4A574]/22',
+    dot: 'bg-[#C4A574]',
+    pill: 'bg-[#C4A574]/15 text-[#A68B58] border-[#C4A574]/25',
+  },
+  stone: {
+    text: 'text-stone-500',
+    bg: 'bg-stone-500/8',
+    border: 'border-stone-400/15',
+    dot: 'bg-stone-400',
+    pill: 'bg-stone-500/10 text-stone-600 border-stone-400/20',
+  },
+};
+
+export function getAccent(name = 'sage') {
+  return accents[name] || accents.sage;
+}
 
 // ---------------------------------------------------------------------------
-// 2. TYPOGRAPHY
+// 3. ADHD-FRIENDLY TYPOGRAPHY
 // ---------------------------------------------------------------------------
 
 export const typography = {
   fonts: {
     body: "'Inter', system-ui, sans-serif",
-    display: "'Space Grotesk', 'Inter', sans-serif",
+    display: "'Inter', system-ui, sans-serif",
     mono: "'JetBrains Mono', monospace",
   },
-  weights: {
-    light: 300,
-    normal: 400,
-    medium: 500,
-    semibold: 600,
-  },
+
+  /**
+   * ADHD rules baked into scale:
+   * - One H1 per view, max 3 heading levels visible
+   * - Labels: mono + uppercase + wide tracking (scannable anchors)
+   * - Body: 16px min, line-height ≥ 1.6
+   * - Tightened display headings: negative tracking on large sizes only
+   */
   scale: {
-    hero: 'font-display text-[3.3rem] sm:text-[4.4rem] lg:text-[5.5rem] leading-[0.98] tracking-[-0.045em] font-light',
-    h1: 'text-[2.35rem] sm:text-[2.9rem] lg:text-[3.45rem] leading-[1.02] tracking-[-0.04em] font-light',
-    h2: 'text-[2.05rem] sm:text-[2.65rem] lg:text-[3.45rem] leading-[1.04] tracking-[-0.045em] font-light',
-    h3: 'text-[1.55rem] lg:text-[1.7rem] leading-[1.08] tracking-[-0.03em] font-light',
-    h4: 'text-[1.35rem] leading-[1.15] tracking-[-0.03em] font-light',
-    bodyLg: 'text-[1.05rem] sm:text-[1.15rem] leading-[1.7]',
-    body: 'text-sm leading-[1.75]',
-    bodySm: 'text-[13px] leading-[1.7]',
-    caption: 'text-xs leading-[1.6] opacity-70',
-    eyebrow: 'font-mono text-[11px] uppercase tracking-[0.22em]',
-    label: 'font-mono text-[12px] uppercase tracking-[0.18em]',
-    stat: 'text-5xl font-medium leading-none tracking-[-0.05em]',
+    pageTitle: 'text-[1.75rem] sm:text-[2rem] font-semibold tracking-[-0.02em] leading-[1.15]',
+    sectionTitle: 'text-xl font-semibold tracking-[-0.01em] leading-[1.25]',
+    cardTitle: 'text-base font-semibold leading-[1.3]',
+    body: 'text-base leading-[1.65]',
+    bodySm: 'text-sm leading-[1.65]',
+    caption: 'text-xs leading-[1.55] text-stone-500',
+    label: 'font-mono text-[11px] uppercase tracking-[0.14em] text-stone-500',
+    labelTight: 'font-mono text-[10px] uppercase tracking-[0.18em] text-stone-500',
+    breadcrumb: 'font-mono text-[11px] uppercase tracking-[0.12em] text-stone-400',
+    stat: 'text-4xl font-semibold tracking-[-0.03em] leading-none tabular-nums',
+    caseName: 'text-2xl sm:text-3xl font-semibold tracking-[-0.02em] leading-[1.1]',
   },
+
+  /** Max content line length for readability */
+  maxProse: 'max-w-prose',
+  maxLabel: 'max-w-[32ch]',
 };
 
 // ---------------------------------------------------------------------------
-// 3. SPACING, RADIUS, SHADOW, MOTION
+// 4. SPACING (generous — ADHD rule: never pack elements tight)
 // ---------------------------------------------------------------------------
 
 export const spacing = {
-  pageX: 'px-6 md:px-8 lg:px-12',
-  sectionY: 'gap-24 lg:gap-28',
-  sectionInner: 'gap-14 lg:gap-16',
-  cardGrid: 'gap-6 md:gap-8',
-  stackSm: 'gap-2',
-  stackMd: 'gap-4',
-  stackLg: 'gap-8',
-  maxContent: 'max-w-[1360px] mx-auto w-full',
-  maxNarrow: 'max-w-3xl mx-auto w-full',
-  scrollOffset: 'scroll-mt-28',
+  /** Minimum touch/click target */
+  touchMin: '44px',
+  /** Standard gaps */
+  xs: '0.5rem',   // 8px
+  sm: '0.75rem',  // 12px
+  md: '1rem',     // 16px
+  lg: '1.5rem',   // 24px
+  xl: '2rem',     // 32px
+  '2xl': '3rem',  // 48px
+  '3xl': '4rem',  // 64px
+
+  pageX: 'px-6 lg:px-8',
+  pageY: 'py-6 lg:py-8',
+  section: 'gap-8 lg:gap-10',
+  cardGrid: 'gap-4 lg:gap-5',
+  stack: 'gap-4',
+  stackLg: 'gap-6',
+  sidebarWidth: 'w-[240px]',
+  contentMax: 'max-w-[1200px] mx-auto w-full',
 };
 
 export const radius = {
-  card: '2.5rem', // 40px — default glass-card via CSS var
-  operational: '1.5rem', // 24px — glass-card--radius-24
-  module: '1.375rem', // 22px — glass-card--radius-22
-  pricing: '1.75rem', // 28px — rounded-[28px]
-  buttonPill: 'rounded-full',
-  buttonRounded: 'rounded-xl',
-  buttonSharp: 'rounded-none',
-  input: 'rounded-xl',
-  badge: 'rounded-full',
-  avatar: 'rounded-full',
-  logo: 'rounded-xl',
+  sm: 'rounded-lg',       // 8px — inputs, small chips
+  md: 'rounded-xl',       // 12px — cards, buttons alt
+  lg: 'rounded-2xl',      // 16px — stat cards
+  xl: 'rounded-3xl',      // 24px — large panels
+  pill: 'rounded-full',
+  caseCard: 'rounded-2xl',
 };
 
 export const shadow = {
-  cardOperational:
-    '0 18px 50px rgba(148, 163, 184, 0.12), 0 6px 18px rgba(15, 23, 42, 0.04)',
-  navScrolled: 'shadow-2xl',
-  highlight: '0 0 40px rgba(0, 0, 0, 0.1)',
-  buttonGlow: (primaryHex) =>
-    `0 0 0 4px ${primaryHex}33, 0 0 20px ${primaryHex}99`,
-};
-
-export const motion = {
-  easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-  durationFast: 'duration-300',
-  durationNormal: 'duration-500',
-  durationSlow: 'duration-700',
-  fadeUp: 'anim-trigger anim-fade-up',
-  lineReveal: 'anim-wrap anim-line',
-  reducedMotionQuery: '(prefers-reduced-motion: reduce)',
+  workplaceCard: 'shadow-[0_4px_24px_rgba(26,26,26,0.06)]',
+  workplaceCardHover: 'shadow-[0_8px_32px_rgba(26,26,26,0.1)]',
+  casefileCard: 'shadow-[0_8px_32px_rgba(0,0,0,0.35)]',
+  casefileGlow: 'shadow-[0_0_20px_rgba(232,223,168,0.12)]',
 };
 
 // ---------------------------------------------------------------------------
-// 4. ELEMENT STYLES (Tailwind class strings — use verbatim)
+// 5. MOTION (bounces OK — ADHD rule: motion communicates, never distracts)
+// ---------------------------------------------------------------------------
+
+export const motion = {
+  easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', // gentle bounce
+  easingSmooth: 'cubic-bezier(0.16, 1, 0.3, 1)',
+  durationFast: '150ms',
+  durationNormal: '250ms',
+  durationSlow: '400ms',
+
+  /** Tailwind classes */
+  cardHover: 'transition-all duration-250 hover:-translate-y-0.5 hover:shadow-lg',
+  buttonPress: 'transition-all duration-150 active:scale-[0.97]',
+  buttonBounce: 'transition-all duration-250 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]',
+  fadeIn: 'animate-in fade-in duration-300',
+};
+
+// ---------------------------------------------------------------------------
+// 6. FORBIDDEN STYLES (anxiety-inducing — agents must check against this)
+// ---------------------------------------------------------------------------
+
+export const forbidden = {
+  colors: [
+    '#3b82f6', '#2563eb', '#1d4ed8', // corporate blue
+    '#ef4444', '#dc2626', '#f87171', // red
+    '#22c55e', '#10b981', '#4ade80', // neon green
+    '#a855f7', '#8b5cf6', '#c084fc', // purple
+  ],
+  tailwind: [
+    'bg-blue-', 'text-blue-', 'border-blue-',
+    'bg-red-', 'text-red-', 'border-red-',
+    'bg-green-5', 'text-green-5', 'bg-emerald-5',
+    'bg-purple-', 'text-purple-', 'from-purple', 'to-purple',
+    'bg-gradient-to-r from-', // no purple/color gradients
+  ],
+  patterns: [
+    'flashing animations',
+    'infinite pulse on non-status elements',
+    'ALL CAPS body text',
+    'more than 3 font sizes in one card',
+    'line-height below 1.5 for body text',
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// 7. ELEMENT CLASS STRINGS
 // ---------------------------------------------------------------------------
 
 export const element = {
-  /** Eyebrow pill — section/category label above headings. */
   eyebrow: {
-  base: 'inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/5 px-4 py-2',
-  section: 'inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 backdrop-blur-xl px-4 py-2',
-  dot: 'w-1.5 h-1.5 rounded-full',
-  text: 'font-mono text-[11px] uppercase tracking-[0.22em] opacity-80',
+    workplace:
+      'inline-flex items-center gap-2 rounded-full border border-stone-300/60 bg-white/60 px-3 py-1.5',
+    casefile:
+      'inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5',
+    dot: 'w-1.5 h-1.5 rounded-full',
+    text: 'font-mono text-[10px] uppercase tracking-[0.16em] text-stone-500',
   },
 
-  /** Glass surfaces — require .glass-card CSS from index.css */
-  glass: {
-    card: 'glass-card',
-    cardOperational: 'glass-card glass-card--content-shell glass-card--radius-24',
-    cardModule: 'glass-card glass-card--content-shell glass-card--radius-22',
-    nav: 'glass-nav',
-    container: 'glass-container',
-  },
-
-  /** Buttons — prefer <Button> component; use these when building new primitives. */
   button: {
-    base: 'inline-flex items-center justify-center font-semibold transition-all duration-300 px-6 py-2.5',
-    primary:
-      'inline-flex items-center justify-center font-semibold transition-all duration-300 px-6 py-2.5 rounded-full text-white hover:-translate-y-1',
-    secondary:
-      'inline-flex items-center justify-center font-semibold transition-all duration-300 px-6 py-2.5 rounded-full text-white bg-white/10 border border-transparent hover:-translate-y-1',
-    outline:
-      'inline-flex items-center justify-center font-semibold transition-all duration-300 px-6 py-2.5 rounded-full bg-transparent border hover:-translate-y-1',
-    ghost:
-      'inline-flex items-center justify-center font-semibold transition-all duration-300 px-3 py-2 rounded-full bg-transparent border border-transparent text-white/90 hover:text-white',
-    danger:
-      'inline-flex items-center justify-center font-semibold transition-all duration-300 px-6 py-2.5 rounded-full text-white bg-rose-500/80 hover:bg-rose-500 border border-rose-400/30 hover:-translate-y-1',
-    sm: '!px-4 !py-2 text-sm',
-    lg: '!px-8 !py-3 text-base',
-    icon: 'inline-flex items-center justify-center p-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors',
+    primaryWorkplace:
+      'inline-flex items-center justify-center gap-2 rounded-xl bg-[#1A1A1A] px-5 py-2.5 text-sm font-medium text-white transition-all duration-250 hover:bg-[#2A2A2A] hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#78BDA7]/40',
+    secondaryWorkplace:
+      'inline-flex items-center justify-center gap-2 rounded-xl border border-[#1A1A1A]/20 bg-transparent px-5 py-2.5 text-sm font-medium text-[#1A1A1A] transition-all duration-250 hover:bg-[#1A1A1A]/5 hover:-translate-y-0.5 active:scale-[0.98]',
+    ghostWorkplace:
+      'inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-stone-600 transition-colors hover:bg-stone-200/50 hover:text-[#1A1A1A]',
+    primaryCasefile:
+      'inline-flex items-center justify-center gap-2 rounded-xl bg-[#E8DFA8] px-5 py-2.5 text-sm font-medium text-[#1A1A1A] transition-all duration-250 hover:bg-[#D9CE9E] hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(232,223,168,0.15)] active:scale-[0.98]',
+    secondaryCasefile:
+      'inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-transparent px-5 py-2.5 text-sm font-medium text-stone-300 transition-all duration-250 hover:bg-white/5 hover:-translate-y-0.5 active:scale-[0.98]',
+    ghostCasefile:
+      'inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-stone-400 transition-colors hover:bg-white/5 hover:text-stone-200',
+    sm: '!px-4 !py-2 text-xs',
     disabled: 'opacity-40 pointer-events-none cursor-not-allowed',
   },
 
-  /** Form controls */
+  card: {
+    workplace:
+      'rounded-2xl border border-[#E5E0D8] bg-white p-6 transition-all duration-250 hover:-translate-y-0.5 shadow-[0_4px_24px_rgba(26,26,26,0.06)] hover:shadow-[0_8px_32px_rgba(26,26,26,0.1)]',
+    workplaceFlat: 'rounded-2xl border border-[#E5E0D8] bg-white p-6',
+    casefile:
+      'rounded-2xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl p-6 transition-all duration-250',
+    casefileGlow:
+      'rounded-2xl border border-[#C8E6EA]/20 bg-white/[0.04] backdrop-blur-xl p-6 shadow-[0_0_20px_rgba(200,230,234,0.06)]',
+    stat: 'rounded-2xl border border-[#E5E0D8] bg-white p-5 lg:p-6',
+  },
+
   input: {
-    base: 'w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-400/60 backdrop-blur-sm transition-colors focus:outline-none focus:border-blue-400/50 focus:ring-2 focus:ring-blue-500/25',
-    error: 'border-rose-400/50 focus:border-rose-400/60 focus:ring-rose-500/25',
-    disabled: 'opacity-50 cursor-not-allowed bg-white/[0.02]',
-    label: 'block font-mono text-[11px] uppercase tracking-[0.18em] text-slate-400 mb-2',
-    hint: 'mt-1.5 text-xs text-slate-400/80',
-    errorText: 'mt-1.5 text-xs text-rose-400',
+    workplace:
+      'w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-3 text-sm text-[#1A1A1A] placeholder:text-stone-400 transition-colors focus:outline-none focus:border-[#78BDA7]/50 focus:ring-2 focus:ring-[#78BDA7]/20',
+    casefile:
+      'w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-stone-100 placeholder:text-stone-500 backdrop-blur-sm transition-colors focus:outline-none focus:border-[#C8E6EA]/30 focus:ring-2 focus:ring-[#C8E6EA]/15',
+    label: 'block font-mono text-[11px] uppercase tracking-[0.14em] text-stone-500 mb-2',
+    hint: 'mt-1.5 text-xs text-stone-400',
+    error: 'mt-1.5 text-xs text-[#C4886A]',
   },
 
-  select: {
-    base: 'w-full appearance-none rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 pr-10 text-sm text-white backdrop-blur-sm transition-colors focus:outline-none focus:border-blue-400/50 focus:ring-2 focus:ring-blue-500/25',
-  },
-
-  textarea: {
-    base: 'w-full min-h-[120px] rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-400/60 backdrop-blur-sm transition-colors focus:outline-none focus:border-blue-400/50 focus:ring-2 focus:ring-blue-500/25 resize-y',
-  },
-
-  checkbox: {
-    base: 'h-4 w-4 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-2 focus:ring-blue-500/25 focus:ring-offset-0',
-  },
-
-  /** Badges and status chips */
-  badge: {
-    base: 'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em]',
-    recommended: 'bg-blue-600 text-white border-transparent shadow-sm',
-    neutral: 'bg-white/10 text-white/90 border-white/20',
-  },
-
-  statusChip: {
-    base: 'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium',
-    // Combine base + semantic.bg + semantic.border + semantic.textStrong
-  },
-
-  /** Pills used inside cards (ContentCard pills layout) */
-  pill: {
-    base: 'inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium',
-  },
-
-  /** Data table — for case lists, pipeline logs */
-  table: {
-    wrapper: 'glass-card glass-card--content-shell glass-card--radius-22 overflow-hidden',
-    table: 'w-full text-sm',
-    thead: 'border-b border-white/10 bg-white/[0.03]',
-    th: 'px-5 py-3 text-left font-mono text-[11px] uppercase tracking-[0.16em] text-slate-400 font-medium',
-    tbody: 'divide-y divide-white/5',
-    tr: 'transition-colors hover:bg-white/[0.04]',
-    trSelected: 'bg-blue-500/10 hover:bg-blue-500/12',
-    td: 'px-5 py-3.5 text-slate-200',
-    tdMuted: 'px-5 py-3.5 text-slate-400',
-  },
-
-  /** Sidebar navigation — for case management app shell */
   sidebar: {
-    shell: 'flex h-full flex-col border-r border-white/10 bg-white/[0.03] backdrop-blur-xl',
-    item: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-300 transition-colors hover:bg-white/10 hover:text-white',
-    itemActive: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm bg-blue-500/15 text-blue-200 border border-blue-400/20',
-    sectionLabel: 'px-3 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500',
+    shell: 'flex h-full flex-col',
+    item: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-stone-600 transition-all duration-200 hover:bg-stone-200/40',
+    itemActive: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium bg-[#DDD8CE] text-[#1A1A1A]',
+    itemActiveCasefile: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium bg-white/[0.08] text-stone-100',
+    sectionLabel: 'px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-stone-400',
+    statusDot: 'w-2 h-2 rounded-full bg-[#78BDA7]',
   },
 
-  /** Tabs */
   tabs: {
-    list: 'inline-flex items-center gap-1 rounded-full border border-white/10 bg-black/20 p-1 backdrop-blur-xl',
-    tab: 'rounded-full px-4 py-2 text-sm font-medium text-slate-400 transition-colors hover:text-white',
-    tabActive: 'rounded-full px-4 py-2 text-sm font-medium bg-white/10 text-white shadow-sm',
+    listWorkplace: 'inline-flex items-center gap-1 rounded-xl border border-[#E5E0D8] bg-[#EDE9E1]/60 p-1',
+    tabWorkplace: 'rounded-lg px-4 py-2 text-sm text-stone-500 transition-all duration-200 hover:text-[#1A1A1A]',
+    tabActiveWorkplace: 'rounded-lg px-4 py-2 text-sm font-medium bg-white text-[#1A1A1A] shadow-sm',
+    listCasefile: 'inline-flex items-center gap-1 rounded-xl border border-white/10 bg-white/[0.03] p-1',
+    tabCasefile: 'rounded-lg px-4 py-2 text-sm text-stone-500 transition-all duration-200 hover:text-stone-200',
+    tabActiveCasefile: 'rounded-lg px-4 py-2 text-sm font-medium bg-white/10 text-stone-100',
   },
 
-  /** Pipeline / spine stepper */
-  pipeline: {
-    stepCard: 'group w-full relative rounded-[22px] p-8 md:p-10 cursor-pointer text-left transition-all duration-500 glass-card',
-    stepCardInactive: 'opacity-80 hover:opacity-100',
-    stepNumber: 'text-sm font-medium font-mono transition-colors',
-    stepNumberActive: 'text-blue-400',
-    stepNumberInactive: 'opacity-50 group-hover:opacity-80',
-    connector: 'w-px h-6 bg-white/10 mx-auto',
+  table: {
+    wrapperWorkplace: 'rounded-2xl border border-[#E5E0D8] bg-white overflow-hidden',
+    wrapperCasefile: 'rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl overflow-hidden',
+    th: 'px-5 py-3 text-left font-mono text-[10px] uppercase tracking-[0.14em] text-stone-400',
+    td: 'px-5 py-3.5 text-sm text-stone-700',
+    tdCasefile: 'px-5 py-3.5 text-sm text-stone-300',
+    trHover: 'transition-colors hover:bg-stone-50',
+    trHoverCasefile: 'transition-colors hover:bg-white/[0.03]',
+    divider: 'divide-y divide-[#E5E0D8]',
+    dividerCasefile: 'divide-y divide-white/[0.05]',
   },
 
-  /** Modal / dialog */
-  modal: {
-    overlay: 'fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm',
-    panel: 'glass-card glass-card--radius-24 w-full max-w-lg p-8 shadow-2xl',
-    title: 'card-title text-[1.55rem] font-light mb-2',
-    body: 'text-sm leading-[1.75] text-slate-300 mb-6',
-    footer: 'flex items-center justify-end gap-3',
+  badge: {
+    base: 'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em]',
+    statusOnline: 'bg-[#78BDA7]/15 text-[#5A9A84] border-[#78BDA7]/25',
+    statusPending: 'bg-[#C4A574]/12 text-[#A68B58] border-[#C4A574]/22',
+    statusNeutral: 'bg-stone-500/10 text-stone-500 border-stone-400/20',
+    grtw: 'bg-[#78BDA7]/15 text-[#5A9A84] border-[#78BDA7]/25',
+    plan: 'bg-white/10 text-stone-300 border-white/15',
   },
 
-  /** Toast / alert banners */
   alert: {
     base: 'flex items-start gap-3 rounded-xl border px-4 py-3 text-sm',
-    success: 'bg-emerald-500/10 border-emerald-400/25 text-emerald-200',
-    warning: 'bg-amber-500/10 border-amber-400/25 text-amber-200',
-    error: 'bg-rose-500/10 border-rose-400/25 text-rose-200',
-    info: 'bg-blue-500/10 border-blue-400/25 text-blue-200',
+    info: 'bg-[#C8E6EA]/10 border-[#C8E6EA]/22 text-stone-600',
+    infoCasefile: 'bg-[#C8E6EA]/8 border-[#C8E6EA]/18 text-stone-300',
+    warning: 'bg-[#C4A574]/10 border-[#C4A574]/20 text-stone-600',
+    attention: 'bg-[#C4886A]/10 border-[#C4886A]/18 text-stone-600',
   },
 
-  /** Empty state */
+  advisor: {
+    panel: 'rounded-2xl border border-white/10 bg-[#1A1A1A]/90 backdrop-blur-xl overflow-hidden',
+    float: 'fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-full border border-white/10 bg-[#1A1A1A]/95 px-5 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-250 hover:-translate-y-1',
+    tab: 'px-4 py-2.5 text-xs font-medium text-stone-400 border-b-2 border-transparent transition-colors',
+    tabActive: 'px-4 py-2.5 text-xs font-medium text-[#C8E6EA] border-b-2 border-[#C8E6EA]/50',
+    input: 'w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-stone-200 placeholder:text-stone-500',
+  },
+
+  fileChip: {
+    workplace:
+      'inline-flex items-center gap-2 rounded-xl border border-[#E5E0D8] bg-[#FAFAF8] px-3 py-2 text-sm text-stone-700',
+    casefile:
+      'inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-stone-300',
+  },
+
+  statCard: {
+    value: 'text-4xl font-semibold tracking-[-0.03em] leading-none tabular-nums text-[#1A1A1A]',
+    valueCasefile: 'text-4xl font-semibold tracking-[-0.03em] leading-none tabular-nums text-stone-100',
+    label: 'font-mono text-[10px] uppercase tracking-[0.14em] text-stone-400 mt-2',
+    icon: 'text-stone-300',
+  },
+
   empty: {
     wrapper: 'flex flex-col items-center justify-center text-center py-16 px-6',
-    icon: 'mb-4 text-slate-500',
-    title: 'card-title text-lg font-light mb-2',
-    body: 'text-sm text-slate-400 max-w-sm',
+    icon: 'mb-4 text-stone-300',
+    title: 'text-lg font-semibold text-stone-700 mb-2',
+    body: 'text-sm text-stone-500 max-w-sm leading-[1.65]',
   },
 
-  /** Loading skeleton */
-  skeleton: {
-    base: 'animate-pulse rounded-lg bg-white/10',
-    text: 'h-4 w-full animate-pulse rounded bg-white/10',
-    avatar: 'h-10 w-10 animate-pulse rounded-full bg-white/10',
-  },
-
-  /** Activity timeline */
-  timeline: {
-    item: 'relative pl-6 pb-6 border-l border-white/10 last:pb-0',
-    dot: 'absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full border-2 border-slate-950',
-    time: 'font-mono text-[10px] uppercase tracking-[0.14em] text-slate-500 mb-1',
-    content: 'text-sm text-slate-300',
-  },
-
-  /** Accordion (FAQ pattern) */
-  accordion: {
-    item: 'glass-card glass-card--content-shell glass-card--radius-22 border border-white/10 overflow-hidden',
-    trigger:
-      'cursor-pointer list-none px-5 py-4 text-left text-sm font-medium text-white/95 flex justify-between items-center gap-3',
-    content: 'px-5 pb-4 pt-0 text-sm leading-[1.75] opacity-80 border-t border-white/5',
-    icon: 'shrink-0 text-blue-400 text-lg leading-none transition-transform group-open:rotate-45',
-  },
-
-  /** Avatar */
-  avatar: {
-    sm: 'h-8 w-8 rounded-full border border-white/15 bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-xs font-semibold text-white',
-    md: 'h-10 w-10 rounded-full border border-white/15 bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-sm font-semibold text-white',
-    lg: 'h-12 w-12 rounded-full border border-white/15 bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-base font-semibold text-white',
-  },
-
-  /** Divider */
-  divider: {
-    horizontal: 'border-t border-white/10',
-    vertical: 'border-l border-white/10',
-  },
-
-  /** Focus ring — apply to custom interactive elements */
-  focusRing: 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950',
+  focusRing:
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#78BDA7]/40 focus-visible:ring-offset-2',
 };
 
 // ---------------------------------------------------------------------------
-// 5. ICONS
+// 8. ICONS (Solar set)
 // ---------------------------------------------------------------------------
 
-/** Solar icon set only — do not mix other icon families. */
 export const icons = {
   set: 'solar',
-  defaults: { width: '16', height: '16' },
   nav: {
-    menu: 'solar:hamburger-menu-linear',
-    close: 'solar:close-circle-linear',
+    dashboard: 'solar:widget-5-linear',
+    cases: 'solar:folder-with-files-linear',
+    incidents: 'solar:danger-circle-linear',
+    analysis: 'solar:chart-2-linear',
+    decisions: 'solar:checklist-minimalistic-linear',
+    people: 'solar:users-group-rounded-linear',
+    evidence: 'solar:document-text-linear',
+    reports: 'solar:graph-new-linear',
+    settings: 'solar:settings-linear',
+    processes: 'solar:routing-2-linear',
   },
   action: {
-    arrowRight: 'solar:arrow-right-linear',
-    check: 'solar:check-circle-linear',
     add: 'solar:add-circle-linear',
     edit: 'solar:pen-linear',
-    delete: 'solar:trash-bin-trash-linear',
     search: 'solar:magnifer-linear',
-    filter: 'solar:filter-linear',
+    upload: 'solar:upload-linear',
+    close: 'solar:close-circle-linear',
+    arrowRight: 'solar:arrow-right-linear',
     refresh: 'solar:refresh-linear',
-    settings: 'solar:settings-linear',
+    mic: 'solar:microphone-linear',
+    robot: 'solar:cpu-bolt-linear',
   },
   status: {
-    success: 'solar:check-circle-bold',
-    warning: 'solar:danger-triangle-linear',
-    error: 'solar:close-circle-bold',
-    info: 'solar:info-circle-linear',
+    active: 'solar:check-circle-linear',
     pending: 'solar:clock-circle-linear',
-  },
-  domain: {
-    case: 'solar:folder-with-files-linear',
-    agent: 'solar:cpu-bolt-linear',
-    pipeline: 'solar:routing-2-linear',
-    document: 'solar:document-text-linear',
-    user: 'solar:user-linear',
+    attention: 'solar:danger-triangle-linear',
+    info: 'solar:info-circle-linear',
   },
 };
 
 // ---------------------------------------------------------------------------
-// 6. CASE MANAGEMENT DOMAIN MAPPINGS
+// 9. DOMAIN MAPPINGS (case management)
 // ---------------------------------------------------------------------------
 
-/**
- * Pre-defined mappings for case management / agent spine pipeline UI.
- * Agents MUST use these — do not invent new status colors.
- */
 export const domain = {
   caseStatus: {
-    open: { accent: 'blue', semantic: 'info', label: 'Open' },
-    in_progress: { accent: 'amber', semantic: 'warning', label: 'In Progress' },
-    pending_review: { accent: 'purple', semantic: 'neutral', label: 'Pending Review' },
-    resolved: { accent: 'emerald', semantic: 'success', label: 'Resolved' },
-    closed: { accent: 'white', semantic: 'neutral', label: 'Closed' },
-    escalated: { accent: 'rose', semantic: 'error', label: 'Escalated' },
+    open: { accent: 'ice', semantic: 'info', label: 'Open' },
+    in_progress: { accent: 'sand', semantic: 'warning', label: 'In Progress' },
+    pending_review: { accent: 'stone', semantic: 'neutral', label: 'Pending Review' },
+    resolved: { accent: 'sage', semantic: 'success', label: 'Resolved' },
+    closed: { accent: 'stone', semantic: 'neutral', label: 'Closed' },
+    escalated: { accent: 'sand', semantic: 'attention', label: 'Escalated' },
   },
 
   pipelineStage: {
-    intake: { accent: 'blue', step: '01', label: 'Intake' },
-    classify: { accent: 'purple', step: '02', label: 'Classify' },
-    route: { accent: 'amber', step: '03', label: 'Route' },
-    execute: { accent: 'emerald', step: '04', label: 'Execute' },
-    review: { accent: 'white', step: '05', label: 'Review' },
-    complete: { accent: 'emerald', step: '06', label: 'Complete' },
+    intake: { accent: 'ice', step: '01', label: 'Intake' },
+    classify: { accent: 'stone', step: '02', label: 'Classify' },
+    route: { accent: 'sand', step: '03', label: 'Route' },
+    execute: { accent: 'sage', step: '04', label: 'Execute' },
+    review: { accent: 'gold', step: '05', label: 'Review' },
+    complete: { accent: 'sage', step: '06', label: 'Complete' },
   },
 
   agentAction: {
-    success: 'emerald',
-    running: 'blue',
-    waiting: 'amber',
-    failed: 'rose',
-    skipped: 'white',
+    success: 'sage',
+    running: 'ice',
+    waiting: 'sand',
+    failed: 'sand',
+    skipped: 'stone',
   },
 
   priority: {
-    low: { accent: 'white', label: 'Low' },
-    medium: { accent: 'blue', label: 'Medium' },
-    high: { accent: 'amber', label: 'High' },
-    critical: { accent: 'rose', label: 'Critical' },
+    low: { accent: 'stone', label: 'Low' },
+    medium: { accent: 'ice', label: 'Medium' },
+    high: { accent: 'sand', label: 'High' },
+    critical: { accent: 'sand', label: 'Critical' },
   },
+
+  caseTabs: ['Gather', 'Analysis', 'Resolution', 'GRTW', 'Tasks', 'Files'],
 };
 
 // ---------------------------------------------------------------------------
-// 7. HELPERS
+// 10. HELPERS
 // ---------------------------------------------------------------------------
 
-/** Build a status chip class string from a semantic key. */
-export function statusChipClasses(semanticKey = 'neutral') {
+export function statusChipClasses(semanticKey = 'neutral', theme = 'workplace') {
   const s = semantic[semanticKey] || semantic.neutral;
-  return `${element.statusChip.base} ${s.bg} ${s.border} ${s.textStrong}`;
+  const textColor = theme === 'casefile' ? s.text : s.text.replace('text-[#C8E6EA]', 'text-[#6B9BA3]');
+  return `${element.badge.base} ${s.bg} ${s.border} ${textColor}`;
 }
 
-/** Build an accent pill class string. */
-export function accentPillClasses(accentName = 'blue') {
+export function accentPillClasses(accentName = 'sage') {
   const a = getAccent(accentName);
-  return `${element.pill.base} ${a.pill}`;
+  return `inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${a.pill}`;
 }
 
-/** Build eyebrow with dot color. */
-export function eyebrowClasses(accentName = 'blue', variant = 'base') {
-  const a = getAccent(accentName);
-  const shell = variant === 'section' ? element.eyebrow.section : element.eyebrow.base;
-  return { shell, dot: `${element.eyebrow.dot} ${a.dot}`, text: element.eyebrow.text };
-}
-
-/** Resolve domain case status to accent + semantic tokens. */
 export function resolveCaseStatus(statusKey) {
   return domain.caseStatus[statusKey] || domain.caseStatus.open;
 }
 
-/** CSS custom properties to copy into :root (matches index.css defaults). */
+export function themeElement(theme, key) {
+  const t = themes[theme] ? theme : 'workplace';
+  const map = element[key];
+  if (!map) return '';
+  if (typeof map === 'string') return map;
+  return map[t] || map.workplace || map.casefile || '';
+}
+
+/** CSS variables for each theme — applied via class on root element */
 export const cssVariables = {
-  '--bg-url': "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop')",
-  '--font-body': typography.fonts.body,
-  '--font-heading': typography.fonts.body,
-  '--color-heading': palette.text.heading,
-  '--color-subtitle': palette.text.muted,
-  '--color-body': palette.text.body,
-  '--text-body-size': '16px',
-  '--primary-color': palette.primary.DEFAULT,
-  '--frost-rgb': palette.surface.frostRgb,
-  '--card-padding': '2rem',
-  '--card-radius': radius.card,
-  '--card-opacity': '0.1',
-  '--card-border-opacity': '0.15',
-  '--card-frost': '24px',
+  workplace: {
+    '--ds-page': palette.workplace.page,
+    '--ds-sidebar': palette.workplace.sidebar,
+    '--ds-surface': palette.workplace.surface,
+    '--ds-border': palette.workplace.border,
+    '--ds-text': palette.workplace.text,
+    '--ds-text-muted': palette.workplace.textMuted,
+    '--ds-primary': palette.workplace.primary,
+    '--ds-accent': palette.sage.DEFAULT,
+    '--ds-focus': palette.workplace.focus,
+  },
+  casefile: {
+    '--ds-page': palette.casefile.page,
+    '--ds-sidebar': palette.casefile.sidebar,
+    '--ds-surface': palette.casefile.surface,
+    '--ds-border': palette.casefile.border,
+    '--ds-text': palette.casefile.text,
+    '--ds-text-muted': palette.casefile.textMuted,
+    '--ds-primary': palette.casefile.primary,
+    '--ds-accent': palette.ice.DEFAULT,
+    '--ds-focus': palette.casefile.focus,
+  },
 };

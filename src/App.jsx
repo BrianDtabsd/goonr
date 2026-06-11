@@ -31,12 +31,12 @@ function AppRoutes() {
         <Route path="analysis" element={<Analysis />} />
         <Route path="cases" element={<CaseList />} />
         <Route path="cases/:caseId" element={<CaseFileDetail />} />
-        <Route path="incidents" element={<PlaceholderPage title="Incidents" breadcrumb="caselogic core / incidents" />} />
-        <Route path="decisions" element={<PlaceholderPage title="Decisions" breadcrumb="caselogic core / decisions" />} />
-        <Route path="people" element={<PlaceholderPage title="People" breadcrumb="caselogic core / people" />} />
-        <Route path="evidence" element={<PlaceholderPage title="Evidence" breadcrumb="caselogic core / evidence" />} />
-        <Route path="reports" element={<PlaceholderPage title="Reports" breadcrumb="caselogic core / reports" />} />
-        <Route path="settings" element={<PlaceholderPage title="Settings" breadcrumb="caselogic core / settings" />} />
+        <Route path="incidents" element={<PlaceholderPage title="Incidents" breadcrumb="core / incidents" />} />
+        <Route path="decisions" element={<PlaceholderPage title="Decisions" breadcrumb="core / decisions" />} />
+        <Route path="people" element={<PlaceholderPage title="People" breadcrumb="core / people" />} />
+        <Route path="evidence" element={<PlaceholderPage title="Evidence" breadcrumb="core / evidence" />} />
+        <Route path="reports" element={<PlaceholderPage title="Reports" breadcrumb="core / reports" />} />
+        <Route path="settings" element={<PlaceholderPage title="Settings" breadcrumb="core / settings" />} />
       </Route>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />

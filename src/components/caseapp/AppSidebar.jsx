@@ -25,7 +25,7 @@ export default function AppSidebar() {
 
   return (
     <DSSidebar
-      brand="caselogic"
+      brand="GAQO"
       status="Inference Active"
       footer={
         <DSSidebarProfile name="Brian Onufrejow" role="Super Admin" initials="BO" />

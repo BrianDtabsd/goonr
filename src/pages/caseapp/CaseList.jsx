@@ -9,7 +9,7 @@ export default function CaseList() {
   return (
     <>
       <DSPageHeader
-        breadcrumb="caselogic core / cases"
+        breadcrumb="core / cases"
         title="Cases"
         actions={
           <DSButton variant="accent">
@@ -35,7 +35,7 @@ export default function CaseList() {
               const status = resolveCaseStatus(c.status);
               return (
                 <tr key={c.id} className={element.table.trHover}>
-                  <td className={cn(element.table.td, 'font-mono text-xs')}>{c.id}</td>
+                  <td className={cn(element.table.td, 'text-xs tabular-nums')}>{c.id}</td>
                   <td className={element.table.td}>{c.name}</td>
                   <td className={element.table.td}>{c.client}</td>
                   <td className={element.table.td}>

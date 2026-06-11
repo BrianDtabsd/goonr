@@ -42,7 +42,7 @@ export default function DSAdvisorPanel({
           <span className="h-2 w-2 rounded-full bg-[#78BDA7]" />
         </div>
       ) : (
-        <div className="p-4 font-mono text-xs leading-relaxed text-stone-400">
+        <div className="p-4 text-xs leading-relaxed text-stone-400">
           {children}
         </div>
       )}

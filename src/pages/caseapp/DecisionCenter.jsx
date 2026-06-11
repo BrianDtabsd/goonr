@@ -22,7 +22,7 @@ export default function DecisionCenter() {
   return (
     <>
       <DSPageHeader
-        breadcrumb="caselogic core / dashboard"
+        breadcrumb="core / dashboard"
         title="Decision Center"
         actions={
           <>
@@ -108,7 +108,7 @@ export default function DecisionCenter() {
                 height="20"
                 class="text-[#434A53]/50 mb-2"
               />
-              <p className="text-xs font-mono uppercase tracking-[0.1em] text-[#434A53]">
+              <p className="text-xs font-medium uppercase tracking-[0.1em] text-[#434A53]">
                 {inc.id}
               </p>
               <p className="mt-1 text-sm text-[#434A53]">{inc.label}</p>

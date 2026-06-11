@@ -1,7 +1,7 @@
-# CaseLogic Design System
+# GAQO Workplace Design System
 
-**Version:** 2.0  
-**Based on:** Your RESON8 / caselogic workplace UI (light) + case file glass UI (dark) + ice-blue globe palette  
+**Version:** 2.1  
+**Based on:** GAQO marketing site + your workplace UI references (light) + case file glass UI (dark) + your brand colors  
 **Tokens:** `src/lib/designTokens.js`  
 **Components:** `src/components/ds/`  
 **Theme CSS:** `src/styles/ds-theme.css`
@@ -96,8 +96,9 @@ Use `forbidden` export from `designTokens.js` to validate.
 
 | Role | Family |
 |------|--------|
-| Everything | Inter |
-| Labels / breadcrumbs / status | JetBrains Mono |
+| Everything (including labels, breadcrumbs, badges) | **Inter only** |
+
+**Do not use JetBrains Mono or `font-mono` in `ds/` or `caseapp/` components.** Monospace is forbidden in this design system.
 
 ### Type scale
 
@@ -107,8 +108,9 @@ Use `forbidden` export from `designTokens.js` to validate.
 | Section title | `text-xl font-semibold` |
 | Card title | `text-base font-semibold` |
 | Body | `text-base leading-[1.65]` |
-| Label | `font-mono text-[11px] uppercase tracking-[0.14em] text-stone-500` |
-| Breadcrumb | `font-mono text-[11px] uppercase tracking-[0.12em] text-stone-400` |
+| Label | `text-[11px] font-medium uppercase tracking-[0.14em] text-stone-500` or class `ds-label` |
+| Breadcrumb | `text-[11px] font-medium uppercase tracking-[0.12em] text-stone-400` or class `ds-breadcrumb` |
+| Codes / IDs | `text-xs tabular-nums` (Inter, not monospace) |
 | Stat value | `text-4xl font-semibold tracking-[-0.03em] tabular-nums` |
 | Case name | `text-2xl sm:text-3xl font-semibold tracking-[-0.02em]` |
 
@@ -186,7 +188,7 @@ import { icons } from './lib/designTokens';
 <DSAppShell
   theme="workplace"
   sidebar={
-    <DSSidebar brand="caselogic" status="Inference Active">
+    <DSSidebar brand="GAQO" status="Inference Active">
       <DSSidebarItem icon={icons.nav.dashboard} label="Mission Control" active />
       <DSSidebarItem icon={icons.nav.cases} label="Cases" />
       <DSSidebarItem icon={icons.nav.analysis} label="Analysis" />
@@ -195,7 +197,7 @@ import { icons } from './lib/designTokens';
   advisor={<DSAdvisorPanel floating title="Senior Advisor" />}
 >
   <DSPageHeader
-    breadcrumb="caselogic core / dashboard"
+    breadcrumb="core / dashboard"
     title="Decision Center"
     actions={
       <>
@@ -218,7 +220,7 @@ import { icons } from './lib/designTokens';
 
 ## 6. Case File Dark Glass theme
 
-Reference: your caselogic case detail screenshots (glass 2 + dark minimalist).
+Reference: your case detail screenshots (glass + dark minimalist).
 
 ### Page structure
 
@@ -381,15 +383,52 @@ Before shipping any UI, verify:
 
 ---
 
-## 11. File index
+## 11. Page templates (scaffolded — wire to spine pipeline)
+
+Run `npm run dev` and open these routes:
+
+| Route | Page | File |
+|-------|------|------|
+| `/app` | Decision Center | `src/pages/caseapp/DecisionCenter.jsx` |
+| `/app/analysis` | Analysis form + advisor panel | `src/pages/caseapp/Analysis.jsx` |
+| `/app/cases` | Case list table | `src/pages/caseapp/CaseList.jsx` |
+| `/app/cases/:caseId` | Case file detail (dark glass) | `src/pages/caseapp/CaseFileDetail.jsx` |
+
+Layout shell: `src/pages/caseapp/CaseAppLayout.jsx`  
+Sidebar nav: `src/components/caseapp/AppSidebar.jsx`  
+Mock data (replace with API): `src/content/caseAppMock.js`
+
+### Spine pipeline integration points
+
+| Page | Wire here |
+|------|-----------|
+| Decision Center | `dashboardStats`, `recentCases` → pipeline status API |
+| Analysis | Form submit → agent run endpoint; `analysisArtifacts` → document upload |
+| Case list | `recentCases` → cases collection |
+| Case file | `caseDetail` → case by ID; tabs → stage-specific views |
+
+```jsx
+// App.jsx already registers:
+<Route path="/app" element={<CaseAppLayout />}>
+  <Route index element={<DecisionCenter />} />
+  <Route path="analysis" element={<Analysis />} />
+  <Route path="cases/:caseId" element={<CaseFileDetail />} />
+</Route>
+```
+
+---
+
+## 12. File index
 
 | File | Purpose |
 |------|---------|
 | `DESIGN_SYSTEM.md` | This document |
-| `src/lib/designTokens.js` | All tokens, forbidden list, domain mappings |
+| `src/lib/designTokens.js` | Brand colors, tokens, forbidden list, domain mappings |
 | `src/lib/cn.js` | `cn()` class merge helper |
 | `src/styles/ds-theme.css` | Theme CSS variables + motion |
-| `src/components/ds/` | All primitive components |
+| `src/components/ds/` | Primitive components |
+| `src/pages/caseapp/` | Scaffolded page templates |
+| `src/content/caseAppMock.js` | Mock data for templates |
 | `src/index.css` | Legacy marketing glass (GAQO site only) |
 
-**Note:** The GAQO marketing site (`src/components/`) uses the old blue glass theme. The case management app must use `ds/` components and tokens exclusively.
+**Note:** The GAQO marketing site (`src/components/`) uses the old blue glass theme. The case management app at `/app/*` must use `ds/` components and tokens exclusively.

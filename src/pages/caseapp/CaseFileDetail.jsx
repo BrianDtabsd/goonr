@@ -77,7 +77,7 @@ export default function CaseFileDetail() {
         <div className="mb-6">
           <p className="ds-label mb-1">Primary Diagnosis</p>
           <p className="text-sm text-stone-200">{data.diagnosis}</p>
-          <p className="mt-1 font-mono text-xs text-stone-500">{data.icd10}</p>
+          <p className="mt-1 text-xs tabular-nums text-stone-500">{data.icd10}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -124,7 +124,7 @@ export default function CaseFileDetail() {
         <DSCard>
           <p className="ds-label mb-4">Document Hub — Medical Preview</p>
           <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white p-4 text-[#1B1B1B]">
-            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#434A53]">
+            <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-[#434A53]">
               Patient Assessment Form
             </p>
             <p className="mt-3 text-sm">Claimant: {data.name}</p>
@@ -157,7 +157,7 @@ export default function CaseFileDetail() {
             {data.comorbidities.map((item) => (
               <li key={item.code} className="flex justify-between gap-4 text-sm">
                 <span className="text-stone-300">{item.label}</span>
-                <span className="font-mono text-xs text-stone-500">{item.code}</span>
+                <span className="text-xs tabular-nums text-stone-500">{item.code}</span>
               </li>
             ))}
           </ul>

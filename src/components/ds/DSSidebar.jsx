@@ -23,7 +23,7 @@ export function DSSidebar({ brand, status, children, footer, className }) {
         {status && (
           <div className="mt-2 flex items-center gap-2">
             <span className={element.sidebar.statusDot} />
-            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-stone-500">
+            <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-stone-500">
               {status}
             </span>
           </div>

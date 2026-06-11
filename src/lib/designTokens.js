@@ -1,5 +1,5 @@
 /**
- * CaseLogic Design System — canonical tokens.
+ * GAQO Workplace Design System — canonical tokens (case management UI).
  *
  * TWO THEMES:
  *   workplace  — light mode dashboard (Decision Center, Analysis, lists)
@@ -250,16 +250,16 @@ export function getAccent(name = 'sage') {
 // ---------------------------------------------------------------------------
 
 export const typography = {
+  /** Inter only — no monospace in this design system */
   fonts: {
     body: "'Inter', system-ui, sans-serif",
     display: "'Inter', system-ui, sans-serif",
-    mono: "'JetBrains Mono', monospace",
   },
 
   /**
    * ADHD rules baked into scale:
    * - One H1 per view, max 3 heading levels visible
-   * - Labels: mono + uppercase + wide tracking (scannable anchors)
+   * - Labels: Inter + uppercase + wide tracking (scannable anchors)
    * - Body: 16px min, line-height ≥ 1.6
    * - Tightened display headings: negative tracking on large sizes only
    */
@@ -270,9 +270,10 @@ export const typography = {
     body: 'text-base leading-[1.65]',
     bodySm: 'text-sm leading-[1.65]',
     caption: 'text-xs leading-[1.55] text-stone-500',
-    label: 'font-mono text-[11px] uppercase tracking-[0.14em] text-stone-500',
-    labelTight: 'font-mono text-[10px] uppercase tracking-[0.18em] text-stone-500',
-    breadcrumb: 'font-mono text-[11px] uppercase tracking-[0.12em] text-stone-400',
+    label: 'text-[11px] font-medium uppercase tracking-[0.14em] text-stone-500',
+    labelTight: 'text-[10px] font-medium uppercase tracking-[0.18em] text-stone-500',
+    breadcrumb: 'text-[11px] font-medium uppercase tracking-[0.12em] text-stone-400',
+    code: 'text-xs tabular-nums text-stone-500',
     stat: 'text-4xl font-semibold tracking-[-0.03em] leading-none tabular-nums',
     caseName: 'text-2xl sm:text-3xl font-semibold tracking-[-0.02em] leading-[1.1]',
   },
@@ -366,6 +367,8 @@ export const forbidden = {
     'ALL CAPS body text',
     'more than 3 font sizes in one card',
     'line-height below 1.5 for body text',
+    'JetBrains Mono',
+    'font-mono in ds/ or caseapp/ components',
   ],
 };
 
@@ -380,7 +383,7 @@ export const element = {
     casefile:
       'inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5',
     dot: 'w-1.5 h-1.5 rounded-full',
-    text: 'font-mono text-[10px] uppercase tracking-[0.16em] text-stone-500',
+    text: 'text-[10px] font-medium uppercase tracking-[0.16em] text-stone-500',
   },
 
   button: {
@@ -418,7 +421,7 @@ export const element = {
       'w-full rounded-xl border border-[#434A53]/20 bg-white px-4 py-3 text-sm text-[#1B1B1B] placeholder:text-[#434A53]/60 transition-colors focus:outline-none focus:border-[#FF5722]/45 focus:ring-2 focus:ring-[#FF5722]/15',
     casefile:
       'w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-stone-100 placeholder:text-stone-500 backdrop-blur-sm transition-colors focus:outline-none focus:border-[#C8E6EA]/30 focus:ring-2 focus:ring-[#C8E6EA]/15',
-    label: 'block font-mono text-[11px] uppercase tracking-[0.14em] text-stone-500 mb-2',
+    label: 'block text-[11px] font-medium uppercase tracking-[0.14em] text-stone-500 mb-2',
     hint: 'mt-1.5 text-xs text-stone-400',
     error: 'mt-1.5 text-xs text-[#C4886A]',
   },
@@ -428,7 +431,7 @@ export const element = {
     item: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-stone-600 transition-all duration-200 hover:bg-stone-200/40',
     itemActive: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium bg-[#D8D8D8] text-[#1B1B1B]',
     itemActiveCasefile: 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium bg-white/[0.08] text-stone-100',
-    sectionLabel: 'px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-stone-400',
+    sectionLabel: 'px-3 py-2 text-[10px] font-medium uppercase tracking-[0.18em] text-stone-400',
     statusDot: 'w-2 h-2 rounded-full bg-[#78BDA7]',
   },
 
@@ -444,7 +447,7 @@ export const element = {
   table: {
     wrapperWorkplace: 'rounded-2xl border border-[#434A53]/15 bg-white overflow-hidden',
     wrapperCasefile: 'rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl overflow-hidden',
-    th: 'px-5 py-3 text-left font-mono text-[10px] uppercase tracking-[0.14em] text-stone-400',
+    th: 'px-5 py-3 text-left text-[10px] font-medium uppercase tracking-[0.14em] text-stone-400',
     td: 'px-5 py-3.5 text-sm text-stone-700',
     tdCasefile: 'px-5 py-3.5 text-sm text-stone-300',
     trHover: 'transition-colors hover:bg-stone-50',
@@ -454,7 +457,7 @@ export const element = {
   },
 
   badge: {
-    base: 'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em]',
+    base: 'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.1em]',
     statusOnline: 'bg-[#78BDA7]/15 text-[#5A9A84] border-[#78BDA7]/25',
     statusPending: 'bg-[#C4A574]/12 text-[#A68B58] border-[#C4A574]/22',
     statusNeutral: 'bg-stone-500/10 text-stone-500 border-stone-400/20',
@@ -488,7 +491,7 @@ export const element = {
   statCard: {
     value: 'text-4xl font-semibold tracking-[-0.03em] leading-none tabular-nums text-[#1B1B1B]',
     valueCasefile: 'text-4xl font-semibold tracking-[-0.03em] leading-none tabular-nums text-stone-100',
-    label: 'font-mono text-[10px] uppercase tracking-[0.14em] text-stone-400 mt-2',
+    label: 'text-[10px] font-medium uppercase tracking-[0.14em] text-stone-400 mt-2',
     icon: 'text-stone-300',
   },
 

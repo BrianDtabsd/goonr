@@ -28,7 +28,7 @@ export default function Analysis() {
     <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1fr_340px]">
       <div>
         <DSPageHeader
-          breadcrumb="caselogic core / advisor"
+          breadcrumb="core / advisor"
           title="Analysis"
           actions={
             <>

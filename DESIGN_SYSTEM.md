@@ -2,7 +2,7 @@
 
 > **Strategy:** [`DESIGN_TRACKS.md`](./DESIGN_TRACKS.md) — three parallel prototypes (glass template, workplace, case file). Refine pages first, promote patterns when they stabilise.  
 > **Your decisions:** [`DESIGN_DECISIONS.md`](./DESIGN_DECISIONS.md) — plain sections, **no coded IDs**.  
-> **Live hub:** `/app/tracks`
+> **Living design system:** `/design-system` — use this the entire time (glass, frost, theme panel, page patterns)
 
 Do not invent decisions. Do not use `DF-xxx` / `DC-xxx` style codes in design files.
 

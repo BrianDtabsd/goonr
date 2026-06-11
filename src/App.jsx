@@ -19,11 +19,12 @@ import Analysis from './pages/caseapp/Analysis';
 import CaseList from './pages/caseapp/CaseList';
 import CaseFileDetail from './pages/caseapp/CaseFileDetail';
 import PlaceholderPage from './pages/caseapp/PlaceholderPage';
-import DesignTracks from './pages/caseapp/DesignTracks';
-import GlassAppLayout from './pages/glass/GlassAppLayout';
-import GlassDashboard from './pages/glass/GlassDashboard';
-import GlassCaseList from './pages/glass/GlassCaseList';
-import GlassCaseFile from './pages/glass/GlassCaseFile';
+import DesignSystemLayout from './layouts/DesignSystemLayout';
+import DesignSystemOverview from './pages/design-system/Overview';
+import DesignSystemFoundation from './pages/design-system/Foundation';
+import DesignSystemComponents from './pages/design-system/Components';
+import DesignSystemDashboard from './pages/design-system/Dashboard';
+import DesignSystemCaseFile from './pages/design-system/CaseFile';
 
 function AppRoutes() {
   const studio = isStudioMode();
@@ -31,13 +32,17 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/app/glass" element={<GlassAppLayout />}>
-        <Route index element={<GlassDashboard />} />
-        <Route path="cases" element={<GlassCaseList />} />
-        <Route path="cases/:caseId" element={<GlassCaseFile />} />
+      <Route path="/design-system" element={<DesignSystemLayout />}>
+        <Route index element={<DesignSystemOverview />} />
+        <Route path="foundation" element={<DesignSystemFoundation />} />
+        <Route path="components" element={<DesignSystemComponents />} />
+        <Route path="dashboard" element={<DesignSystemDashboard />} />
+        <Route path="case-file" element={<DesignSystemCaseFile />} />
       </Route>
+      <Route path="/app/glass" element={<Navigate to="/design-system/dashboard" replace />} />
+      <Route path="/app/glass/*" element={<Navigate to="/design-system/dashboard" replace />} />
+      <Route path="/app/tracks" element={<Navigate to="/design-system" replace />} />
       <Route path="/app" element={<CaseAppLayout />}>
-        <Route path="tracks" element={<DesignTracks />} />
         <Route index element={<DecisionCenter />} />
         <Route path="analysis" element={<Analysis />} />
         <Route path="cases" element={<CaseList />} />

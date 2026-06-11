@@ -6,7 +6,7 @@ import { getCaseAppMeta } from '../../config/caseAppMeta';
 
 const navItems = [
   { to: '/app', label: 'Mission Control', icon: icons.nav.dashboard, end: true },
-  { to: '/app/tracks', label: 'Design Tracks', icon: 'solar:palette-linear' },
+  { to: '/design-system', label: 'Design System', icon: 'solar:palette-linear' },
   { to: '/app/cases', label: 'Cases', icon: icons.nav.cases },
   { to: '/app/incidents', label: 'Incidents', icon: icons.nav.incidents },
   { to: '/app/analysis', label: 'Analysis', icon: icons.nav.analysis },

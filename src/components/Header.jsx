@@ -20,6 +20,7 @@ function Header() {
   const { isPageVisible } = useVisibility();
 
   const navLinks = [
+    { name: 'Design System', to: '/design-system', show: true },
     { name: 'How it works', href: '/#methodology', show: true },
     { name: 'Pricing', href: '/#pricing', show: true },
     { name: 'Learn', href: '/learn', show: isPageVisible('learn') },
@@ -54,6 +55,7 @@ function Header() {
               <Button
                 key={link.name}
                 href={link.href}
+                to={link.to}
                 variant="empty"
                 className="text-sm font-medium !px-3 !py-2"
               >
@@ -101,6 +103,7 @@ function Header() {
               <Button
                 key={link.name}
                 href={link.href}
+                to={link.to}
                 variant="empty"
                 className="text-lg font-medium !justify-start w-full"
                 onClick={() => setIsMobileMenuOpen(false)}

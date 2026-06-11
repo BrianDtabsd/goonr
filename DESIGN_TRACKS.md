@@ -20,7 +20,9 @@
 | **B** | Workplace Light | REASON8 / case08 Decision Centre references | `/app`, `/app/analysis`, `/app/cases` | **Exploring** — mist/ember palette, sidebar, stat cards |
 | **C** | Case File Dark Glass | Black + green glass case file references | `/app/cases/:caseId` | **Exploring** — dense info panels, advisor rail |
 
-**Hub:** `/app/tracks` — links to all prototypes side by side.
+**Living design system (primary):** `/design-system` — always in the goonr template with live theme panel, glass, and swappable background. Bookmark this.
+
+**Hub:** `/design-system` (replaces `/app/tracks`).
 
 ---
 

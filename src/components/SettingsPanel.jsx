@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import TemplateContentEditor from './TemplateContentEditor';
 import SetupGuide from './SetupGuide';
 import VisibilityEditor from './VisibilityEditor';
 import { isStudioMode } from '../lib/studioMode';
+import { documindGlassCasefile, documindGlassDashboard } from '../lib/glassPresets';
 
 function SettingsPanel() {
   const { theme, updateTheme, typographyBundles } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
+  const onDesignSystem = pathname.startsWith('/design-system');
+  const showPanel = isStudioMode() || onDesignSystem;
 
-  if (!isStudioMode()) return null;
+  if (!showPanel) return null;
 
   // Available colors for Primary and Frost
   const colors = [
     { label: 'White', hex: '#ffffff', rgb: '255, 255, 255' },
     { label: 'Black', hex: '#000000', rgb: '0, 0, 0' },
+    { label: 'Ember', hex: '#FF5722', rgb: '255, 87, 34' },
     { label: 'Blue', hex: '#3b82f6', rgb: '59, 130, 246' },
     { label: 'Emerald', hex: '#10b981', rgb: '16, 185, 129' },
     { label: 'Purple', hex: '#8b5cf6', rgb: '139, 92, 246' },
@@ -51,6 +57,29 @@ function SettingsPanel() {
       </div>
 
       <div className="space-y-6">
+        {onDesignSystem ? (
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              DocuMind presets
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => updateTheme(documindGlassDashboard)}
+                className="rounded-lg bg-slate-800 px-3 py-2 text-xs hover:bg-slate-700"
+              >
+                Dashboard glass
+              </button>
+              <button
+                type="button"
+                onClick={() => updateTheme(documindGlassCasefile)}
+                className="rounded-lg bg-slate-800 px-3 py-2 text-xs hover:bg-slate-700"
+              >
+                Case file glass
+              </button>
+            </div>
+          </div>
+        ) : null}
         <SetupGuide />
         <VisibilityEditor />
 

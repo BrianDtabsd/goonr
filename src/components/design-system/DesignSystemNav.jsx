@@ -23,7 +23,7 @@ export default function DesignSystemNav() {
 
   return (
     <aside className="fixed left-4 top-4 bottom-4 z-40 flex w-[240px] flex-col gap-3 sm:left-6 lg:left-8">
-      <div className="glass-nav flex flex-1 flex-col overflow-hidden p-3">
+      <div className="glass-sidebar flex flex-1 flex-col overflow-hidden p-3">
         <div className="mb-4 px-2 pt-1">
           <p className="text-sm font-semibold text-white">{brandName}</p>
           <p className="mt-0.5 text-[10px] uppercase tracking-[0.14em] text-slate-400">

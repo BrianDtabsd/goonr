@@ -122,11 +122,25 @@ h1, h2, h3, h4, h5, h6, .card-title {
     backdrop-filter: blur(var(--card-frost));
     -webkit-backdrop-filter: blur(var(--card-frost));
     border: var(--nav-border-width) solid var(--nav-border-color);
-    border-radius: 9999px; /* Pill shape by default */
+    border-radius: 9999px; /* Pill shape — horizontal nav bars only */
     transition:
       background-color 0.25s ease-out,
       backdrop-filter 0.25s ease-out,
       border-color 0.25s ease-out;
+  }
+
+  /* Vertical sidebars — same glass tokens, rectangular panel (not pill) */
+  .glass-sidebar {
+    background-color: rgba(var(--frost-rgb), var(--card-opacity));
+    backdrop-filter: blur(var(--card-frost));
+    -webkit-backdrop-filter: blur(var(--card-frost));
+    border: 1px solid rgba(var(--frost-rgb), var(--card-border-opacity));
+    border-radius: var(--card-radius);
+    transition:
+      background-color 0.25s ease-out,
+      backdrop-filter 0.25s ease-out,
+      border-color 0.25s ease-out,
+      border-radius 0.25s ease-out;
   }
 }
 

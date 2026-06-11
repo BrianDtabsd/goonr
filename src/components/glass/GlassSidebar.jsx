@@ -21,7 +21,7 @@ export default function GlassSidebar() {
 
   return (
     <aside className="fixed left-4 top-4 bottom-4 z-30 flex w-[220px] flex-col gap-4 sm:left-6 lg:left-8">
-      <div className="glass-nav flex flex-col gap-1 p-3">
+      <div className="glass-sidebar flex flex-col gap-1 p-3">
         <div className="mb-3 px-3 pt-2">
           <p className="text-sm font-semibold text-white">{brandName}</p>
           <p className="mt-0.5 text-[10px] uppercase tracking-[0.14em] text-slate-400">

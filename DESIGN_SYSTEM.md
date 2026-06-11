@@ -1,10 +1,9 @@
 # DocuMind CMS Design System
 
-> **Authoritative decision record:** [`DESIGN_DECISIONS.md`](./DESIGN_DECISIONS.md) — `DC-xxx` design choice IDs (separate from `DF-xxx` data field registry).  
-> **Machine-readable:** `src/lib/designDecisions.js`  
+> **Your decisions:** [`DESIGN_DECISIONS.md`](./DESIGN_DECISIONS.md) — plain sections, **no coded IDs** (keeps design separate from your data field registry).  
 > **Tokens:** `src/lib/designTokens.js` · **Components:** `src/components/ds/` · **Brand:** `src/config/caseAppMeta.js`
 
-This file is the implementation reference. **Do not invent decisions** — if it's not in `DESIGN_DECISIONS.md`, ask the owner.
+Do not invent decisions. Do not use `DF-xxx` / `DC-xxx` style codes in design files.
 
 ---
 

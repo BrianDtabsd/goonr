@@ -1,61 +1,41 @@
-# DocuMind CMS — Design Decision Record
+# DocuMind CMS — Design Decisions
 
-**Status:** AUTHORITATIVE  
 **Owner:** You  
 **Product:** DocuMind cms  
-**Machine-readable:** `src/lib/designDecisions.js`  
 **Tokens:** `src/lib/designTokens.js`  
 **Components:** `src/components/ds/`  
 **Branding:** `src/config/caseAppMeta.js`
 
 ---
 
-## How this works
+## Rules for agents
 
-Every visual decision for the case management app lives in **this document**. An implementing agent must:
-
-1. Read this file first  
-2. Import tokens from `designTokens.js` — never invent hex values  
-3. Use components from `src/components/ds/` — never restyle from scratch  
-4. If something is **not listed here** → **stop and ask you** — do not guess  
-
-Each decision has an ID (`DC-xxx`) for traceability.
-
-**Not the same as `DF-xxx`.** `DF-` is your data field registry. `DC-` is design choice only — separate namespace so they never collide.
+1. Read this file and `designTokens.js`  
+2. Use components from `src/components/ds/` — do not restyle from scratch  
+3. If something is not listed → **ask the owner** — do not guess  
+4. **Never invent coded IDs** (no `DF-xxx`, `DC-xxx`, `DM-xxx`, or anything like your data field registry)  
+5. **Design specs are not data fields** — do not merge this into the case data field registry  
 
 ---
 
-## ID numbering (`DC-xxx`)
+## Foundation decisions
 
-| Range | Category | Examples |
-|-------|----------|----------|
-| `DC-001` – `DC-099` | Foundation (brand, color, type, motion) | `DC-003` brand colors · `DC-012` status colors |
-| `DC-100` – `DC-199` | Components (buttons, cards, inputs) | `DC-102` button · `DC-106` case header |
-
-Three digits with leading zeros. Same *number style* as `DF-012` in your other projects, but **`DC-` prefix only** — never `DF-` for design decisions.
-
----
-
-## Decision log — foundation
-
-| ID | Your decision | Value / rule |
-|----|---------------|--------------|
-| **DC-001** | Product name | **DocuMind cms** |
-| **DC-002** | Two themes | **Workplace Light** (lists, forms, dashboard) + **Case File Dark Glass** (case detail) |
-| **DC-003** | Brand colors (you provided) | `#1B1B1B` ink · `#434A53` slate · `#FF5722` ember · `#EEEEEE` mist |
-| **DC-004** | Calm accents (you approved) | Sage `#78BDA7` · Ice `#C8E6EA` · Gold `#E8DFA8` · Sand `#C4A574` · Clay `#C4886A` |
-| **DC-005** | Forbidden | No corporate blue, red, neon green, purple gradients, JetBrains Mono, invented branding |
-| **DC-006** | Typography | **Inter only** · 16px body · line-height 1.65 · one H1 per view |
-| **DC-007** | Spacing | Generous — 44px touch targets · 24px card padding · 240px sidebar |
-| **DC-008** | Corners | Rounded modern — 12px inputs/buttons · 16px cards · never sharp 4px |
-| **DC-009** | Shadows | Soft only — no harsh drop shadows |
-| **DC-010** | Motion | Hover lift + press bounce **OK** · no flash, no infinite pulse |
-| **DC-011** | Icons | Solar set via iconify only |
-| **DC-012** | Status colors | See [Domain mappings](#domain-mappings) — no ad-hoc status colors |
+| Topic | Your decision |
+|-------|---------------|
+| Product name | **DocuMind cms** |
+| Themes | **Workplace Light** (dashboard, forms, lists) + **Case File Dark Glass** (case detail) |
+| Brand colors | `#1B1B1B` ink · `#434A53` slate · `#FF5722` ember · `#EEEEEE` mist |
+| Calm accents | Sage `#78BDA7` · Ice `#C8E6EA` · Gold `#E8DFA8` · Sand `#C4A574` · Clay `#C4886A` |
+| Forbidden | No corporate blue, red, neon green, purple gradients, JetBrains Mono, invented branding |
+| Typography | **Inter only** · 16px body · line-height 1.65 · one H1 per view |
+| Spacing | 44px touch targets · 24px card padding · 240px sidebar |
+| Corners | 12px inputs/buttons · 16px cards · never sharp 4px |
+| Motion | Hover lift + press bounce OK · no flash, no infinite pulse |
+| Icons | Solar set via iconify only |
 
 ---
 
-## DC-003 — Brand colors (your four)
+## Brand colors
 
 ```css
 :root {
@@ -66,375 +46,146 @@ Three digits with leading zeros. Same *number style* as `DF-012` in your other p
 }
 ```
 
-| Token | Hex | You decided to use it for |
-|-------|-----|---------------------------|
-| Ink | `#1B1B1B` | Headings, body primary, charcoal buttons |
-| Slate | `#434A53` | Secondary text, borders, labels, placeholders |
-| Ember | `#FF5722` | **One** accent CTA per screen (e.g. + New Analysis) |
+| Token | Hex | Use |
+|-------|-----|-----|
+| Ink | `#1B1B1B` | Headings, charcoal buttons |
+| Slate | `#434A53` | Secondary text, borders, labels |
+| Ember | `#FF5722` | **One** accent CTA per screen |
 | Mist | `#EEEEEE` | Workplace page background |
 
-**Ember rule (your rule):** Max one ember button per view. Never for errors. Never as a page background.
+Max one ember button per view. Never for errors or page backgrounds.
 
 ---
 
-## DC-004 — Calm accents (you approved)
+## Calm accents
 
 | Name | Hex | Use |
 |------|-----|-----|
-| Sage | `#78BDA7` | Online dot, active, success, GRTW |
-| Ice | `#C8E6EA` | Info, focus ring (dark), glass glow |
-| Gold | `#E8DFA8` | Primary button on **case file** dark theme |
-| Sand | `#C4A574` | Pending, in progress, escalated |
-| Clay | `#C4886A` | Needs attention, form errors — **not red** |
+| Sage | `#78BDA7` | Online, active, success |
+| Ice | `#C8E6EA` | Info, focus (dark), glass glow |
+| Gold | `#E8DFA8` | Primary CTA on case file theme |
+| Sand | `#C4A574` | Pending, in progress |
+| Clay | `#C4886A` | Needs attention — not red |
 | Dark page | `#0D0D0D` | Case file background |
 
 ---
 
-## DC-005 — Forbidden (you said no to these)
+## Forbidden
 
-| Category | Forbidden |
-|----------|-----------|
+| Category | Do not use |
+|----------|------------|
 | Colors | Corporate blue, bright red, neon green, purple gradients |
 | Fonts | JetBrains Mono, `font-mono` in ds/ or caseapp/ |
 | Motion | Flashing, infinite pulse (except live status dot) |
-| Typography | ALL CAPS body text, line-height &lt; 1.5 |
-| Process | Inventing colors, fonts, or product names |
+| Typography | ALL CAPS body, line-height below 1.5 |
+| Codes | Any `XX-###` style IDs in design files — reserved for your data field registry elsewhere |
 
 ---
 
-## DC-006 — Typography (your ADHD rules)
+## Typography
 
-| Rule | Your decision |
-|------|---------------|
-| Font | **Inter only** — everything including labels |
+| Rule | Value |
+|------|-------|
+| Font | Inter only |
 | Body | 16px, line-height 1.65 |
-| Headings | Semibold, tightened tracking on large sizes only |
-| Labels | 10–11px, uppercase, tracking 0.14em, medium weight |
-| Breadcrumbs | `documind cms / {section}` — uppercase via `.ds-breadcrumb` |
-| IDs / codes | Inter + `tabular-nums` — **not** monospace |
+| Labels | 10–11px uppercase, tracking 0.14em, medium weight |
+| Breadcrumbs | `documind cms / {section}` via `caseAppBreadcrumb()` |
+| Case IDs / codes | Inter + `tabular-nums` — not monospace |
 | Limits | 1 H1 per view · max 3 heading levels per card |
 
 ---
 
-## DC-007 — Spacing (your generous layout rule)
+## Spacing
 
 | Token | Value |
 |-------|-------|
-| Touch target minimum | 44px |
-| Card padding | 24px (`p-6`) |
+| Touch target | 44px min |
+| Card padding | 24px |
 | Section gap | 32–40px |
-| Sidebar width | 240px fixed |
-| Page horizontal padding | 24px → 32px on large screens |
-| Content max width | 1200px |
+| Sidebar | 240px |
+| Content max | 1200px |
 
 ---
 
-## DC-010 — Motion (you said bounces are OK)
+## Motion
 
-| State | Your decision |
-|-------|---------------|
-| Card hover | Lift 2px + slightly stronger shadow |
-| Button hover | Lift 2px |
-| Button press | `scale(0.98)` |
-| Easing | Gentle bounce `cubic-bezier(0.34, 1.56, 0.64, 1)` |
-| Duration | 250ms hover · 150ms press |
-| Reduced motion | All animation disabled when user prefers |
+| State | Behavior |
+|-------|----------|
+| Card/button hover | Lift 2px |
+| Button press | scale(0.98) |
+| Easing | `cubic-bezier(0.34, 1.56, 0.64, 1)` |
+| Reduced motion | Disable all animation when user prefers |
 
 ---
 
-# Component decisions
+# Components
 
-Each component: **anatomy → variants → states → when to use → do not**.
+Use named sections only — no coded reference IDs.
 
----
+## App shell (`DSAppShell`)
 
-## DC-100 — App shell (`DSAppShell`)
+Sidebar left · main content · optional advisor float. Theme `workplace` or `casefile`. Case routes auto-switch to casefile.
 
-| Property | Your decision |
-|----------|---------------|
-| Layout | Sidebar left · main content · optional advisor float bottom-right |
-| Theme | `workplace` or `casefile` — set per route |
-| Case file route | Auto-switch to `casefile` theme on `/app/cases/:id` |
+## Sidebar (`DSSidebar`)
 
----
+Workplace: `#E4E4E4` bg, 240px, brand from `caseAppMeta.js`, sage status dot, active nav `#D8D8D8`.  
+Case file: `#111111` bg, active `white/8%`.
 
-## DC-101 — Sidebar (`DSSidebar`)
+## Button (`DSButton`)
 
-### Workplace theme
+| Variant | Workplace | Case file |
+|---------|-----------|-----------|
+| primary | `#1B1B1B` bg | `#E8DFA8` gold bg |
+| accent | `#FF5722` — one per view | — |
+| secondary | outlined slate | outlined white |
+| ghost | low emphasis | low emphasis |
 
-| Property | Value |
-|----------|-------|
-| Width | 240px |
-| Background | `#E4E4E4` |
-| Brand | `DocuMind cms` from `caseAppMeta.js` |
-| Status | Green sage dot + "Inference Active" (or your pipeline label) |
-| Nav item | 12px radius pill |
-| Nav inactive | Slate text, hover light grey bg |
-| Nav active | `#D8D8D8` bg, ink text, medium weight |
-| Profile | 36px circle avatar, initials, name + role below |
+## Card (`DSCard`)
 
-### Case file theme
+Workplace: white, 16px radius, soft shadow, hover lift.  
+Case file: glass `white/4%`, optional ice glow for hero card.
 
-| Property | Value |
-|----------|-------|
-| Background | `#111111` |
-| Nav active | `white/8%` bg |
+## Stat card, page header, case header, input, tabs, badge, table, alert, advisor, file chip
 
-**Do not:** Collapse sidebar on desktop · use icons without labels · add a second brand name.
+See `src/lib/designDecisions.js` → `components` for full specs.  
+Case header tabs: Gather · Analysis · Resolution · GRTW · Tasks · Files.
 
 ---
 
-## DC-102 — Button (`DSButton`)
+## Status colors (UI only — not data field codes)
 
-### Sizes
-
-| Size | Padding | Font |
-|------|---------|------|
-| Default | 20×10px | 14px |
-| Small | 16×8px | 12px |
-
-### Variants — workplace
-
-| Variant | Background | Text | You use it for |
-|---------|------------|------|----------------|
-| **primary** | `#1B1B1B` | white | Create Case, Run Analysis, Save |
-| **accent** | `#FF5722` | white | **One** hero action: + New Analysis |
-| **secondary** | transparent + slate border | ink | New Case, Edit, cancel |
-| **ghost** | none | slate | Back, low-priority links |
-
-### Variants — case file
-
-| Variant | Background | Text | You use it for |
-|---------|------------|------|----------------|
-| **primary** | `#E8DFA8` gold | ink | Deep Review |
-| **secondary** | transparent + white border | stone-300 | + Note, Edit |
-| **ghost** | none | stone-400 | Back |
-
-### States (all variants)
-
-| State | Your decision |
-|-------|---------------|
-| Hover | Lift 2px |
-| Press | Scale 0.98 |
-| Disabled | 40% opacity, no pointer |
-| Focus | Ember ring (workplace) or ice ring (casefile) |
-
-**Do not:** More than one accent (ember) button per view · red danger buttons · blue links.
+| Status | Accent |
+|--------|--------|
+| open | ice |
+| in_progress | sand |
+| pending_review | stone |
+| resolved | sage |
+| closed | stone |
+| escalated | sand (not red) |
 
 ---
 
-## DC-103 — Card (`DSCard`)
+## Page templates
 
-| Property | Workplace | Case file |
-|----------|-----------|-----------|
-| Background | `#FFFFFF` | `white/4%` + blur |
-| Border | slate 15% | white 8% |
-| Radius | 16px | 16px |
-| Padding | 24px | 24px |
-| Hover | Lift + shadow (workplace only) | — |
-| Glow variant | — | Ice border — use for profile hero card |
-
-**Do not:** Nested cards more than 2 deep · sharp corners · heavy borders.
-
----
-
-## DC-104 — Stat card (`DSStatCard`)
-
-| Element | Your decision |
-|---------|---------------|
-| Value | 36px semibold, tabular nums, ink |
-| Label | 10px uppercase, stone-400, below value |
-| Icon | Optional, top-right, muted |
-| Grid | 2 cols mobile · 4 cols desktop on dashboard |
-
----
-
-## DC-105 — Page header (`DSPageHeader`)
-
-| Element | Your decision |
-|---------|---------------|
-| Breadcrumb | `caseAppBreadcrumb('dashboard')` etc. |
-| Title | One H1, page title scale |
-| Subtitle | Optional, stone-500, max ~65ch |
-| Actions | Right-aligned: badges + buttons |
-
----
-
-## DC-106 — Case header (`DSCaseHeader`)
-
-| Element | Your decision |
-|---------|---------------|
-| Back | Ghost button, arrow icon |
-| Breadcrumb | `Cases / {name}` |
-| Case ID | Semibold tabular — not monospace |
-| Badges | Status + plan tags (GRTW, STD PLAN, etc.) |
-| Name | Large semibold below ID |
-| Tabs | Gather · Analysis · Resolution · GRTW · Tasks · Files |
-| Actions | + Note (secondary) · Edit (secondary) · Deep Review (primary gold) |
-
----
-
-## DC-107 — Input (`DSInput`, `DSTextarea`)
-
-| Property | Workplace | Case file |
-|----------|-----------|-----------|
-| Height | 44px min | 44px min |
-| Radius | 12px | 12px |
-| Background | white | white/5% |
-| Border | slate 20% | white/10% |
-| Focus | ember ring | ice ring |
-| Label | 11px uppercase slate above | same |
-| Error text | clay `#C4886A` | clay |
-
-**Do not:** Red error states · placeholder as only label · fields &lt; 44px tall.
-
----
-
-## DC-108 — Tabs (`DSTabs`)
-
-| Property | Workplace | Case file |
-|----------|-----------|-----------|
-| Track | `#E4E4E4` pill container | `white/3%` |
-| Active tab | White bg + shadow | `white/10%` |
-| Inactive | Slate text | stone-500 |
-| Padding | 8×16px per tab | same |
-
----
-
-## DC-109 — Badge (`DSBadge`)
-
-| Variant | Color | Use |
-|---------|-------|-----|
-| online / active | Sage dot | Model online, inference active, in progress |
-| plan | Neutral glass | STD PLAN, ACTIVE COVERAGE |
-| pending | Sand | Waiting states |
-
-Shape: pill · 10px uppercase · always include dot for live status.
-
----
-
-## DC-110 — Table
-
-| Element | Your decision |
-|---------|---------------|
-| Wrapper | Card shell, rounded-2xl |
-| Header row | 10px uppercase slate labels |
-| Rows | Hover subtle tint |
-| Case ID column | tabular-nums, 12px |
-| Open link | Ember text — not blue |
-
----
-
-## DC-111 — Alert banner
-
-Case file pending data banner:
-- Ice tint background — informational, not alarming
-- Copy: "N data points pending — incomplete calculations may occur"
-- Link: "View Details" in ice tone
-
-**Do not:** Red warning banner for incomplete data.
-
----
-
-## DC-112 — Advisor panel (`DSAdvisorPanel`)
-
-### Floating pill (dashboard + case file)
-
-| Property | Value |
-|----------|-------|
-| Position | Bottom-right fixed |
-| Label | Senior Advisor |
-| Icon | CPU/agent icon |
-| Dot | Sage online |
-
-### Side panel (analysis page)
-
-| Property | Value |
-|----------|-------|
-| Tabs | Document Analysis · RTW Prediction · Hermes Agent |
-| Log | Inter xs — pipeline status lines |
-| Input | "Ask the advisor..." |
-
----
-
-## DC-113 — File chip
-
-Upload list row: icon + filename + type/size + remove (×)  
-Background `#F8F8F8` workplace · 12px radius · slate border.
-
----
-
-## Domain mappings
-
-### Case status → color (DC-012)
-
-| Status | Accent | Never use |
-|--------|--------|-----------|
-| open | ice | blue |
-| in_progress | sand | amber neon |
-| pending_review | stone | purple |
-| resolved | sage | neon green |
-| closed | stone | — |
-| escalated | sand | **red** |
-
-### Priority
-
-| Level | Accent |
-|-------|--------|
-| low | stone |
-| medium | ice |
-| high | sand |
-| critical | sand (not red) |
-
----
-
-## Page templates (implemented)
-
-| Route | Template | Theme |
-|-------|----------|-------|
+| Route | Page | Theme |
+|-------|------|-------|
 | `/app` | Decision Center | workplace |
-| `/app/analysis` | Analysis form | workplace |
+| `/app/analysis` | Analysis | workplace |
 | `/app/cases` | Case list | workplace |
-| `/app/cases/:id` | Case file detail | casefile |
+| `/app/cases/:id` | Case file | casefile |
 
-Mock data: `src/content/caseAppMock.js` — replace with spine pipeline API.
-
----
-
-## Agent handoff checklist
-
-Copy this to any frontend agent:
-
-```
-You are implementing DocuMind CMS UI.
-
-READ FIRST:
-- DESIGN_DECISIONS.md (this file)
-- src/lib/designDecisions.js
-- src/lib/designTokens.js
-
-RULES:
-1. Brand is DocuMind cms — from caseAppMeta.js only
-2. Colors: brand.ink/slate/ember/mist + calm accents only
-3. Font: Inter only — no font-mono
-4. Components: import from src/components/ds/ — do not recreate
-5. If a decision is missing → ask the owner — do not invent
-
-FORBIDDEN:
-- GAQO, caselogic, or any other product name
-- Corporate blue, red, neon green, purple gradients
-- JetBrains Mono
-```
+Mock data: `src/content/caseAppMock.js`
 
 ---
 
-## Changing a decision
+## Agent handoff
 
-To change any decision:
+```
+Implement DocuMind CMS UI from DESIGN_DECISIONS.md + designTokens.js + src/components/ds/.
 
-1. Edit this file (human record)  
-2. Update `src/lib/designDecisions.js` (machine record)  
-3. Update `src/lib/designTokens.js` (token values)  
-4. Update affected `src/components/ds/*` if needed  
-
-Never change tokens without updating the decision record.
+Do NOT:
+- Invent colors, fonts, or product names
+- Use coded IDs like DF-012 or DC-012 anywhere in design files
+- Touch or merge with the data field registry
+- Use JetBrains Mono or corporate blue/red/neon green
+```

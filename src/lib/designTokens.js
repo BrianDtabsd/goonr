@@ -10,7 +10,7 @@
  *   ✓ charcoal, warm cream, soft sage, ice blue, pale gold, warm stone
  *
  * Import from this file only. Do not invent colors or spacing.
- * Decision record: DESIGN_DECISIONS.md + src/lib/designDecisions.js
+ * Decisions: DESIGN_DECISIONS.md (no coded IDs — separate from data field registry)
  */
 
 // ---------------------------------------------------------------------------
@@ -370,6 +370,7 @@ export const forbidden = {
     'line-height below 1.5 for body text',
     'JetBrains Mono',
     'font-mono in ds/ or caseapp/ components',
+    'coded IDs like DF-012 or DC-012 in design files — reserved for data field registry elsewhere',
   ],
 };
 

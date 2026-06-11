@@ -49,6 +49,8 @@ The blue gear button (bottom-right) opens Theme Settings when studio mode is on 
 
 The app uses `react-router-dom` (not hash-only anchors). Routes include `/`, `/store`, `/checkout`, `/learn`, `/sales`, and `/seller-onboarding` (studio only).
 
+**Gotcha:** `Layout` renders the `<Hero />` section on *every* route, then the page-specific component below it via `<Outlet />`. So on `/store` (and other routes) the homepage hero appears first — scroll past it to see the page content. The page is not "stuck on the homepage"; the route content renders below the hero.
+
 ### Lint caveat
 
 `npm run lint` fails with `eslint: not found` because ESLint is referenced in scripts but not installed. Use `npm run build` as the primary static check until ESLint is added to `devDependencies`.

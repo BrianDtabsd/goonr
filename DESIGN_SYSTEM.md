@@ -1,13 +1,10 @@
 # DocuMind CMS Design System
 
-**Brand:** DocuMind cms  
-**Config:** `src/config/caseAppMeta.js` (override via `VITE_CASE_APP_BRAND_NAME`)  
-**Version:** 2.2  
-**Tokens:** `src/lib/designTokens.js`  
-**Components:** `src/components/ds/`  
-**Theme CSS:** `src/styles/ds-theme.css`
+> **Authoritative decision record:** [`DESIGN_DECISIONS.md`](./DESIGN_DECISIONS.md) — every component choice you made, with IDs.  
+> **Machine-readable:** `src/lib/designDecisions.js`  
+> **Tokens:** `src/lib/designTokens.js` · **Components:** `src/components/ds/` · **Brand:** `src/config/caseAppMeta.js`
 
-Hand this document + the `ds/` folder to any agent building the case management spine pipeline frontend. All visual decisions are made. Do not invent alternative branding or fonts.
+This file is the implementation reference. **Do not invent decisions** — if it's not in `DESIGN_DECISIONS.md`, ask the owner.
 
 ---
 
@@ -88,7 +85,7 @@ Use `forbidden` export from `designTokens.js` to validate.
 1. **One H1 per view** — page title only
 2. **Max 3 heading levels** visible in any card
 3. **Body minimum 16px** with `line-height: 1.65`
-4. **Labels** — mono, uppercase, `tracking-[0.14em]`, 10–11px (scannable anchors)
+4. **Labels** — Inter uppercase, `tracking-[0.14em]`, 10–11px (scannable anchors)
 5. **Display headings** — `tracking-[-0.02em]` on large sizes only (tightened, not cramped)
 6. **Tabular nums** on all stat values
 7. **Max line length** — `max-w-prose` (~65ch) for paragraphs

@@ -10,6 +10,7 @@
  *   ✓ charcoal, warm cream, soft sage, ice blue, pale gold, warm stone
  *
  * Import from this file only. Do not invent colors or spacing.
+ * Decision record: DESIGN_DECISIONS.md + src/lib/designDecisions.js
  */
 
 // ---------------------------------------------------------------------------

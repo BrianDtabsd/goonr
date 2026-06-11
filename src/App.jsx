@@ -19,6 +19,11 @@ import Analysis from './pages/caseapp/Analysis';
 import CaseList from './pages/caseapp/CaseList';
 import CaseFileDetail from './pages/caseapp/CaseFileDetail';
 import PlaceholderPage from './pages/caseapp/PlaceholderPage';
+import DesignTracks from './pages/caseapp/DesignTracks';
+import GlassAppLayout from './pages/glass/GlassAppLayout';
+import GlassDashboard from './pages/glass/GlassDashboard';
+import GlassCaseList from './pages/glass/GlassCaseList';
+import GlassCaseFile from './pages/glass/GlassCaseFile';
 
 function AppRoutes() {
   const studio = isStudioMode();
@@ -26,7 +31,13 @@ function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="/app/glass" element={<GlassAppLayout />}>
+        <Route index element={<GlassDashboard />} />
+        <Route path="cases" element={<GlassCaseList />} />
+        <Route path="cases/:caseId" element={<GlassCaseFile />} />
+      </Route>
       <Route path="/app" element={<CaseAppLayout />}>
+        <Route path="tracks" element={<DesignTracks />} />
         <Route index element={<DecisionCenter />} />
         <Route path="analysis" element={<Analysis />} />
         <Route path="cases" element={<CaseList />} />

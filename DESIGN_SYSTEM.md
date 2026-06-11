@@ -1,13 +1,20 @@
 # DocuMind CMS Design System
 
-> **Your decisions:** [`DESIGN_DECISIONS.md`](./DESIGN_DECISIONS.md) — plain sections, **no coded IDs** (keeps design separate from your data field registry).  
-> **Tokens:** `src/lib/designTokens.js` · **Components:** `src/components/ds/` · **Brand:** `src/config/caseAppMeta.js`
+> **Strategy:** [`DESIGN_TRACKS.md`](./DESIGN_TRACKS.md) — three parallel prototypes (glass template, workplace, case file). Refine pages first, promote patterns when they stabilise.  
+> **Your decisions:** [`DESIGN_DECISIONS.md`](./DESIGN_DECISIONS.md) — plain sections, **no coded IDs**.  
+> **Live hub:** `/app/tracks`
 
 Do not invent decisions. Do not use `DF-xxx` / `DC-xxx` style codes in design files.
 
+| Track | Routes | Stack |
+|-------|--------|-------|
+| **A — Template Glass** | `/app/glass` | `useTheme`, `glass-card`, `ContentCard` |
+| **B — Workplace Light** | `/app`, `/app/analysis` | `ds-theme-workplace`, `src/components/ds/` |
+| **C — Case File Dark Glass** | `/app/cases/:id` | `ds-theme-casefile`, `DSCaseHeader` |
+
 ---
 
-## 1. Two themes — when to use which
+## 1. Two themes — when to use which (Track B + C)
 
 | Theme | Class | Use for |
 |-------|-------|---------|

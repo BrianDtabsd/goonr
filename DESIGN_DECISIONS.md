@@ -2,8 +2,10 @@
 
 **Owner:** You  
 **Product:** DocuMind cms  
+**Strategy:** [`DESIGN_TRACKS.md`](./DESIGN_TRACKS.md) — three parallel prototypes  
+**Hub:** `/app/tracks`  
 **Tokens:** `src/lib/designTokens.js`  
-**Components:** `src/components/ds/`  
+**Components:** `src/components/ds/` (Track B/C) · `glass-card` + `useTheme` (Track A)  
 **Branding:** `src/config/caseAppMeta.js`
 
 ---

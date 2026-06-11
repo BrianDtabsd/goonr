@@ -20,18 +20,18 @@ export const decisionRecord = {
 
   /** Trace every choice to a decision ID in DESIGN_DECISIONS.md */
   ids: {
-    brand: 'DM-001',
-    themes: 'DM-002',
-    brandColors: 'DM-003',
-    calmPalette: 'DM-004',
-    forbidden: 'DM-005',
-    typography: 'DM-006',
-    spacing: 'DM-007',
-    radius: 'DM-008',
-    shadow: 'DM-009',
-    motion: 'DM-010',
-    icons: 'DM-011',
-    domainColors: 'DM-012',
+    brand: 'DC-001',
+    themes: 'DC-002',
+    brandColors: 'DC-003',
+    calmPalette: 'DC-004',
+    forbidden: 'DC-005',
+    typography: 'DC-006',
+    spacing: 'DC-007',
+    radius: 'DC-008',
+    shadow: 'DC-009',
+    motion: 'DC-010',
+    icons: 'DC-011',
+    domainColors: 'DC-012',
   },
 };
 
@@ -41,14 +41,14 @@ export const decisionRecord = {
 
 export const decisions = {
   brand: {
-    id: 'DM-001',
+    id: 'DC-001',
     name: getCaseAppMeta().brandName,
     breadcrumbPrefix: getCaseAppMeta().breadcrumbPrefix,
     source: 'Owner specified: DocuMind cms',
   },
 
   themes: {
-    id: 'DM-002',
+    id: 'DC-002',
     workplace: {
       name: 'Workplace Light',
       class: 'ds-theme-workplace',
@@ -64,7 +64,7 @@ export const decisions = {
   },
 
   brandColors: {
-    id: 'DM-003',
+    id: 'DC-003',
     source: 'Owner provided CSS variables',
     tokens: {
       ink: { hex: '#1B1B1B', cssVar: '--color-1', use: 'Primary text, charcoal buttons' },
@@ -76,7 +76,7 @@ export const decisions = {
   },
 
   calmAccents: {
-    id: 'DM-004',
+    id: 'DC-004',
     source: 'Owner: calm palette, ADHD/anxiety-safe; globe + case file refs',
     sage: { hex: '#78BDA7', use: 'Active, online, success' },
     ice: { hex: '#C8E6EA', use: 'Info, focus, dark-mode glass glow' },
@@ -88,7 +88,7 @@ export const decisions = {
   },
 
   forbidden: {
-    id: 'DM-005',
+    id: 'DC-005',
     source: 'Owner: no anxiety-inducing UI',
     colors: ['corporate blue (#3b82f6)', 'bright red', 'neon green', 'purple gradients'],
     fonts: ['JetBrains Mono', 'font-mono in ds/ or caseapp/'],
@@ -102,7 +102,7 @@ export const decisions = {
   },
 
   typography: {
-    id: 'DM-006',
+    id: 'DC-006',
     source: 'Owner: ADHD-friendly; Inter only; tightened headings',
     fontFamily: 'Inter',
     bodySize: '16px',
@@ -117,7 +117,7 @@ export const decisions = {
   },
 
   spacing: {
-    id: 'DM-007',
+    id: 'DC-007',
     source: 'Owner: generous spacing, not cramped',
     touchTargetMin: '44px',
     cardPadding: '24px',
@@ -127,7 +127,7 @@ export const decisions = {
   },
 
   radius: {
-    id: 'DM-008',
+    id: 'DC-008',
     source: 'Owner screenshots: rounded modern UI',
     button: '12px (rounded-xl)',
     card: '16px (rounded-2xl)',
@@ -137,7 +137,7 @@ export const decisions = {
   },
 
   motion: {
-    id: 'DM-010',
+    id: 'DC-010',
     source: 'Owner: bounces OK; no flashy motion',
     allowed: ['hover lift -2px', 'press scale 0.98', 'fade-in', 'tab transition'],
     forbidden: ['flash', 'infinite pulse (except live status dot)', 'parallax', 'auto carousel'],
@@ -148,7 +148,7 @@ export const decisions = {
   },
 
   icons: {
-    id: 'DM-011',
+    id: 'DC-011',
     set: 'Solar (iconify-icon)',
     rule: 'No emoji as icons',
   },
@@ -160,14 +160,14 @@ export const decisions = {
 
 export const components = {
   appShell: {
-    id: 'DM-100',
+    id: 'DC-100',
     component: 'DSAppShell',
     anatomy: ['sidebar 240px', 'main scroll area', 'optional floating advisor pill'],
     themes: ['workplace', 'casefile'],
   },
 
   sidebar: {
-    id: 'DM-101',
+    id: 'DC-101',
     component: 'DSSidebar',
     workplace: {
       width: '240px',
@@ -195,7 +195,7 @@ export const components = {
   },
 
   button: {
-    id: 'DM-102',
+    id: 'DC-102',
     component: 'DSButton',
     sizes: {
       default: { px: '20px', py: '10px', fontSize: '14px' },
@@ -249,7 +249,7 @@ export const components = {
   },
 
   card: {
-    id: 'DM-103',
+    id: 'DC-103',
     component: 'DSCard',
     padding: '24px',
     radius: '16px',
@@ -268,7 +268,7 @@ export const components = {
   },
 
   statCard: {
-    id: 'DM-104',
+    id: 'DC-104',
     component: 'DSStatCard',
     value: { size: '36px', weight: 600, tracking: '-0.03em', nums: 'tabular' },
     label: { size: '10px', uppercase: true, tracking: '0.14em', color: 'stone-400' },
@@ -276,7 +276,7 @@ export const components = {
   },
 
   pageHeader: {
-    id: 'DM-105',
+    id: 'DC-105',
     component: 'DSPageHeader',
     anatomy: ['breadcrumb', 'title H1', 'optional subtitle', 'actions right'],
     breadcrumb: 'documind cms / {section} via caseAppBreadcrumb()',
@@ -284,7 +284,7 @@ export const components = {
   },
 
   caseHeader: {
-    id: 'DM-106',
+    id: 'DC-106',
     component: 'DSCaseHeader',
     anatomy: ['back ghost', 'breadcrumb', 'case ID', 'status badges', 'case name', 'tabs', 'actions'],
     tabs: ['Gather', 'Analysis', 'Resolution', 'GRTW', 'Tasks', 'Files'],
@@ -292,7 +292,7 @@ export const components = {
   },
 
   input: {
-    id: 'DM-107',
+    id: 'DC-107',
     components: ['DSInput', 'DSTextarea'],
     height: '44px min (input)',
     padding: '12px 16px',
@@ -312,7 +312,7 @@ export const components = {
   },
 
   tabs: {
-    id: 'DM-108',
+    id: 'DC-108',
     component: 'DSTabs',
     container: 'pilled track with 4px inner padding',
     workplace: { track: '#E4E4E4/80', active: 'white bg + shadow' },
@@ -321,7 +321,7 @@ export const components = {
   },
 
   badge: {
-    id: 'DM-109',
+    id: 'DC-109',
     component: 'DSBadge',
     shape: 'pill',
     font: '10px uppercase medium tracking 0.1em',
@@ -335,7 +335,7 @@ export const components = {
   },
 
   table: {
-    id: 'DM-110',
+    id: 'DC-110',
     wrapper: 'card shell rounded-2xl overflow hidden',
     header: '10px uppercase medium slate — not monospace',
     row: 'hover stone-50 workplace / white/3% casefile',
@@ -343,7 +343,7 @@ export const components = {
   },
 
   alert: {
-    id: 'DM-111',
+    id: 'DC-111',
     casefileInfo: {
       bg: 'ice/8%',
       border: 'ice/18%',
@@ -352,7 +352,7 @@ export const components = {
   },
 
   advisor: {
-    id: 'DM-112',
+    id: 'DC-112',
     component: 'DSAdvisorPanel',
     floating: {
       position: 'fixed bottom-right',
@@ -369,14 +369,14 @@ export const components = {
   },
 
   fileChip: {
-    id: 'DM-113',
+    id: 'DC-113',
     anatomy: ['icon', 'filename', 'type/size meta', 'optional remove'],
     radius: '12px',
     workplace: { bg: '#F8F8F8', border: 'slate 15%' },
   },
 
   empty: {
-    id: 'DM-114',
+    id: 'DC-114',
     layout: 'centered icon + title + body + optional CTA',
     tone: 'muted stone — no alarming colors',
   },
@@ -387,7 +387,7 @@ export const components = {
 // ---------------------------------------------------------------------------
 
 export const domainDecisions = {
-  id: 'DM-012',
+  id: 'DC-012',
   caseStatus: {
     open: { accent: 'ice', label: 'Open' },
     in_progress: { accent: 'sand', label: 'In Progress' },

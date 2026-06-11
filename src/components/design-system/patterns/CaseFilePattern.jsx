@@ -3,9 +3,6 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Button from '../../Button';
 import { caseDetail } from '../../../content/caseAppMock';
 import { caseAppBreadcrumb } from '../../../config/caseAppMeta';
-import { documindGlassCasefile } from '../../../lib/glassPresets';
-import { useTheme } from '../../../hooks/useTheme';
-
 const tabs = ['Gather', 'Analyze', 'Decide', 'Document Hub', 'GRTW'];
 
 function InfoBlock({ label, rows }) {
@@ -32,14 +29,9 @@ export default function CaseFilePattern({
 }) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { updateTheme } = useTheme();
   const [activeTab, setActiveTab] = useState('Gather');
   const caseId = searchParams.get('case') || caseDetail.id;
   const data = { ...caseDetail, id: caseId };
-
-  React.useEffect(() => {
-    updateTheme(documindGlassCasefile);
-  }, [updateTheme]);
 
   return (
     <div className="space-y-6">

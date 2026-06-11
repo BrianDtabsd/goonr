@@ -23,6 +23,7 @@ function SettingsPanel() {
     { label: 'Ember', hex: '#FF5722', rgb: '255, 87, 34' },
     { label: 'Blue', hex: '#3b82f6', rgb: '59, 130, 246' },
     { label: 'Emerald', hex: '#10b981', rgb: '16, 185, 129' },
+    { label: 'Forest', hex: '#1e372a', rgb: '30, 55, 42' },
     { label: 'Purple', hex: '#8b5cf6', rgb: '139, 92, 246' },
     { label: 'Rose', hex: '#f43f5e', rgb: '244, 63, 94' },
     { label: 'Amber', hex: '#f59e0b', rgb: '245, 158, 11' },
@@ -80,8 +81,8 @@ function SettingsPanel() {
             </div>
           </div>
         ) : null}
-        <SetupGuide />
-        <VisibilityEditor />
+        {onDesignSystem ? null : <SetupGuide />}
+        {onDesignSystem ? null : <VisibilityEditor />}
 
         {/* Layout Mode */}
         <div>
@@ -129,7 +130,7 @@ function SettingsPanel() {
           </div>
         </div>
 
-        <TemplateContentEditor />
+        {onDesignSystem ? null : <TemplateContentEditor />}
 
         {/* Typography Bundles */}
         <div>
@@ -163,7 +164,7 @@ function SettingsPanel() {
             />
           </div>
           
-          <div>
+          <div className="mb-3">
             <div className="flex justify-between mb-1">
               <span>Transparency</span>
               <span className="text-slate-400">{theme.transparencyLevel}</span>
@@ -173,6 +174,34 @@ function SettingsPanel() {
               min="0" max="1" step="0.05"
               value={theme.transparencyLevel}
               onChange={(e) => updateTheme({ transparencyLevel: parseFloat(e.target.value) })}
+              className="w-full accent-blue-500"
+            />
+          </div>
+
+          <div className="mb-3">
+            <div className="flex justify-between mb-1">
+              <span>Card radius</span>
+              <span className="text-slate-400">{theme.cardRadius}</span>
+            </div>
+            <input
+              type="range"
+              min="8" max="48"
+              value={parseInt(theme.cardRadius)}
+              onChange={(e) => updateTheme({ cardRadius: `${e.target.value}px` })}
+              className="w-full accent-blue-500"
+            />
+          </div>
+
+          <div>
+            <div className="flex justify-between mb-1">
+              <span>Card padding</span>
+              <span className="text-slate-400">{theme.cardPadding}</span>
+            </div>
+            <input
+              type="range"
+              min="12" max="48"
+              value={parseInt(theme.cardPadding)}
+              onChange={(e) => updateTheme({ cardPadding: `${e.target.value}px` })}
               className="w-full accent-blue-500"
             />
           </div>

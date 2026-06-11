@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { documindGlassDashboard } from '../lib/glassPresets';
+
+const THEME_STORAGE_KEY = 'goonr-theme-v1';
 
 const typographyBundles = {
   modern: {
@@ -43,7 +46,7 @@ export const defaultTheme = {
   // Glassmorphism settings
   frostLevel: '24px', // blur amount
   transparencyLevel: 0.1, // opacity of the background color
-  primaryColor: '#3b82f6', // blue-500
+  primaryColor: '#FF5722', // DocuMind ember
   frostColor: '255, 255, 255', // RGB string for rgba()
   
   // Sizing
@@ -63,8 +66,19 @@ export const defaultTheme = {
 
 const ThemeContext = createContext();
 
+function loadStoredTheme() {
+  if (typeof window === 'undefined') return { ...defaultTheme, ...documindGlassDashboard };
+  try {
+    const raw = localStorage.getItem(THEME_STORAGE_KEY);
+    if (raw) return { ...defaultTheme, ...JSON.parse(raw) };
+  } catch {
+    /* ignore corrupt storage */
+  }
+  return { ...defaultTheme, ...documindGlassDashboard };
+}
+
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(defaultTheme);
+  const [theme, setTheme] = useState(loadStoredTheme);
 
   // Update CSS variables when theme changes
   useEffect(() => {
@@ -103,15 +117,28 @@ export function ThemeProvider({ children }) {
     const navBorderWidth = theme.navOutline === 'none' ? '0px' : theme.navOutline === 'thin' ? '1px' : '2px';
     root.style.setProperty('--nav-border-width', navBorderWidth);
     root.style.setProperty('--nav-border-color', theme.navOutlineColor);
-    
+
+    document.body.style.removeProperty('background-image');
+    document.body.style.removeProperty('background-color');
+
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(theme));
+    } catch {
+      /* ignore quota errors */
+    }
   }, [theme]);
 
-  const updateTheme = (updates) => {
-    setTheme(prev => ({ ...prev, ...updates }));
-  };
+  const updateTheme = useCallback((updates) => {
+    setTheme((prev) => ({ ...prev, ...updates }));
+  }, []);
+
+  const value = useMemo(
+    () => ({ theme, updateTheme, typographyBundles }),
+    [theme, updateTheme]
+  );
 
   return (
-    <ThemeContext.Provider value={{ theme, updateTheme, typographyBundles }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );

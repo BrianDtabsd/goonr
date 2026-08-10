@@ -310,9 +310,6 @@ body::before {
 }
 
 .site-ambiance {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
   pointer-events: none;
   background:
     radial-gradient(
@@ -335,7 +332,7 @@ body::before {
 }
 
 .site-header-slot {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -354,7 +351,7 @@ body::before {
  * before it reaches the bar.
  */
 .site-header-mask {
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
   top: 0;
@@ -502,4 +499,335 @@ html[data-surface='foundation'] .bg-black\/10 {
 html[data-surface='foundation'] .font-mono {
   font-family: var(--font-label);
   letter-spacing: 0.1em;
+}
+
+/* Remap hardcoded blue accents → Foundation theme accent */
+html[data-surface='foundation'] .bg-blue-400,
+html[data-surface='foundation'] .bg-blue-500,
+html[data-surface='foundation'] .bg-blue-600 {
+  background-color: var(--ds-color-accent) !important;
+}
+
+html[data-surface='foundation'] .text-blue-300,
+html[data-surface='foundation'] .text-blue-400,
+html[data-surface='foundation'] .text-blue-500,
+html[data-surface='foundation'] .text-blue-600 {
+  color: var(--ds-color-accent) !important;
+}
+
+html[data-surface='foundation'] .border-blue-400\/20,
+html[data-surface='foundation'] .border-blue-400\/30,
+html[data-surface='foundation'] .border-blue-400\/60 {
+  border-color: color-mix(in srgb, var(--ds-color-accent) 35%, transparent) !important;
+}
+
+html[data-surface='foundation'] .bg-blue-500\/10,
+html[data-surface='foundation'] .bg-blue-500\/15 {
+  background-color: var(--ds-color-accent-soft) !important;
+}
+
+html[data-surface='foundation'] .text-blue-200 {
+  color: var(--ds-color-accent-hover) !important;
+}
+
+/* Accent edge on cards so palette shifts are obvious */
+html[data-surface='foundation'] .glass-card {
+  border-top: 2px solid var(--ds-color-accent);
+}
+
+.foundation-stripe {
+  display: none;
+}
+
+html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundation-stripe {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0.55rem;
+  z-index: 40;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    #8f7a96 0%,
+    #8f7a96 33%,
+    #7a9eab 33%,
+    #7a9eab 66%,
+    #8fa890 66%,
+    #8fa890 100%
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Studio split shell — site + opaque panel, drag to resize
+   ───────────────────────────────────────────────────────────── */
+
+.studio-split {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  align-items: stretch;
+}
+
+.studio-split.is-dragging {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.studio-split.is-dragging * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+.studio-site-pane {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 100vh;
+  overflow: auto;
+  position: relative;
+  transition: width 0.15s ease;
+}
+
+.studio-split.is-dragging .studio-site-pane {
+  transition: none;
+}
+
+.studio-split.is-open .studio-site-pane {
+  /* keep fixed layers (header/ambiance) clipped to the site pane */
+  contain: paint;
+}
+
+.studio-resize-handle {
+  position: relative;
+  flex: 0 0 6px;
+  width: 6px;
+  margin-left: -3px;
+  z-index: 90;
+  cursor: col-resize;
+  touch-action: none;
+  background: transparent;
+}
+
+.studio-resize-handle::before {
+  content: '';
+  position: absolute;
+  inset: 0 -4px;
+}
+
+.studio-resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 2px;
+  width: 2px;
+  background: #3f3f46;
+  transition: background 0.15s ease, width 0.15s ease, left 0.15s ease;
+}
+
+.studio-resize-handle:hover::after,
+.studio-resize-handle.is-dragging::after {
+  left: 1px;
+  width: 4px;
+  background: #38bdf8;
+}
+
+.studio-panel {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  background: #101014;
+  color: #e4e4e7;
+  border-left: 1px solid #27272a;
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.45);
+  font-size: 13px;
+  overflow: hidden;
+}
+
+.studio-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #27272a;
+  background: #0c0c10;
+  flex-shrink: 0;
+}
+
+.studio-panel__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fafafa;
+  letter-spacing: -0.01em;
+}
+
+.studio-panel__sub {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+.studio-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #3f3f46;
+  background: #18181b;
+  color: #e4e4e7;
+}
+
+.studio-icon-btn:hover {
+  background: #27272a;
+  color: #fff;
+}
+
+.studio-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #27272a;
+  background: #0c0c10;
+  flex-shrink: 0;
+}
+
+.studio-tab {
+  border: 1px solid #3f3f46;
+  background: #18181b;
+  color: #a1a1aa;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.studio-tab:hover {
+  color: #f4f4f5;
+  border-color: #52525b;
+}
+
+.studio-tab.is-active {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #fff;
+}
+
+.studio-panel__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px 14px 28px;
+  background: #101014;
+}
+
+/* High-contrast form controls inside Studio */
+#settings-panel label span,
+#settings-panel .studio-panel__body {
+  color: #e4e4e7;
+}
+
+#settings-panel input[type='text'],
+#settings-panel input[type='search'],
+#settings-panel textarea,
+#settings-panel select {
+  background: #18181b !important;
+  border: 1px solid #3f3f46 !important;
+  color: #fafafa !important;
+  border-radius: 8px !important;
+}
+
+#settings-panel input:focus,
+#settings-panel textarea:focus,
+#settings-panel select:focus {
+  border-color: #38bdf8 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+}
+
+#settings-panel details {
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  border-radius: 10px;
+}
+
+#settings-panel details > summary {
+  color: #f4f4f5;
+}
+
+#settings-panel .bg-slate-800,
+#settings-panel .bg-slate-900\/40,
+#settings-panel .bg-black\/20,
+#settings-panel .bg-black\/40 {
+  background-color: #18181b !important;
+}
+
+#settings-panel .border-white\/10,
+#settings-panel .border-white\/5,
+#settings-panel .border-slate-600,
+#settings-panel .border-slate-700 {
+  border-color: #3f3f46 !important;
+}
+
+#settings-panel .text-slate-500,
+#settings-panel .text-slate-400 {
+  color: #a1a1aa !important;
+}
+
+#settings-panel .text-slate-300,
+#settings-panel .text-slate-200 {
+  color: #e4e4e7 !important;
+}
+
+#settings-panel .bg-blue-500,
+#settings-panel .bg-blue-600 {
+  background-color: #0284c7 !important;
+}
+
+@media (max-width: 900px) {
+  .studio-split.is-open {
+    flex-direction: column;
+  }
+
+  .studio-split.is-open .studio-site-pane {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 45vh;
+  }
+
+  .studio-resize-handle {
+    flex-basis: 8px;
+    width: 100%;
+    height: 8px;
+    margin-left: 0;
+    cursor: row-resize;
+  }
+
+  .studio-resize-handle::after {
+    top: 3px;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 2px;
+  }
+
+  .studio-panel {
+    width: 100% !important;
+    height: 55vh;
+    position: relative;
+  }
 }

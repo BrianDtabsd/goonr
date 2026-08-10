@@ -204,6 +204,7 @@ export function ThemeProvider({ children }) {
         ? 'dark'
         : 'light'
       : '';
+    root.dataset.foundationPreset = isFoundation ? preset.id : '';
     root.dataset.serifScope = isFoundation ? preset.serifScope : 'none';
     document.body.dataset.layoutMode = theme.layoutMode;
     document.body.dataset.surface = root.dataset.surface;

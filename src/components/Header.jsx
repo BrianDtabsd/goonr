@@ -57,11 +57,18 @@ function Header() {
         >
           <Link to="/" className="flex items-center gap-3 group min-w-0 shrink-0">
             {isFoundation ? (
-              <span
-                className="text-xs font-bold uppercase tracking-[0.14em] truncate"
-                style={{ color: 'var(--ds-color-ink)', fontFamily: 'var(--font-label)' }}
-              >
-                {brandName}
+              <span className="flex items-center gap-2.5 min-w-0">
+                <span
+                  className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
+                  style={{ backgroundColor: 'var(--ds-color-accent)' }}
+                  aria-hidden="true"
+                />
+                <span
+                  className="text-xs font-bold uppercase tracking-[0.14em] truncate"
+                  style={{ color: 'var(--ds-color-ink)', fontFamily: 'var(--font-label)' }}
+                >
+                  {brandName}
+                </span>
               </span>
             ) : (
               <>

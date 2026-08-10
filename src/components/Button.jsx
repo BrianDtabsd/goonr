@@ -21,9 +21,10 @@ function Button({ children, onClick, href, to, className = '', variant = 'primar
     baseClass +=
       ' font-bold uppercase tracking-[0.08em] text-xs min-h-10';
     if (variant === 'primary') {
-      styleObj.backgroundColor = 'var(--ds-button-ink)';
-      styleObj.color = 'var(--ds-button-ink-text)';
-      styleObj.border = '1px solid var(--ds-button-ink)';
+      // Accent fill — theme differences are immediately visible
+      styleObj.backgroundColor = 'var(--ds-color-accent)';
+      styleObj.color = '#ffffff';
+      styleObj.border = '1px solid var(--ds-color-accent)';
     } else if (variant === 'outline') {
       styleObj.backgroundColor = 'transparent';
       styleObj.color = 'var(--ds-color-ink)';
@@ -67,21 +68,22 @@ function Button({ children, onClick, href, to, className = '', variant = 'primar
     ? {
         onMouseEnter: (e) => {
           if (variant === 'primary') {
-            e.currentTarget.style.backgroundColor = 'var(--ds-color-accent)';
-            e.currentTarget.style.borderColor = 'var(--ds-color-accent)';
+            e.currentTarget.style.backgroundColor = 'var(--ds-color-accent-hover)';
+            e.currentTarget.style.borderColor = 'var(--ds-color-accent-hover)';
             e.currentTarget.style.color = '#ffffff';
           } else if (variant === 'outline') {
             e.currentTarget.style.backgroundColor = 'var(--ds-color-ink)';
             e.currentTarget.style.color = 'var(--ds-color-canvas)';
           } else {
-            e.currentTarget.style.backgroundColor = 'var(--ds-color-surface-subtle)';
+            e.currentTarget.style.backgroundColor = 'var(--ds-color-accent-soft)';
+            e.currentTarget.style.color = 'var(--ds-color-accent-hover)';
           }
         },
         onMouseLeave: (e) => {
           if (variant === 'primary') {
-            e.currentTarget.style.backgroundColor = 'var(--ds-button-ink)';
-            e.currentTarget.style.borderColor = 'var(--ds-button-ink)';
-            e.currentTarget.style.color = 'var(--ds-button-ink-text)';
+            e.currentTarget.style.backgroundColor = 'var(--ds-color-accent)';
+            e.currentTarget.style.borderColor = 'var(--ds-color-accent)';
+            e.currentTarget.style.color = '#ffffff';
           } else if (variant === 'outline') {
             e.currentTarget.style.backgroundColor = 'transparent';
             e.currentTarget.style.color = 'var(--ds-color-ink)';

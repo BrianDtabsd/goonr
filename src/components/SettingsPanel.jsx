@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useSiteMeta } from '../hooks/useSiteMeta';
+import { useStudioShell } from '../hooks/useStudioShell';
 import TemplateContentEditor, { TextField } from './TemplateContentEditor';
 import SetupGuide from './SetupGuide';
 import VisibilityEditor from './VisibilityEditor';
@@ -541,8 +542,9 @@ function LookEditor() {
 }
 
 function SettingsPanel() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [tab, setTab] = useState('setup');
+  const [tab, setTab] = useState('look');
+  const { isOpen, openStudio, closeStudio, panelWidth, beginResize, isDragging } =
+    useStudioShell();
 
   if (!isStudioMode()) return null;
 
@@ -551,8 +553,8 @@ function SettingsPanel() {
       <div id="settings-panel">
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4 shadow-lg transition-transform hover:scale-105"
+          onClick={openStudio}
+          className="fixed bottom-6 right-6 z-[80] bg-sky-600 hover:bg-sky-500 text-white rounded-full p-4 shadow-lg transition-transform hover:scale-105"
           aria-label="Open Studio"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -575,60 +577,70 @@ function SettingsPanel() {
   }
 
   return (
-    <div
-      id="settings-panel"
-      className="fixed top-0 right-0 bottom-0 z-50 flex w-[min(36rem,calc(100vw-0.5rem))] flex-col border-l border-white/10 bg-black/85 text-sm text-slate-200 shadow-2xl backdrop-blur-xl"
-      contentEditable="false"
-    >
-      <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-5 py-4">
-        <div>
-          <h2 className="text-lg font-bold text-white">ShopSite Studio</h2>
-          <p className="text-[10px] text-slate-500 mt-0.5">
-            Setup · brand · pages · copy · look
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setIsOpen(false)}
-          className="text-slate-400 hover:text-white"
-          aria-label="Close Studio"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <div className="shrink-0 flex gap-1 overflow-x-auto border-b border-white/10 px-3 py-2">
-        {TABS.map((t) => (
+    <>
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize Studio"
+        title="Drag to resize"
+        onPointerDown={(e) => {
+          e.preventDefault();
+          beginResize(e.clientX);
+        }}
+        className={`studio-resize-handle ${isDragging ? 'is-dragging' : ''}`}
+      />
+      <aside
+        id="settings-panel"
+        className="studio-panel"
+        style={{ width: panelWidth }}
+        contentEditable="false"
+      >
+        <div className="studio-panel__header">
+          <div>
+            <h2 className="studio-panel__title">ShopSite Studio</h2>
+            <p className="studio-panel__sub">Edit live · drag the edge to resize</p>
+          </div>
           <button
-            key={t.id}
             type="button"
-            onClick={() => setTab(t.id)}
-            className={`shrink-0 rounded-md px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-colors ${
-              tab === t.id
-                ? 'bg-blue-500 text-white'
-                : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
-            }`}
+            onClick={closeStudio}
+            className="studio-icon-btn"
+            aria-label="Close Studio"
           >
-            {t.label}
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
-        ))}
-      </div>
+        </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-        {tab === 'setup' ? <SetupGuide embedded /> : null}
-        {tab === 'brand' ? <BrandEditor /> : null}
-        {tab === 'pages' ? <VisibilityEditor embedded /> : null}
-        {tab === 'copy' ? <TemplateContentEditor embedded /> : null}
-        {tab === 'look' ? <LookEditor /> : null}
-      </div>
-    </div>
+        <div className="studio-tabs" role="tablist">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              aria-selected={tab === t.id}
+              onClick={() => setTab(t.id)}
+              className={`studio-tab ${tab === t.id ? 'is-active' : ''}`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="studio-panel__body">
+          {tab === 'setup' ? <SetupGuide embedded /> : null}
+          {tab === 'brand' ? <BrandEditor /> : null}
+          {tab === 'pages' ? <VisibilityEditor embedded /> : null}
+          {tab === 'copy' ? <TemplateContentEditor embedded /> : null}
+          {tab === 'look' ? <LookEditor /> : null}
+        </div>
+      </aside>
+    </>
   );
 }
 

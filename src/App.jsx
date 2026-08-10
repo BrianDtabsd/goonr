@@ -4,6 +4,7 @@ import { ThemeProvider } from './hooks/useTheme';
 import { TemplateContentProvider } from './hooks/useTemplateContent';
 import { SiteMetaProvider } from './hooks/useSiteMeta';
 import { VisibilityProvider, useVisibility } from './hooks/useVisibility';
+import { StudioShellProvider, useStudioShell } from './hooks/useStudioShell';
 import { StripeEmbeddedCheckoutProvider } from './context/StripeEmbeddedCheckoutContext';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -39,6 +40,33 @@ function AppRoutes() {
   );
 }
 
+function StudioSplitShell({ children }) {
+  const studioEnabled = isStudioMode();
+  const { isOpen, panelWidth, isDragging } = useStudioShell();
+
+  if (!studioEnabled) {
+    return children;
+  }
+
+  return (
+    <div
+      className={`studio-split ${isOpen ? 'is-open' : ''} ${isDragging ? 'is-dragging' : ''}`}
+    >
+      <div
+        className="studio-site-pane"
+        style={
+          isOpen
+            ? { width: `calc(100% - ${panelWidth}px)`, maxWidth: `calc(100% - ${panelWidth}px)` }
+            : undefined
+        }
+      >
+        {children}
+      </div>
+      <SettingsPanel />
+    </div>
+  );
+}
+
 function App() {
   return (
     <ThemeProvider>
@@ -46,10 +74,13 @@ function App() {
         <SiteMetaProvider>
           <TemplateContentProvider>
             <VisibilityProvider>
-              <StripeEmbeddedCheckoutProvider>
-                <AppRoutes />
-                <SettingsPanel />
-              </StripeEmbeddedCheckoutProvider>
+              <StudioShellProvider>
+                <StripeEmbeddedCheckoutProvider>
+                  <StudioSplitShell>
+                    <AppRoutes />
+                  </StudioSplitShell>
+                </StripeEmbeddedCheckoutProvider>
+              </StudioShellProvider>
             </VisibilityProvider>
           </TemplateContentProvider>
         </SiteMetaProvider>

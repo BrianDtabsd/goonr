@@ -13,18 +13,20 @@ function Layout() {
   const isContainer = theme.layoutMode === 'container';
 
   return (
-    <div className="relative min-h-screen flex flex-col">
+    <div className="relative min-h-screen flex flex-col overflow-x-hidden">
       <DocumentHead />
 
+      <div className="foundation-stripe" aria-hidden="true" />
+
       {/* Ambient layers sit under the full-page surface */}
-      <div className="site-ambiance" aria-hidden="true" />
+      <div className="site-ambiance absolute inset-0 z-0" aria-hidden="true" />
 
       {/*
         Global Container = full-bleed page surface (no edge gutters).
         Cards mode leaves this inert so floating cards sit on the ambient field.
       */}
       <div
-        className={`fixed inset-0 z-0 pointer-events-none transition-all duration-700 ${
+        className={`absolute inset-0 z-0 pointer-events-none transition-all duration-700 ${
           isContainer ? 'glass-container' : ''
         }`}
         aria-hidden="true"
@@ -50,10 +52,7 @@ function Layout() {
 
       <Header />
 
-      <main
-        className="flex-grow flex flex-col z-10 relative"
-        style={{ paddingTop: 'var(--header-offset)' }}
-      >
+      <main className="flex-grow flex flex-col z-10 relative">
         <Hero />
         <Outlet />
       </main>

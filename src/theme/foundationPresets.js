@@ -1,0 +1,184 @@
+/**
+ * Foundation look presets — decided font pairs + palettes.
+ * Serif is scoped deliberately so it never floods body/UI copy.
+ *
+ * serifScope:
+ *   - none:    all sans (serif-averse)
+ *   - display: hero / h1 only
+ *   - titles:  h1–h3 + .card-title
+ */
+
+export const foundationPresets = {
+  ember: {
+    id: 'ember',
+    name: 'Ember Editorial',
+    blurb: 'Canonical Foundation — Georgia titles, Arial UI, warm paper, ember accent.',
+    serifScope: 'titles',
+    fonts: {
+      display: 'Georgia, "Times New Roman", serif',
+      heading: 'Georgia, "Times New Roman", serif',
+      body: 'Arial, Helvetica, sans-serif',
+      label: 'Arial, Helvetica, sans-serif',
+    },
+    light: {
+      canvas: '#f3f2ee',
+      surface: '#ffffff',
+      surfaceSubtle: '#ebe9e3',
+      ink: '#121212',
+      inkMuted: '#66645f',
+      inkFaint: '#85827b',
+      line: 'rgba(18, 18, 18, 0.18)',
+      accent: '#d65f32',
+      accentHover: '#bf4f28',
+      accentSoft: '#f3d7ca',
+      buttonInk: '#121212',
+      buttonInkText: '#f3f2ee',
+    },
+    dark: {
+      canvas: '#111111',
+      surface: '#191919',
+      surfaceSubtle: '#22211f',
+      ink: '#f3f2ee',
+      inkMuted: '#b2afa8',
+      inkFaint: '#85827c',
+      line: 'rgba(255, 255, 255, 0.16)',
+      accent: '#e27348',
+      accentHover: '#ee855d',
+      accentSoft: '#4a2b20',
+      buttonInk: '#f3f2ee',
+      buttonInkText: '#111111',
+    },
+  },
+
+  /** Color Consciousness–inspired: cream paper, muted pastels, serif display only */
+  consciousness: {
+    id: 'consciousness',
+    name: 'Color Consciousness',
+    blurb: 'Cream paper, muted mauve/teal/sage, serif for big headlines only — UI stays sans.',
+    serifScope: 'display',
+    fonts: {
+      display: '"Libre Baskerville", Georgia, serif',
+      heading: '"DM Sans", Arial, sans-serif',
+      body: '"DM Sans", Arial, sans-serif',
+      label: '"DM Sans", Arial, sans-serif',
+    },
+    light: {
+      canvas: '#f5f2ea',
+      surface: '#fffcf7',
+      surfaceSubtle: '#ebe6db',
+      ink: '#1a1917',
+      inkMuted: '#6b675f',
+      inkFaint: '#8f8a80',
+      line: 'rgba(26, 25, 23, 0.16)',
+      accent: '#8f7a96', // dusty mauve
+      accentHover: '#76647d',
+      accentSoft: '#e8e0eb',
+      buttonInk: '#1a1917',
+      buttonInkText: '#f5f2ea',
+      pastelTeal: '#7a9eab',
+      pastelSage: '#8fa890',
+    },
+    dark: {
+      canvas: '#161513',
+      surface: '#1f1e1b',
+      surfaceSubtle: '#2a2824',
+      ink: '#f5f2ea',
+      inkMuted: '#b0aaa0',
+      inkFaint: '#878178',
+      line: 'rgba(245, 242, 234, 0.14)',
+      accent: '#b9a4c0',
+      accentHover: '#cbb8d1',
+      accentSoft: '#3a3240',
+      buttonInk: '#f5f2ea',
+      buttonInkText: '#161513',
+      pastelTeal: '#8fb4bf',
+      pastelSage: '#a3b89e',
+    },
+  },
+
+  /** Serif-averse: all sans, warm paper, teal accent */
+  sansFirst: {
+    id: 'sansFirst',
+    name: 'Sans First',
+    blurb: 'No serif at all — Jakarta everywhere. Warm canvas with teal accent.',
+    serifScope: 'none',
+    fonts: {
+      display: '"Plus Jakarta Sans", Arial, sans-serif',
+      heading: '"Plus Jakarta Sans", Arial, sans-serif',
+      body: '"Plus Jakarta Sans", Arial, sans-serif',
+      label: '"Plus Jakarta Sans", Arial, sans-serif',
+    },
+    light: {
+      canvas: '#f2f1ed',
+      surface: '#ffffff',
+      surfaceSubtle: '#e8e6e0',
+      ink: '#141413',
+      inkMuted: '#5c5a55',
+      inkFaint: '#807d76',
+      line: 'rgba(20, 20, 19, 0.16)',
+      accent: '#2f6f6a',
+      accentHover: '#245853',
+      accentSoft: '#d5e6e4',
+      buttonInk: '#141413',
+      buttonInkText: '#f2f1ed',
+    },
+    dark: {
+      canvas: '#121211',
+      surface: '#1c1c1a',
+      surfaceSubtle: '#272724',
+      ink: '#f2f1ed',
+      inkMuted: '#a8a59c',
+      inkFaint: '#7d7a72',
+      line: 'rgba(242, 241, 237, 0.14)',
+      accent: '#5faba4',
+      accentHover: '#78c0b9',
+      accentSoft: '#1e3533',
+      buttonInk: '#f2f1ed',
+      buttonInkText: '#121211',
+    },
+  },
+
+  /** Strong sans labels + restrained Source Serif titles */
+  inkPaper: {
+    id: 'inkPaper',
+    name: 'Ink & Paper',
+    blurb: 'Source Serif for section titles only; Inter for everything else. Cool ink accent.',
+    serifScope: 'titles',
+    fonts: {
+      display: '"Source Serif 4", Georgia, serif',
+      heading: '"Source Serif 4", Georgia, serif',
+      body: 'Inter, Arial, sans-serif',
+      label: 'Inter, Arial, sans-serif',
+    },
+    light: {
+      canvas: '#f0efeb',
+      surface: '#ffffff',
+      surfaceSubtle: '#e5e3dd',
+      ink: '#101820',
+      inkMuted: '#5a6168',
+      inkFaint: '#7d848c',
+      line: 'rgba(16, 24, 32, 0.16)',
+      accent: '#1d5f91',
+      accentHover: '#164a72',
+      accentSoft: '#d5e5f2',
+      buttonInk: '#101820',
+      buttonInkText: '#f0efeb',
+    },
+    dark: {
+      canvas: '#0e1216',
+      surface: '#171c22',
+      surfaceSubtle: '#222830',
+      ink: '#eef1f4',
+      inkMuted: '#a3aab3',
+      inkFaint: '#7a828c',
+      line: 'rgba(238, 241, 244, 0.14)',
+      accent: '#75b9ea',
+      accentHover: '#93caf0',
+      accentSoft: '#1a3348',
+      buttonInk: '#eef1f4',
+      buttonInkText: '#0e1216',
+    },
+  },
+};
+
+export const foundationPresetList = Object.values(foundationPresets);

@@ -10,36 +10,63 @@ import { useTheme } from '../hooks/useTheme';
 function Layout() {
   useScrollReveal();
   const { theme } = useTheme();
+  const isContainer = theme.layoutMode === 'container';
 
   return (
-    <div className="relative min-h-screen selection:bg-blue-500/30 flex flex-col pt-8 pb-24">
+    <div className="relative min-h-screen flex flex-col overflow-x-hidden">
       <DocumentHead />
-      {/* Global Container Background Layer */}
-      <div 
-        className={`fixed inset-0 m-4 sm:m-6 lg:m-8 z-0 pointer-events-none transition-all duration-700 ${theme.layoutMode === 'container' ? 'glass-container' : ''}`}
+
+      <div className="foundation-stripe" aria-hidden="true" />
+
+      {/* Ambient layers sit under the full-page surface */}
+      <div className="site-ambiance absolute inset-0 z-0" aria-hidden="true" />
+
+      {/*
+        Global Container = full-bleed page surface (no edge gutters).
+        Cards mode leaves this inert so floating cards sit on the ambient field.
+      */}
+      <div
+        className={`absolute inset-0 z-0 pointer-events-none transition-all duration-700 ${
+          isContainer ? 'glass-container' : ''
+        }`}
+        aria-hidden="true"
       >
-        {theme.backgroundPattern === 'mesh' && (
-          <div className="absolute inset-0 pointer-events-none opacity-[0.15] rounded-[2.5rem] overflow-hidden">
+        {isContainer && theme.backgroundPattern === 'mesh' && (
+          <div className="absolute inset-0 pointer-events-none opacity-[0.06] overflow-hidden">
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <pattern id="global-mesh" width="56" height="56" patternUnits="userSpaceOnUse">
-                  <path d="M 56 0 L 0 0 0 56" fill="none" stroke="#ffffff" strokeWidth="0.6"></path>
+                  <path
+                    d="M 56 0 L 0 0 0 56"
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth="0.6"
+                  />
                 </pattern>
               </defs>
-              <rect width="100%" height="100%" fill="url(#global-mesh)"></rect>
+              <rect width="100%" height="100%" fill="url(#global-mesh)" />
             </svg>
           </div>
         )}
       </div>
-      
+
       <Header />
-      
+
       <main className="flex-grow flex flex-col z-10 relative">
         <Hero />
         <Outlet />
       </main>
-      
-      <div className="mx-4 sm:mx-6 lg:mx-8 mt-16 mb-8 overflow-hidden relative z-10 glass-card">
+
+      <div
+        className="mt-16 mb-0 overflow-hidden relative z-10 glass-card"
+        style={{
+          marginLeft: 'var(--shell-inset)',
+          marginRight: 'var(--shell-inset)',
+          marginBottom: 'var(--shell-inset)',
+          borderBottomLeftRadius: isContainer ? '1.25rem' : undefined,
+          borderBottomRightRadius: isContainer ? '1.25rem' : undefined,
+        }}
+      >
         <Footer />
       </div>
     </div>

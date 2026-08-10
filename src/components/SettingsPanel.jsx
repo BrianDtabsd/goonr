@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useSiteMeta } from '../hooks/useSiteMeta';
+import { useStudioShell } from '../hooks/useStudioShell';
 import TemplateContentEditor, { TextField } from './TemplateContentEditor';
 import SetupGuide from './SetupGuide';
 import VisibilityEditor from './VisibilityEditor';
@@ -104,14 +105,22 @@ function BrandEditor() {
 }
 
 function LookEditor() {
-  const { theme, updateTheme, resetTheme, typographyBundles } = useTheme();
+  const {
+    theme,
+    updateTheme,
+    resetTheme,
+    typographyBundles,
+    foundationPresetList,
+  } = useTheme();
+  const isFoundation = theme.surfaceSystem === 'foundation';
 
   const colors = [
+    { label: 'Orange', hex: '#ff6b00', rgb: '255, 107, 0' },
     { label: 'White', hex: '#ffffff', rgb: '255, 255, 255' },
+    { label: 'Charcoal', hex: '#161618', rgb: '22, 22, 24' },
     { label: 'Black', hex: '#000000', rgb: '0, 0, 0' },
     { label: 'Blue', hex: '#3b82f6', rgb: '59, 130, 246' },
     { label: 'Emerald', hex: '#10b981', rgb: '16, 185, 129' },
-    { label: 'Purple', hex: '#8b5cf6', rgb: '139, 92, 246' },
     { label: 'Rose', hex: '#f43f5e', rgb: '244, 63, 94' },
     { label: 'Amber', hex: '#f59e0b', rgb: '245, 158, 11' },
   ];
@@ -120,253 +129,402 @@ function LookEditor() {
     <div className="space-y-6">
       <div>
         <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Layout Mode
+          Surface
         </label>
         <div className="flex bg-slate-800 rounded-lg p-1">
           <button
             type="button"
             className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              theme.layoutMode === 'cards' ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
+              !isFoundation ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
             }`}
-            onClick={() => updateTheme({ layoutMode: 'cards' })}
+            onClick={() => updateTheme({ surfaceSystem: 'glass' })}
           >
-            Floating Cards
+            Glass
           </button>
           <button
             type="button"
             className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              theme.layoutMode === 'container'
-                ? 'bg-blue-500 text-white'
-                : 'hover:bg-slate-700'
+              isFoundation ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
             }`}
-            onClick={() => updateTheme({ layoutMode: 'container' })}
+            onClick={() => updateTheme({ surfaceSystem: 'foundation' })}
           >
-            Global Container
+            Foundation
           </button>
         </div>
+        <p className="mt-2 text-[10px] text-slate-500 leading-relaxed">
+          Glass keeps frost / accent toybox. Foundation is a decided editorial look with
+          curated font pairs — serif stays scoped so it never floods the UI.
+        </p>
       </div>
 
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Background URL
-        </label>
-        <input
-          type="text"
-          value={theme.backgroundUrl}
-          onChange={(e) => updateTheme({ backgroundUrl: e.target.value })}
-          onFocus={(e) => e.target.select()}
-          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 mb-4"
-        />
-
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Background Pattern
-        </label>
-        <div className="flex bg-slate-800 rounded-lg p-1">
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              theme.backgroundPattern === 'none'
-                ? 'bg-blue-500 text-white'
-                : 'hover:bg-slate-700'
-            }`}
-            onClick={() => updateTheme({ backgroundPattern: 'none' })}
-          >
-            None
-          </button>
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              theme.backgroundPattern === 'mesh'
-                ? 'bg-blue-500 text-white'
-                : 'hover:bg-slate-700'
-            }`}
-            onClick={() => updateTheme({ backgroundPattern: 'mesh' })}
-          >
-            Mesh Grid
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Typography Bundle
-        </label>
-        <select
-          value={theme.typographyPreset}
-          onChange={(e) => updateTheme({ typographyPreset: e.target.value })}
-          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 mb-2"
-        >
-          {Object.entries(typographyBundles).map(([key, bundle]) => (
-            <option key={key} value={key}>
-              {bundle.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Glass Effect
-        </label>
-
-        <div className="mb-3">
-          <div className="flex justify-between mb-1">
-            <span>Frost Level (Blur)</span>
-            <span className="text-slate-400">{theme.frostLevel}</span>
+      {isFoundation ? (
+        <>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Mode
+            </label>
+            <div className="flex bg-slate-800 rounded-lg p-1">
+              <button
+                type="button"
+                className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                  theme.foundationMode !== 'dark'
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-slate-700'
+                }`}
+                onClick={() => updateTheme({ foundationMode: 'light' })}
+              >
+                Light
+              </button>
+              <button
+                type="button"
+                className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                  theme.foundationMode === 'dark'
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-slate-700'
+                }`}
+                onClick={() => updateTheme({ foundationMode: 'dark' })}
+              >
+                Dark
+              </button>
+            </div>
           </div>
-          <input
-            type="range"
-            min="0"
-            max="64"
-            value={parseInt(theme.frostLevel, 10) || 0}
-            onChange={(e) => updateTheme({ frostLevel: `${e.target.value}px` })}
-            className="w-full accent-blue-500"
-          />
-        </div>
 
-        <div>
-          <div className="flex justify-between mb-1">
-            <span>Transparency</span>
-            <span className="text-slate-400">{theme.transparencyLevel}</span>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Foundation theme
+            </label>
+            <div className="space-y-2">
+              {foundationPresetList.map((preset) => {
+                const active = theme.foundationPreset === preset.id;
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => updateTheme({ foundationPreset: preset.id })}
+                    className={`w-full text-left rounded-lg border px-3 py-2.5 transition-colors ${
+                      active
+                        ? 'border-blue-400/60 bg-blue-500/15'
+                        : 'border-white/10 bg-slate-900/40 hover:bg-white/5'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-white">{preset.name}</span>
+                      <span className="text-[9px] font-mono uppercase tracking-wider text-slate-500">
+                        serif: {preset.serifScope}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-[11px] text-slate-400 leading-snug">{preset.blurb}</p>
+                    <div className="mt-2 flex gap-1.5">
+                      {[
+                        preset.light.canvas,
+                        preset.light.surface,
+                        preset.light.ink,
+                        preset.light.accent,
+                      ].map((hex) => (
+                        <span
+                          key={hex}
+                          className="h-3.5 w-3.5 rounded-full border border-white/20"
+                          style={{ backgroundColor: hex }}
+                          title={hex}
+                        />
+                      ))}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.05"
-            value={theme.transparencyLevel}
-            onChange={(e) =>
-              updateTheme({ transparencyLevel: parseFloat(e.target.value) })
-            }
-            className="w-full accent-blue-500"
-          />
-        </div>
-      </div>
 
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Frost Color
-        </label>
-        <div className="flex gap-2 mb-4 flex-wrap">
-          {colors.map((color) => (
-            <button
-              key={color.label}
-              type="button"
-              title={color.label}
-              onClick={() => updateTheme({ frostColor: color.rgb })}
-              className={`w-8 h-8 rounded-full border-2 transition-transform ${
-                theme.frostColor === color.rgb
-                  ? 'border-white scale-110'
-                  : 'border-transparent hover:scale-105'
-              }`}
-              style={{ backgroundColor: color.hex }}
-            />
-          ))}
-        </div>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Layout Mode
+            </label>
+            <div className="flex bg-slate-800 rounded-lg p-1">
+              <button
+                type="button"
+                className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                  theme.layoutMode === 'cards' ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
+                }`}
+                onClick={() => updateTheme({ layoutMode: 'cards' })}
+              >
+                Cards
+              </button>
+              <button
+                type="button"
+                className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                  theme.layoutMode === 'container'
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-slate-700'
+                }`}
+                onClick={() => updateTheme({ layoutMode: 'container' })}
+              >
+                Full page
+              </button>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Layout Mode
+            </label>
+            <div className="flex bg-slate-800 rounded-lg p-1">
+              <button
+                type="button"
+                className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                  theme.layoutMode === 'cards' ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
+                }`}
+                onClick={() => updateTheme({ layoutMode: 'cards' })}
+              >
+                Floating Cards
+              </button>
+              <button
+                type="button"
+                className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                  theme.layoutMode === 'container'
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-slate-700'
+                }`}
+                onClick={() => updateTheme({ layoutMode: 'container' })}
+              >
+                Global Container
+              </button>
+            </div>
+            <p className="mt-2 text-[10px] text-slate-500 leading-relaxed">
+              Floating Cards: panels sit on the ambient field. Global Container: full-page surface
+              (edge-to-edge) with quieter cards.
+            </p>
+          </div>
 
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Primary Color
-        </label>
-        <div className="flex gap-2 flex-wrap">
-          {colors.map((color) => (
-            <button
-              key={color.label}
-              type="button"
-              title={color.label}
-              onClick={() => updateTheme({ primaryColor: color.hex })}
-              className={`w-8 h-8 rounded-full border-2 transition-transform ${
-                theme.primaryColor === color.hex
-                  ? 'border-white scale-110'
-                  : 'border-transparent hover:scale-105'
-              }`}
-              style={{ backgroundColor: color.hex }}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Nav Outline
-        </label>
-        <div className="flex bg-slate-800 rounded-lg p-1">
-          {['none', 'thin', 'thick'].map((style) => (
-            <button
-              key={style}
-              type="button"
-              className={`flex-1 py-1.5 px-2 rounded-md transition-colors capitalize ${
-                theme.navOutline === style
-                  ? 'bg-blue-500 text-white'
-                  : 'hover:bg-slate-700'
-              }`}
-              onClick={() => updateTheme({ navOutline: style })}
-            >
-              {style}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Button Style
-        </label>
-
-        <div className="flex bg-slate-800 rounded-lg p-1 mb-2">
-          {['pill', 'rounded', 'sharp'].map((shape) => (
-            <button
-              key={shape}
-              type="button"
-              className={`flex-1 py-1.5 px-2 rounded-md transition-colors capitalize ${
-                theme.buttonShape === shape
-                  ? 'bg-blue-500 text-white'
-                  : 'hover:bg-slate-700'
-              }`}
-              onClick={() => updateTheme({ buttonShape: shape })}
-            >
-              {shape}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex bg-slate-800 rounded-lg p-1 mb-3">
-          {['filled', 'outline', 'empty'].map((style) => (
-            <button
-              key={style}
-              type="button"
-              className={`flex-1 py-1.5 px-2 rounded-md transition-colors capitalize ${
-                theme.buttonStyle === style
-                  ? 'bg-blue-500 text-white'
-                  : 'hover:bg-slate-700'
-              }`}
-              onClick={() => updateTheme({ buttonStyle: style })}
-            >
-              {style}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 cursor-pointer">
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Background URL
+            </label>
             <input
-              type="checkbox"
-              checked={theme.buttonGlow}
-              onChange={(e) => updateTheme({ buttonGlow: e.target.checked })}
-              className="rounded bg-slate-800 border-slate-700 text-blue-500 focus:ring-blue-500"
+              type="text"
+              value={theme.backgroundUrl}
+              onChange={(e) => updateTheme({ backgroundUrl: e.target.value })}
+              onFocus={(e) => e.target.select()}
+              placeholder="Leave blank for layered dark field"
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 mb-1"
             />
-            <span>Glow on click</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={theme.buttonJump}
-              onChange={(e) => updateTheme({ buttonJump: e.target.checked })}
-              className="rounded bg-slate-800 border-slate-700 text-blue-500 focus:ring-blue-500"
-            />
-            <span>Hover jump</span>
-          </label>
-        </div>
-      </div>
+            <p className="text-[10px] text-slate-500 mb-4">
+              Blank keeps the fancy charcoal layers + accent glow. Paste an image URL to layer a
+              photo underneath.
+            </p>
+
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Background Pattern
+            </label>
+            <div className="flex bg-slate-800 rounded-lg p-1">
+              <button
+                type="button"
+                className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                  theme.backgroundPattern === 'none'
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-slate-700'
+                }`}
+                onClick={() => updateTheme({ backgroundPattern: 'none' })}
+              >
+                None
+              </button>
+              <button
+                type="button"
+                className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                  theme.backgroundPattern === 'mesh'
+                    ? 'bg-blue-500 text-white'
+                    : 'hover:bg-slate-700'
+                }`}
+                onClick={() => updateTheme({ backgroundPattern: 'mesh' })}
+              >
+                Mesh Grid
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Typography Bundle
+            </label>
+            <select
+              value={theme.typographyPreset}
+              onChange={(e) => updateTheme({ typographyPreset: e.target.value })}
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 mb-2"
+            >
+              {Object.entries(typographyBundles).map(([key, bundle]) => (
+                <option key={key} value={key}>
+                  {bundle.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Glass Effect
+            </label>
+
+            <div className="mb-3">
+              <div className="flex justify-between mb-1">
+                <span>Frost Level (Blur)</span>
+                <span className="text-slate-400">{theme.frostLevel}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="64"
+                value={parseInt(theme.frostLevel, 10) || 0}
+                onChange={(e) => updateTheme({ frostLevel: `${e.target.value}px` })}
+                className="w-full accent-blue-500"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between mb-1">
+                <span>Transparency</span>
+                <span className="text-slate-400">{theme.transparencyLevel}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={theme.transparencyLevel}
+                onChange={(e) =>
+                  updateTheme({ transparencyLevel: parseFloat(e.target.value) })
+                }
+                className="w-full accent-blue-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Frost Color
+            </label>
+            <div className="flex gap-2 mb-4 flex-wrap">
+              {colors.map((color) => (
+                <button
+                  key={color.label}
+                  type="button"
+                  title={color.label}
+                  onClick={() => updateTheme({ frostColor: color.rgb })}
+                  className={`w-8 h-8 rounded-full border-2 transition-transform ${
+                    theme.frostColor === color.rgb
+                      ? 'border-white scale-110'
+                      : 'border-transparent hover:scale-105'
+                  }`}
+                  style={{ backgroundColor: color.hex }}
+                />
+              ))}
+            </div>
+
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Primary Color
+            </label>
+            <div className="flex gap-2 flex-wrap">
+              {colors.map((color) => (
+                <button
+                  key={color.label}
+                  type="button"
+                  title={color.label}
+                  onClick={() => updateTheme({ primaryColor: color.hex })}
+                  className={`w-8 h-8 rounded-full border-2 transition-transform ${
+                    theme.primaryColor === color.hex
+                      ? 'border-white scale-110'
+                      : 'border-transparent hover:scale-105'
+                  }`}
+                  style={{ backgroundColor: color.hex }}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Nav Outline
+            </label>
+            <div className="flex bg-slate-800 rounded-lg p-1">
+              {['none', 'thin', 'thick'].map((style) => (
+                <button
+                  key={style}
+                  type="button"
+                  className={`flex-1 py-1.5 px-2 rounded-md transition-colors capitalize ${
+                    theme.navOutline === style
+                      ? 'bg-blue-500 text-white'
+                      : 'hover:bg-slate-700'
+                  }`}
+                  onClick={() => updateTheme({ navOutline: style })}
+                >
+                  {style}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              Button Style
+            </label>
+
+            <div className="flex bg-slate-800 rounded-lg p-1 mb-2">
+              {['pill', 'rounded', 'sharp'].map((shape) => (
+                <button
+                  key={shape}
+                  type="button"
+                  className={`flex-1 py-1.5 px-2 rounded-md transition-colors capitalize ${
+                    theme.buttonShape === shape
+                      ? 'bg-blue-500 text-white'
+                      : 'hover:bg-slate-700'
+                  }`}
+                  onClick={() => updateTheme({ buttonShape: shape })}
+                >
+                  {shape}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex bg-slate-800 rounded-lg p-1 mb-3">
+              {['filled', 'outline', 'empty'].map((style) => (
+                <button
+                  key={style}
+                  type="button"
+                  className={`flex-1 py-1.5 px-2 rounded-md transition-colors capitalize ${
+                    theme.buttonStyle === style
+                      ? 'bg-blue-500 text-white'
+                      : 'hover:bg-slate-700'
+                  }`}
+                  onClick={() => updateTheme({ buttonStyle: style })}
+                >
+                  {style}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={theme.buttonGlow}
+                  onChange={(e) => updateTheme({ buttonGlow: e.target.checked })}
+                  className="rounded bg-slate-800 border-slate-700 text-blue-500 focus:ring-blue-500"
+                />
+                <span>Glow on click</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={theme.buttonJump}
+                  onChange={(e) => updateTheme({ buttonJump: e.target.checked })}
+                  className="rounded bg-slate-800 border-slate-700 text-blue-500 focus:ring-blue-500"
+                />
+                <span>Hover jump</span>
+              </label>
+            </div>
+          </div>
+        </>
+      )}
 
       <button
         type="button"
@@ -384,8 +542,9 @@ function LookEditor() {
 }
 
 function SettingsPanel() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [tab, setTab] = useState('setup');
+  const [tab, setTab] = useState('look');
+  const { isOpen, openStudio, closeStudio, panelWidth, beginResize, isDragging } =
+    useStudioShell();
 
   if (!isStudioMode()) return null;
 
@@ -394,8 +553,8 @@ function SettingsPanel() {
       <div id="settings-panel">
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4 shadow-lg transition-transform hover:scale-105"
+          onClick={openStudio}
+          className="fixed bottom-6 right-6 z-[80] bg-sky-600 hover:bg-sky-500 text-white rounded-full p-4 shadow-lg transition-transform hover:scale-105"
           aria-label="Open Studio"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -418,60 +577,70 @@ function SettingsPanel() {
   }
 
   return (
-    <div
-      id="settings-panel"
-      className="fixed top-0 right-0 bottom-0 z-50 flex w-[min(36rem,calc(100vw-0.5rem))] flex-col border-l border-white/10 bg-black/85 text-sm text-slate-200 shadow-2xl backdrop-blur-xl"
-      contentEditable="false"
-    >
-      <div className="flex shrink-0 items-center justify-between border-b border-white/10 px-5 py-4">
-        <div>
-          <h2 className="text-lg font-bold text-white">ShopSite Studio</h2>
-          <p className="text-[10px] text-slate-500 mt-0.5">
-            Setup · brand · pages · copy · look
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setIsOpen(false)}
-          className="text-slate-400 hover:text-white"
-          aria-label="Close Studio"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <div className="shrink-0 flex gap-1 overflow-x-auto border-b border-white/10 px-3 py-2">
-        {TABS.map((t) => (
+    <>
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize Studio"
+        title="Drag to resize"
+        onPointerDown={(e) => {
+          e.preventDefault();
+          beginResize(e.clientX);
+        }}
+        className={`studio-resize-handle ${isDragging ? 'is-dragging' : ''}`}
+      />
+      <aside
+        id="settings-panel"
+        className="studio-panel"
+        style={{ width: panelWidth }}
+        contentEditable="false"
+      >
+        <div className="studio-panel__header">
+          <div>
+            <h2 className="studio-panel__title">ShopSite Studio</h2>
+            <p className="studio-panel__sub">Edit live · drag the edge to resize</p>
+          </div>
           <button
-            key={t.id}
             type="button"
-            onClick={() => setTab(t.id)}
-            className={`shrink-0 rounded-md px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-colors ${
-              tab === t.id
-                ? 'bg-blue-500 text-white'
-                : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
-            }`}
+            onClick={closeStudio}
+            className="studio-icon-btn"
+            aria-label="Close Studio"
           >
-            {t.label}
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
-        ))}
-      </div>
+        </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-        {tab === 'setup' ? <SetupGuide embedded /> : null}
-        {tab === 'brand' ? <BrandEditor /> : null}
-        {tab === 'pages' ? <VisibilityEditor embedded /> : null}
-        {tab === 'copy' ? <TemplateContentEditor embedded /> : null}
-        {tab === 'look' ? <LookEditor /> : null}
-      </div>
-    </div>
+        <div className="studio-tabs" role="tablist">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              aria-selected={tab === t.id}
+              onClick={() => setTab(t.id)}
+              className={`studio-tab ${tab === t.id ? 'is-active' : ''}`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="studio-panel__body">
+          {tab === 'setup' ? <SetupGuide embedded /> : null}
+          {tab === 'brand' ? <BrandEditor /> : null}
+          {tab === 'pages' ? <VisibilityEditor embedded /> : null}
+          {tab === 'copy' ? <TemplateContentEditor embedded /> : null}
+          {tab === 'look' ? <LookEditor /> : null}
+        </div>
+      </aside>
+    </>
   );
 }
 

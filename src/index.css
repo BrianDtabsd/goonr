@@ -3,42 +3,87 @@
 @tailwind utilities;
 
 :root {
-  --bg-url: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop');
-  --font-body: 'Inter', sans-serif;
-  --font-heading: 'Inter', sans-serif;
+  --bg-url: none;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
   --color-heading: #ffffff;
-  --color-subtitle: #94a3b8;
-  --color-body: #cbd5e1;
+  --color-subtitle: #a1a1aa;
+  --color-body: #d4d4d8;
   --text-body-size: 16px;
-  
-  --frost-level: 24px;
-  --transparency-level: 0.1;
-  --primary-color: #3b82f6;
-  --frost-rgb: 255, 255, 255;
-  
-  --card-padding: 2rem;
-  --card-radius: 2.5rem;
-  
-  --card-opacity: 0.1;
-  --card-border-opacity: 0.15;
-  --card-frost: 24px;
-  
+
+  --frost-level: 18px;
+  --transparency-level: 0.78;
+  --primary-color: #ff6b00;
+  --frost-rgb: 22, 22, 24;
+
+  --card-padding: 1.5rem;
+  --card-radius: 1.25rem;
+
+  --card-opacity: 0.78;
+  --card-border-opacity: 0.12;
+  --card-frost: 18px;
+
   --container-opacity: 0;
   --container-frost: 0px;
   --container-border-opacity: 0;
-  
-  --nav-border-width: 0px;
-  --nav-border-color: rgba(255,255,255,0.15);
+
+  --nav-border-width: 1px;
+  --nav-border-color: rgba(255, 255, 255, 0.08);
+  --nav-surface: rgba(22, 22, 24, 0.92);
+
+  /* Content/nav padding (always). Frame inset is 0 in Global Container mode. */
+  --shell-inset: 1rem;
+  --frame-inset: 0px;
+  --shell-radius: 0px;
+  --header-offset: 5.25rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --shell-inset: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --shell-inset: 2rem;
+  }
+}
+
+/* Floating Cards: optional outer breathing room only when the frame is unused */
+body[data-layout-mode='cards'] {
+  --frame-inset: 0px;
+  --shell-radius: 0px;
+}
+
+body[data-layout-mode='container'] {
+  --frame-inset: 0px;
+  --shell-radius: 0px;
 }
 
 body {
   font-family: var(--font-body);
   font-size: var(--text-body-size);
-  background-image: var(--bg-url);
-  background-size: cover;
+  /* Fancy layered dark field (CaseLogic-style). Optional image sits under accents. */
+  background-color: #0a0a0b;
+  background-image:
+    radial-gradient(
+      ellipse 85% 60% at 0% 100%,
+      color-mix(in srgb, var(--primary-color) 28%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 100% 0%,
+      color-mix(in srgb, var(--primary-color) 10%, transparent),
+      transparent 50%
+    ),
+    radial-gradient(ellipse 55% 45% at 70% 20%, rgba(255, 255, 255, 0.045), transparent 55%),
+    linear-gradient(160deg, #18181b 0%, #0c0c0e 38%, #111113 72%, #0a0a0b 100%),
+    var(--bg-url);
+  background-size: cover, cover, cover, cover, cover;
   background-position: center;
   background-attachment: fixed;
-  background-color: #020617;
+  background-repeat: no-repeat;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
@@ -46,7 +91,13 @@ body {
   color: var(--color-body);
 }
 
-h1, h2, h3, h4, h5, h6, .card-title {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.card-title {
   font-family: var(--font-heading);
   color: var(--color-heading);
 }
@@ -56,7 +107,6 @@ h1, h2, h3, h4, h5, h6, .card-title {
 }
 
 @layer utilities {
-  /* Premium Glassmorphism Card Effect for Floating Layers */
   .glass-card {
     position: relative;
     background-color: rgba(var(--frost-rgb), var(--card-opacity));
@@ -65,23 +115,17 @@ h1, h2, h3, h4, h5, h6, .card-title {
     border-radius: var(--card-radius);
     transition: all 0.7s ease-out;
     padding: var(--card-padding);
-    border: 1px solid rgba(var(--frost-rgb), var(--card-border-opacity));
+    border: 1px solid rgba(255, 255, 255, var(--card-border-opacity));
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
   }
 
-  /*
-   * Template shells (original HTML laptop/desktop cards): outer glass has no
-   * padding so inner content can use exact p-8 / p-5 without doubling
-   * --card-padding. Border radius matches operational (24px) vs module (22px).
-   */
   .glass-card.glass-card--content-shell {
     padding: 0 !important;
   }
 
   .glass-card.glass-card--radius-24 {
     border-radius: 1.5rem;
-    box-shadow:
-      0 18px 50px rgba(148, 163, 184, 0.12),
-      0 6px 18px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
   }
 
   .glass-card.glass-card--radius-24::before {
@@ -90,47 +134,56 @@ h1, h2, h3, h4, h5, h6, .card-title {
 
   .glass-card.glass-card--radius-22 {
     border-radius: 1.375rem;
-    box-shadow:
-      0 18px 50px rgba(148, 163, 184, 0.12),
-      0 6px 18px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
   }
 
   .glass-card.glass-card--radius-22::before {
     border-radius: 1.375rem;
   }
-  
+
   .glass-container {
     background-color: rgba(var(--frost-rgb), var(--container-opacity));
     backdrop-filter: blur(var(--container-frost));
     -webkit-backdrop-filter: blur(var(--container-frost));
-    border: 1px solid rgba(var(--frost-rgb), var(--container-border-opacity));
-    border-radius: 2.5rem;
-    transition: all 0.7s ease-out;
+    border: none;
+    border-radius: var(--shell-radius);
+    transition: background-color 0.7s ease-out, backdrop-filter 0.7s ease-out;
+    /* Full-page surface — no gutter frame, no bottom-corner clip trap */
+    box-shadow: none;
   }
-  
+
+  /*
+   * Nav is a solid docked bar (not a translucent pill content bleeds through).
+   * Shape (pill vs bar) is controlled by layout mode classes on the header.
+   */
   .glass-nav {
-    background-color: rgba(var(--frost-rgb), var(--card-opacity));
-    backdrop-filter: blur(var(--card-frost));
-    -webkit-backdrop-filter: blur(var(--card-frost));
+    background-color: var(--nav-surface);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
     border: var(--nav-border-width) solid var(--nav-border-color);
-    border-radius: 9999px; /* Pill shape by default */
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
   }
 }
 
-/* Gradient Edges to emphasize the floating effect */
+/* Soft edge highlight — muted so dark cards stay layered, not neon */
 .glass-card::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: -1px;
   border-radius: var(--card-radius);
   padding: 1px;
-  background: linear-gradient(135deg, rgba(var(--frost-rgb),0.6) 0%, rgba(var(--frost-rgb),0.02) 50%, rgba(var(--frost-rgb),0.3) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.02) 45%,
+    color-mix(in srgb, var(--primary-color) 28%, transparent) 100%
+  );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
-  opacity: var(--card-opacity); /* Only show if cards are visible */
+  opacity: calc(var(--card-opacity) * 0.85);
   transition: opacity 0.7s ease, background 0.7s ease;
   z-index: 10;
 }
@@ -147,14 +200,18 @@ h1, h2, h3, h4, h5, h6, .card-title {
     display: inline-block;
     transform: translateY(110%);
     opacity: 0;
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .anim-fade-up {
     transform: translateY(60px) scale(0.96);
     opacity: 0;
-    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  
+
   .is-visible .anim-line,
   .is-visible.anim-line,
   .is-visible .anim-fade-up,
@@ -164,7 +221,8 @@ h1, h2, h3, h4, h5, h6, .card-title {
   }
 }
 
-html, body {
+html,
+body {
   overscroll-behavior-y: none;
   overflow-x: hidden;
 }
@@ -173,11 +231,14 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Depth veil — keeps layers readable without washing out the accent glow */
 body::before {
-  content: "";
+  content: '';
   position: fixed;
   inset: 0;
-  background-color: rgba(15, 23, 42, 0.4);
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 28%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.45) 0%, transparent 22%);
   z-index: -1;
   pointer-events: none;
 }
@@ -190,12 +251,11 @@ body::before {
 .glass-card .bg-white,
 .glass-card .bg-slate-50,
 .glass-card .bg-slate-100 {
-  background-color: rgba(var(--frost-rgb), 0.1) !important;
+  background-color: rgba(var(--frost-rgb), 0.55) !important;
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
 
-/* Settings panel never inherits the page outline */
 #settings-panel {
   outline: none !important;
 }
@@ -204,9 +264,92 @@ body::before {
   cursor: default;
 }
 
-/* Button glow only on click (active state). When the buttonGlow theme option
-   is on, Button.jsx sets --btn-glow on the element; this rule shows it only
-   while the user is actually pressing the button. */
-[style*="--btn-glow"]:active {
+[style*='--btn-glow']:active {
   box-shadow: var(--btn-glow);
+}
+
+.site-ambiance {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 90% 55% at 0% 100%,
+      color-mix(in srgb, var(--primary-color) 32%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 45% 35% at 100% 0%,
+      color-mix(in srgb, var(--primary-color) 14%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(ellipse 40% 30% at 60% 40%, rgba(255, 255, 255, 0.04), transparent 70%);
+}
+
+/* Layout shell helpers */
+.site-shell-pad {
+  padding-left: var(--shell-inset);
+  padding-right: var(--shell-inset);
+}
+
+.site-header-slot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  /* Content inset only — no outer frame gutter */
+  padding: 0.75rem var(--shell-inset) 0;
+  pointer-events: none;
+}
+
+.site-header-slot > * {
+  pointer-events: auto;
+}
+
+/*
+ * Full-viewport occlusion under the nav: scrolling copy is clipped visually
+ * before it reaches the bar.
+ */
+.site-header-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(var(--header-offset) + 1rem);
+  background: linear-gradient(
+    180deg,
+    #0a0a0b 0%,
+    #0a0a0b 78%,
+    rgba(10, 10, 11, 0.97) 90%,
+    rgba(10, 10, 11, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.site-header-mask--container {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(var(--header-offset) + 1rem);
+  border-radius: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(12, 12, 14, 1) 0%,
+    rgba(12, 12, 14, 0.98) 80%,
+    rgba(12, 12, 14, 0.7) 92%,
+    rgba(12, 12, 14, 0) 100%
+  );
+}
+
+.glass-nav--docked {
+  border-radius: 1rem;
+  width: 100%;
+}
+
+.glass-nav--floating {
+  border-radius: 1rem;
+  width: 100%;
 }

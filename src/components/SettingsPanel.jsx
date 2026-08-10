@@ -107,11 +107,12 @@ function LookEditor() {
   const { theme, updateTheme, resetTheme, typographyBundles } = useTheme();
 
   const colors = [
+    { label: 'Orange', hex: '#ff6b00', rgb: '255, 107, 0' },
     { label: 'White', hex: '#ffffff', rgb: '255, 255, 255' },
+    { label: 'Charcoal', hex: '#161618', rgb: '22, 22, 24' },
     { label: 'Black', hex: '#000000', rgb: '0, 0, 0' },
     { label: 'Blue', hex: '#3b82f6', rgb: '59, 130, 246' },
     { label: 'Emerald', hex: '#10b981', rgb: '16, 185, 129' },
-    { label: 'Purple', hex: '#8b5cf6', rgb: '139, 92, 246' },
     { label: 'Rose', hex: '#f43f5e', rgb: '244, 63, 94' },
     { label: 'Amber', hex: '#f59e0b', rgb: '245, 158, 11' },
   ];
@@ -123,28 +124,32 @@ function LookEditor() {
           Layout Mode
         </label>
         <div className="flex bg-slate-800 rounded-lg p-1">
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              theme.layoutMode === 'cards' ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
-            }`}
-            onClick={() => updateTheme({ layoutMode: 'cards' })}
-          >
-            Floating Cards
-          </button>
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              theme.layoutMode === 'container'
-                ? 'bg-blue-500 text-white'
-                : 'hover:bg-slate-700'
-            }`}
-            onClick={() => updateTheme({ layoutMode: 'container' })}
-          >
-            Global Container
-          </button>
+            <button
+              type="button"
+              className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                theme.layoutMode === 'cards' ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
+              }`}
+              onClick={() => updateTheme({ layoutMode: 'cards' })}
+            >
+              Floating Cards
+            </button>
+            <button
+              type="button"
+              className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
+                theme.layoutMode === 'container'
+                  ? 'bg-blue-500 text-white'
+                  : 'hover:bg-slate-700'
+              }`}
+              onClick={() => updateTheme({ layoutMode: 'container' })}
+            >
+              Global Container
+            </button>
+          </div>
+          <p className="mt-2 text-[10px] text-slate-500 leading-relaxed">
+            Floating Cards: panels sit on the ambient field. Global Container: full-page surface
+            (edge-to-edge) with quieter cards.
+          </p>
         </div>
-      </div>
 
       <div>
         <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
@@ -155,8 +160,12 @@ function LookEditor() {
           value={theme.backgroundUrl}
           onChange={(e) => updateTheme({ backgroundUrl: e.target.value })}
           onFocus={(e) => e.target.select()}
-          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 mb-4"
+          placeholder="Leave blank for layered dark field"
+          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500 mb-1"
         />
+        <p className="text-[10px] text-slate-500 mb-4">
+          Blank keeps the fancy charcoal layers + accent glow. Paste an image URL to layer a photo underneath.
+        </p>
 
         <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
           Background Pattern

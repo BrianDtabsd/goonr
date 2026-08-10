@@ -1,52 +1,57 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-const THEME_STORAGE_KEY = 'shopsite-theme-v1';
+/** Bumped so the orange-dark defaults apply for existing local installs. */
+const THEME_STORAGE_KEY = 'shopsite-theme-v2';
 
 const typographyBundles = {
   modern: {
-    name: 'Modern Clean',
-    headingFont: '"Inter", sans-serif',
-    bodyFont: '"Inter", sans-serif',
+    name: 'Jakarta Clean',
+    headingFont: '"Plus Jakarta Sans", sans-serif',
+    bodyFont: '"Plus Jakarta Sans", sans-serif',
     headingColor: '#ffffff',
-    subtitleColor: '#94a3b8',
-    bodyColor: '#cbd5e1',
+    subtitleColor: '#a1a1aa',
+    bodyColor: '#d4d4d8',
   },
   elegant: {
-    name: 'Elegant Serif',
-    headingFont: '"Playfair Display", serif',
-    bodyFont: '"Roboto", sans-serif',
-    headingColor: '#f8fafc',
-    subtitleColor: '#cbd5e1',
-    bodyColor: '#e2e8f0',
+    name: 'Montserrat Display',
+    headingFont: '"Montserrat", sans-serif',
+    bodyFont: '"Plus Jakarta Sans", sans-serif',
+    headingColor: '#fafafa',
+    subtitleColor: '#a1a1aa',
+    bodyColor: '#e4e4e7',
   },
   tech: {
-    name: 'Technical',
-    headingFont: '"Space Grotesk", sans-serif',
-    bodyFont: '"Inter", sans-serif',
-    headingColor: '#60a5fa',
-    subtitleColor: '#94a3b8',
-    bodyColor: '#f1f5f9',
+    name: 'Ember Technical',
+    headingFont: '"Montserrat", sans-serif',
+    bodyFont: '"Plus Jakarta Sans", sans-serif',
+    headingColor: '#ffffff',
+    subtitleColor: '#a8a29e',
+    bodyColor: '#f5f5f4',
   },
 };
 
+/**
+ * Default look: orange-dark layered system (CaseLogic-inspired) expressed
+ * through existing Studio knobs — no new controls.
+ */
 const defaultTheme = {
-  backgroundUrl:
-    'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000&auto=format&fit=crop',
-  backgroundPattern: 'mesh',
+  // Empty = CSS layered field only (accent glow + charcoal depth)
+  backgroundUrl: '',
+  backgroundPattern: 'none',
   layoutMode: 'cards',
   typographyPreset: 'modern',
   bodyTextSize: '16px',
-  frostLevel: '24px',
-  transparencyLevel: 0.1,
-  primaryColor: '#3b82f6',
-  frostColor: '255, 255, 255',
-  cardPadding: '2rem',
-  cardRadius: '2.5rem',
-  navOutline: 'none',
-  navOutlineColor: 'rgba(255,255,255,0.15)',
-  buttonShape: 'pill',
+  frostLevel: '16px',
+  transparencyLevel: 0.82,
+  primaryColor: '#ff6b00',
+  frostColor: '22, 22, 24',
+  cardPadding: '1.5rem',
+  cardRadius: '1.25rem',
+  navOutline: 'thin',
+  navOutlineColor: 'rgba(255,255,255,0.08)',
+  buttonShape: 'rounded',
   buttonStyle: 'filled',
-  buttonGlow: true,
+  buttonGlow: false,
   buttonJump: true,
 };
 
@@ -78,7 +83,8 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     const root = document.documentElement;
 
-    root.style.setProperty('--bg-url', `url('${theme.backgroundUrl}')`);
+    const bg = (theme.backgroundUrl || '').trim();
+    root.style.setProperty('--bg-url', bg ? `url('${bg}')` : 'none');
 
     const typo = typographyBundles[theme.typographyPreset] || typographyBundles.modern;
     root.style.setProperty('--font-heading', typo.headingFont);
@@ -92,23 +98,35 @@ export function ThemeProvider({ children }) {
     root.style.setProperty('--transparency-level', theme.transparencyLevel);
     root.style.setProperty('--primary-color', theme.primaryColor);
     root.style.setProperty('--frost-rgb', theme.frostColor);
+    root.style.setProperty(
+      '--nav-surface',
+      `rgba(${theme.frostColor}, ${Math.min(0.96, Math.max(0.72, theme.transparencyLevel + 0.1))})`
+    );
 
     root.style.setProperty('--card-padding', theme.cardPadding);
     root.style.setProperty('--card-radius', theme.cardRadius);
 
     const isCards = theme.layoutMode === 'cards';
-    root.style.setProperty('--card-opacity', isCards ? theme.transparencyLevel : 0);
-    root.style.setProperty('--card-border-opacity', isCards ? 0.15 : 0);
+    // Container mode: shell is the surface; cards go quiet.
+    // Cards mode: shell invisible; cards carry the layered panels.
+    const surfaceOpacity = theme.transparencyLevel;
+    root.style.setProperty('--card-opacity', isCards ? surfaceOpacity : 0);
+    root.style.setProperty('--card-border-opacity', isCards ? 0.1 : 0);
     root.style.setProperty('--card-frost', isCards ? theme.frostLevel : '0px');
 
-    root.style.setProperty('--container-opacity', !isCards ? theme.transparencyLevel : 0);
+    root.style.setProperty(
+      '--container-opacity',
+      !isCards ? Math.min(0.88, Math.max(0.7, surfaceOpacity)) : 0
+    );
     root.style.setProperty('--container-frost', !isCards ? theme.frostLevel : '0px');
-    root.style.setProperty('--container-border-opacity', !isCards ? 0.15 : 0);
+    root.style.setProperty('--container-border-opacity', 0);
 
     const navBorderWidth =
       theme.navOutline === 'none' ? '0px' : theme.navOutline === 'thin' ? '1px' : '2px';
     root.style.setProperty('--nav-border-width', navBorderWidth);
     root.style.setProperty('--nav-border-color', theme.navOutlineColor);
+
+    document.body.dataset.layoutMode = theme.layoutMode;
   }, [theme]);
 
   const updateTheme = useCallback((updates) => {

@@ -4,8 +4,10 @@
 
 :root {
   --bg-url: none;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
   --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-label: 'Plus Jakarta Sans', sans-serif;
   --color-heading: #ffffff;
   --color-subtitle: #a1a1aa;
   --color-body: #d4d4d8;
@@ -30,6 +32,19 @@
   --nav-border-width: 1px;
   --nav-border-color: rgba(255, 255, 255, 0.08);
   --nav-surface: rgba(22, 22, 24, 0.92);
+
+  --ds-color-canvas: #0a0a0b;
+  --ds-color-surface: #161618;
+  --ds-color-surface-subtle: #1e1e20;
+  --ds-color-ink: #ffffff;
+  --ds-color-ink-muted: #a1a1aa;
+  --ds-color-ink-faint: #71717a;
+  --ds-color-line: rgba(255, 255, 255, 0.12);
+  --ds-color-accent: #ff6b00;
+  --ds-color-accent-hover: #ff6b00;
+  --ds-color-accent-soft: rgba(255, 107, 0, 0.2);
+  --ds-button-ink: #ff6b00;
+  --ds-button-ink-text: #ffffff;
 
   /* Content/nav padding (always). Frame inset is 0 in Global Container mode. */
   --shell-inset: 1rem;
@@ -100,6 +115,32 @@ h6,
 .card-title {
   font-family: var(--font-heading);
   color: var(--color-heading);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Serif scope — Foundation presets control how widely display serif applies */
+html[data-serif-scope='display'] h1,
+html[data-serif-scope='display'] .font-display {
+  font-family: var(--font-display);
+}
+
+html[data-serif-scope='titles'] h1,
+html[data-serif-scope='titles'] h2,
+html[data-serif-scope='titles'] h3,
+html[data-serif-scope='titles'] .card-title,
+html[data-serif-scope='titles'] .font-display {
+  font-family: var(--font-display);
+}
+
+html[data-serif-scope='none'] h1,
+html[data-serif-scope='none'] h2,
+html[data-serif-scope='none'] h3,
+html[data-serif-scope='none'] .card-title,
+html[data-serif-scope='none'] .font-display {
+  font-family: var(--font-heading);
 }
 
 .card-subtitle {
@@ -352,4 +393,113 @@ body::before {
 .glass-nav--floating {
   border-radius: 1rem;
   width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Foundation surface — matte editorial alternative to glass
+   ───────────────────────────────────────────────────────────── */
+
+html[data-surface='foundation'] body {
+  background-color: var(--ds-color-canvas);
+  background-image: none;
+  color: var(--ds-color-ink);
+}
+
+html[data-surface='foundation'] body::before {
+  display: none;
+}
+
+html[data-surface='foundation'] .site-ambiance {
+  display: none;
+}
+
+html[data-surface='foundation'] .glass-container {
+  background-color: var(--ds-color-canvas);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+}
+
+html[data-surface='foundation'] .glass-card {
+  background-color: var(--ds-color-surface);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid var(--ds-color-line);
+  border-radius: 0.5rem;
+  box-shadow: none;
+  color: var(--ds-color-ink);
+}
+
+html[data-surface='foundation'] .glass-card::before {
+  display: none;
+}
+
+html[data-surface='foundation'] .glass-card .bg-white,
+html[data-surface='foundation'] .glass-card .bg-slate-50,
+html[data-surface='foundation'] .glass-card .bg-slate-100 {
+  background-color: var(--ds-color-surface-subtle) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html[data-surface='foundation'] .glass-nav {
+  background-color: var(--ds-color-canvas) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  border-bottom: 1px solid var(--ds-color-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+html[data-surface='foundation'] .glass-nav--docked {
+  border-radius: 0;
+}
+
+html[data-surface='foundation'] .site-header-slot {
+  padding-top: 0;
+}
+
+html[data-surface='foundation'] .site-header-mask,
+html[data-surface='foundation'] .site-header-mask--container {
+  background: linear-gradient(
+    180deg,
+    var(--ds-color-canvas) 0%,
+    var(--ds-color-canvas) 85%,
+    transparent 100%
+  );
+}
+
+html[data-surface='foundation'] .card-subtitle,
+html[data-surface='foundation'] .opacity-70,
+html[data-surface='foundation'] .opacity-80 {
+  color: var(--ds-color-ink-muted);
+}
+
+html[data-surface='foundation'] .text-white,
+html[data-surface='foundation'] .text-slate-200,
+html[data-surface='foundation'] .text-slate-300 {
+  color: var(--ds-color-ink);
+}
+
+html[data-surface='foundation'] .text-zinc-300,
+html[data-surface='foundation'] .text-slate-400 {
+  color: var(--ds-color-ink-muted);
+}
+
+html[data-surface='foundation'] .border-white\/10,
+html[data-surface='foundation'] .border-white\/5,
+html[data-surface='foundation'] .border-white\/25 {
+  border-color: var(--ds-color-line);
+}
+
+html[data-surface='foundation'] .bg-black\/5,
+html[data-surface='foundation'] .bg-black\/10 {
+  background-color: var(--ds-color-surface-subtle);
+}
+
+html[data-surface='foundation'] .font-mono {
+  font-family: var(--font-label);
+  letter-spacing: 0.1em;
 }

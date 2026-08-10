@@ -17,7 +17,7 @@ export default function Hero() {
               'linear-gradient(90deg, transparent, black 0%, black 100%, transparent)',
           }}
         >
-          <h1 className="font-display text-[3.3rem] sm:text-[4.4rem] lg:text-[5.5rem] leading-[0.98] tracking-[-0.045em] text-white font-light max-w-[12ch] mb-7 drop-shadow-sm">
+          <h1 className="font-display text-[3.3rem] sm:text-[4.4rem] lg:text-[5.5rem] leading-[0.98] tracking-[-0.045em] font-light max-w-[12ch] mb-7 drop-shadow-sm">
             <span className="anim-wrap block">
               <span className="anim-line inline-block">{h.titleLine1}</span>
             </span>

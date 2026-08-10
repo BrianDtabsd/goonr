@@ -1,38 +1,38 @@
 /**
  * FAQ — objection handling before the final pricing push.
- * Edit questions/answers here for each client template.
+ * Edit here or via Studio → Copy.
  */
 
 export const faqIntro = {
   eyebrow: 'Questions',
-  heading: 'Before you subscribe',
+  heading: 'Before you buy',
   subheading:
-    'Straight answers about plans, billing, and what you get — so you can choose with confidence.',
+    'Sample FAQ entries. Replace with the questions your customers actually ask.',
 };
 
 export const faqItems = [
   {
-    q: 'How do I actually pay for a plan?',
-    a: 'Choose a tier on this site and complete checkout on Stripe’s secure page (card or other methods Stripe supports). No card data touches our servers.',
+    q: 'How do I pay?',
+    a: 'Choose a plan and complete checkout on Stripe’s secure page. Card details never touch this site’s servers.',
   },
   {
-    q: 'Is there a free way to try it?',
-    a: 'Yes — the Researcher tier is built for trial use: limited regions and history so you can validate the workflow before upgrading.',
+    q: 'Is there a free option?',
+    a: 'Yes — the Starter plan is free so you can try the flow before upgrading. Replace this answer if your free tier differs.',
   },
   {
-    q: 'What happens if I need to cancel?',
-    a: 'Paid plans are month-to-month unless you agree otherwise with sales. Cancel in the billing portal Stripe emails you — access lasts through the period you already paid for.',
+    q: 'Can I cancel?',
+    a: 'Paid plans are month-to-month unless you agree otherwise. Cancel from the Stripe billing portal link in your receipt email.',
   },
   {
-    q: 'What do I get on day one after subscribing?',
-    a: 'Dashboard access at your tier’s limits: live telemetry refresh, regional coverage, and API access where included. Enterprise tiers may include onboarding — we’ll confirm in checkout notes.',
+    q: 'What do I get after checkout?',
+    a: 'Access at your plan’s limits, plus a receipt from Stripe. Replace with your onboarding details.',
   },
   {
-    q: 'Do you store our atmospheric data?',
-    a: 'We process streams for the observatory layer; retention and regions depend on your plan and any enterprise agreement. Ask sales if you need a specific compliance profile.',
+    q: 'Do you ship physical products?',
+    a: 'Sample answer: shop items ship separately from subscriptions. Update this for Your Brand.',
   },
   {
-    q: 'Can my team share one account?',
-    a: 'Professional and Global Node tiers are meant for operational teams. Seat policies are defined per plan — see feature bullets above or contact us for multi-seat pricing.',
+    q: 'Can my team share access?',
+    a: 'Growth and Business tiers are meant for teams. Seat rules are defined per plan — replace with your policy.',
   },
 ];

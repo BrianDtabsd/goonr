@@ -1,11 +1,11 @@
 /**
- * Learn page (/learn) — education + trust; every card should push toward #pricing or checkout.
+ * Learn page (/learn) — sample articles. Replace with Your Brand guides.
  */
 
 export const blogIntro = {
   heading: 'Learn',
   subheading:
-    'Short articles on how the observatory works. When you are ready, pick a plan and complete secure checkout with Stripe.',
+    'Sample articles so the Learn page has structure. Replace titles and bodies, or hide the page in Studio → Pages.',
 };
 
 export const blogPosts = [
@@ -13,50 +13,50 @@ export const blogPosts = [
     layout: 'text',
     eyebrow: 'Guide',
     eyebrowColor: 'blue',
-    heading: 'What you get on each subscription tier',
+    heading: 'Sample article: choosing a plan',
     headingSize: 'md',
-    body: 'Researcher, Professional, and Global Node differ by regions, history depth, API access, and support. Compare the feature list on the homepage, then subscribe from Pricing or Checkout.',
+    body: 'Explain how customers should pick a tier. Link them to pricing when ready.',
     image:
-      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop&sig=1',
+      'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?q=80&w=800&auto=format&fit=crop&sig=1',
     imagePosition: 'left',
     size: 'sm',
     cta: { label: 'View pricing →', href: '/#pricing', variant: 'empty' },
   },
   {
     layout: 'text',
-    eyebrow: 'Security',
+    eyebrow: 'Checkout',
     eyebrowColor: 'emerald',
-    heading: 'How Stripe checkout protects your payment',
+    heading: 'Sample article: how checkout works',
     headingSize: 'md',
-    body: 'We use Stripe Payment Links for subscriptions. Your card details are entered on Stripe’s hosted page — we never store them. You receive receipts and a billing portal link from Stripe.',
+    body: 'Reassure buyers that payment is handled securely by Stripe. Replace with your own FAQ-style article.',
     image:
       'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=800&auto=format&fit=crop&sig=2',
     imagePosition: 'left',
     size: 'sm',
-    cta: { label: 'Go to checkout hub →', href: '/checkout', variant: 'empty' },
+    cta: { label: 'Go to checkout →', href: '/checkout', variant: 'empty' },
   },
   {
     layout: 'text',
     eyebrow: 'Workflow',
     eyebrowColor: 'amber',
-    heading: 'From raw signals to a decision in four steps',
+    heading: 'Sample article: how it works',
     headingSize: 'md',
-    body: 'Collect → Normalize → Interpret → Forecast. That pipeline is how the dashboard turns noisy sensor data into something your leads can brief executives on.',
+    body: 'Walk through your process in a few steps. Point readers at the methodology section.',
     image:
-      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=800&auto=format&fit=crop&sig=3',
+      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop&sig=3',
     imagePosition: 'left',
     size: 'sm',
     cta: { label: 'See how it works →', href: '/#methodology', variant: 'empty' },
   },
   {
     layout: 'text',
-    eyebrow: 'Hardware',
+    eyebrow: 'Shop',
     eyebrowColor: 'purple',
-    heading: 'Optional add-ons from the shop',
+    heading: 'Sample article: browse the shop',
     headingSize: 'md',
-    body: 'Sensors and kits in the Store are separate from your subscription. Add them to the cart when you need physical gear; subscriptions stay on Stripe.',
+    body: 'Introduce products or add-ons. Link to the store page.',
     image:
-      'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=800&auto=format&fit=crop&sig=4',
+      'https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=800&auto=format&fit=crop&sig=4',
     imagePosition: 'left',
     size: 'sm',
     cta: { label: 'Browse the shop →', href: '/store', variant: 'empty' },

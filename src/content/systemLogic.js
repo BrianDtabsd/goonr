@@ -1,44 +1,45 @@
 /**
- * System Logic section — intro + step cards. Defaults; overridable via Settings → Site copy.
+ * System Logic section — intro + step cards.
+ * Replace with Your Brand process / methodology.
  */
 
 export const systemLogicIntro = {
-  eyebrow: 'System Logic',
-  headingLine1: 'From distributed sensing to',
-  headingLine2: 'environmental clarity',
+  eyebrow: 'How it works',
+  headingLine1: 'Your process,',
+  headingLine2: 'step by step',
   subheading:
-    'The observatory transforms fragmented atmospheric inputs into a unified operational view that can be monitored, interpreted, and acted on.',
-  exploreCtaLabel: 'Explore methodology',
+    'Four sample steps. Rename titles and descriptions to match how Your Brand delivers value.',
+  exploreCtaLabel: 'Explore the steps',
   exploreCtaHref: '#access',
 };
 
 export const systemLogicSteps = [
   {
-    title: 'Collect',
+    title: 'Step 1',
     description:
-      'Aggregate live environmental streams from sensor networks, satellite layers, and regional measurements to establish a unified observational input layer.',
+      'Sample step description — what happens first for the customer or team.',
     image:
-      'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/e3160dde-0640-4209-ba49-2fdd186ab7aa_1600w.jpg',
+      'https://images.unsplash.com/photo-1557800636-894a64c1696f?q=80&w=1600&auto=format&fit=crop',
   },
   {
-    title: 'Normalize',
+    title: 'Step 2',
     description:
-      'Standardize signal quality across sources, calibrate inconsistencies, and align measurements into a coherent atmospheric model that can be trusted across regions.',
+      'Sample step description — what happens next. Replace with your workflow.',
     image:
-      'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ad49c60a-ac88-46a9-803d-231a2d478e0c_1600w.jpg',
+      'https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1600&auto=format&fit=crop',
   },
   {
-    title: 'Interpret',
+    title: 'Step 3',
     description:
-      'Detect pollutant build-up, drift anomalies, and emerging exposure shifts across monitored zones.',
+      'Sample step description — the moment value shows up. Replace with your copy.',
     image:
-      'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/ea63cda8-7a78-412b-a258-e0190a2d2f29_1600w.jpg',
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop',
   },
   {
-    title: 'Forecast',
+    title: 'Step 4',
     description:
-      'Project likely movement, density change, and short-range environmental shifts across time and geography to support clearer response planning.',
+      'Sample step description — how they keep getting results over time.',
     image:
-      'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/f6611eb5-6c22-42ad-ad4c-1afd7eaeb616_1600w.jpg',
+      'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1600&auto=format&fit=crop',
   },
 ];

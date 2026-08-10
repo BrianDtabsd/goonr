@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from './Button';
-import { getSiteMeta } from '../config/siteMeta';
+import { useSiteMeta } from '../hooks/useSiteMeta';
 import { useVisibility } from '../hooks/useVisibility';
 
 function Header() {
@@ -16,7 +16,7 @@ function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const { brandName } = getSiteMeta();
+  const { brandName } = useSiteMeta();
   const { isPageVisible } = useVisibility();
 
   const navLinks = [

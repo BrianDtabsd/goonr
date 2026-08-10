@@ -1,20 +1,4 @@
-import { useEffect } from 'react';
-import { getSiteMeta } from '../config/siteMeta';
-
-/** Syncs <title> and meta description from env (client-specific deploy). */
+/** Title / meta sync is handled by SiteMetaProvider; this keeps Layout imports stable. */
 export default function DocumentHead() {
-  useEffect(() => {
-    const { documentTitle, metaDescription } = getSiteMeta();
-    document.title = documentTitle;
-
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) {
-      meta = document.createElement('meta');
-      meta.setAttribute('name', 'description');
-      document.head.appendChild(meta);
-    }
-    meta.setAttribute('content', metaDescription);
-  }, []);
-
   return null;
 }

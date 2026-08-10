@@ -1,15 +1,15 @@
 /**
- * Hero — primary conversion story: one main CTA to pricing / subscribe.
- * Edit here or via Settings → Site copy.
+ * Hero — primary conversion story.
+ * Edit here or via Studio → Copy. Click a field there to select & replace placeholders.
  */
 
 export const heroContent = {
-  titleLine1: 'Environmental intelligence',
-  titleLine2: 'your operations team',
-  titleLine3: 'can trust in real time',
+  titleLine1: 'Your headline',
+  titleLine2: 'goes here —',
+  titleLine3: 'replace this copy',
   subtitle:
-    'Live atmospheric monitoring, drift forecasts, and regional exposure in one workspace. Subscribe when you are ready — or start free and upgrade as you grow.',
-  primaryCtaLabel: 'See plans & subscribe',
+    'Short supporting sentence about what Your Brand sells. One or two lines is enough — keep the first viewport simple.',
+  primaryCtaLabel: 'See plans',
   primaryCtaHref: '#pricing',
   secondaryCtaLabel: 'How it works',
   secondaryCtaHref: '#methodology',

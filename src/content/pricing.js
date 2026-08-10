@@ -1,82 +1,69 @@
 /**
- * Pricing tiers — 3-card classic layout (pricing-page skill).
- *
- *   Plan name      → audience-led ("Researcher" / "Operations" / "Global Node")
- *   Price          → simple, monthly anchored; "Custom" for sales-led tier
- *   Description    → 2 lines: who it's for + what it unlocks
- *   Features       → outcome bullets (what visibility/decision they get)
- *   CTA            → consistent verbs across tiers
- *
+ * Pricing tiers — 3-card classic layout.
  * Wire to Stripe: set cta.stripePriceId from Dashboard → Product → Price ID.
- * Mode: 'subscription' (recurring) or 'payment' (one-time).
- * Fallback: cta.stripeLink (Payment Link URL).
  */
 
 export const pricingIntro = {
   eyebrow: 'Pricing',
-  heading: 'Start small. Upgrade when conditions get serious.',
+  heading: 'Simple plans for Your Brand',
   subheading:
-    'Plans that scale from desk research to live, multi-region operations. Cancel anytime, no setup fees, secure Stripe checkout.',
+    'Replace plan names, prices, and features. Keep Stripe Price IDs blank until you create products in the Dashboard.',
 };
 
 export const pricingTiers = [
   {
-    name: 'Researcher',
+    name: 'Starter',
     price: '$0',
     period: '',
-    desc: 'For analysts and academics doing trial observation. Free forever — see how the data feels before you commit.',
+    desc: 'For trying Your Brand risk-free. Replace with who this tier is for.',
     features: [
-      'Live conditions for 5 monitored regions',
-      '24h history for trend checks and reports',
-      'Hourly refresh with daily downloadable summaries',
-      'Community Slack and weekly office hours',
-      'Email export for one researcher',
+      'Sample feature A',
+      'Sample feature B',
+      'Sample feature C',
+      'Community support',
+      'Cancel anytime',
     ],
     cta: { label: 'Start free', href: '#' },
     highlighted: false,
   },
   {
-    name: 'Operations',
-    price: '$499',
+    name: 'Growth',
+    price: '$49',
     period: '/mo',
-    desc: 'For environmental and field-ops teams that need live decision support. Live coverage, predictive layers, and the API.',
+    desc: 'For teams ready to buy. Replace with your mid-tier pitch.',
     features: [
-      'Unlimited regions worldwide with live drift mapping',
-      '90 days of historical telemetry for incident review',
-      '60-second refresh on monitored zones',
-      'Real-time API with webhooks for your stack',
-      'Priority support with 1-business-day SLA',
+      'Everything in Starter',
+      'Sample premium feature',
+      'Priority email support',
+      'Higher usage limits',
+      'Monthly billing via Stripe',
     ],
     cta: {
       label: 'Subscribe',
-      stripePriceId: 'price_REPLACE_ME_OPS',
+      stripePriceId: 'price_REPLACE_ME_GROWTH',
       stripeCheckoutMode: 'subscription',
-      stripeLink: 'https://buy.stripe.com/test_REPLACE_ME_OPS',
+      stripeLink: 'https://buy.stripe.com/test_REPLACE_ME_GROWTH',
     },
     highlighted: true,
-    badge: 'Most teams pick this',
+    badge: 'Most popular',
   },
   {
-    name: 'Global Node',
+    name: 'Business',
     price: 'Custom',
     period: '',
-    desc: 'For multinational programs running their own sensors. Bidirectional data, private modeling, dedicated capacity.',
+    desc: 'For larger rollouts. Replace with sales-led tier details.',
     features: [
-      'Bidirectional sensor syndication with your fleet',
-      'Custom atmospheric models tuned to your regions',
-      'Private deployment zones and data residency',
-      'Dedicated infrastructure and named CSM',
-      'Procurement-ready: SSO, audit logs, MSA',
+      'Custom limits and onboarding',
+      'Dedicated support contact',
+      'Security / procurement extras',
+      'Volume pricing',
+      'Talk to sales to start',
     ],
     cta: { label: 'Talk to sales', href: 'mailto:sales@example.com' },
     highlighted: false,
   },
 ];
 
-/**
- * Optional risk-reversal line to render under the pricing grid.
- * Pricing.jsx may render this; if not, it's a clean place for the next dev to plug it in.
- */
 export const pricingRiskReversal = {
-  text: 'Cancel anytime. No setup fees. Test with team data on Researcher before upgrading.',
+  text: 'Cancel anytime. No setup fees. Start on Starter before upgrading.',
 };

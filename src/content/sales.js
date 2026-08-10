@@ -1,20 +1,19 @@
 /**
  * Sales / clearance page content. Same shape as store products.
- * Set cta.stripeLink to a Stripe Payment Link to wire each item.
  */
 
 export const salesIntro = {
-  heading: 'Secret Sales',
-  subheading: 'Exclusive clearance items and limited-time offers.',
+  heading: 'Sample sales',
+  subheading: 'Limited-time sample offers — replace with your clearance or promo items.',
   headingTone: 'rose',
 };
 
 export const salesProducts = [
   {
     layout: 'text',
-    heading: 'Clearance Item 1',
-    subheading: '$99.50  (was $199.00)',
-    body: 'Limited stock — half off while supplies last.',
+    heading: 'Sample Sale Item 1',
+    subheading: '$49  (was $99)',
+    body: 'Limited stock sample — replace with a real promo.',
     image:
       'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop&sig=1',
     imagePosition: 'top',
@@ -25,11 +24,11 @@ export const salesProducts = [
   },
   {
     layout: 'text',
-    heading: 'Clearance Item 2',
-    subheading: '$99.50  (was $199.00)',
-    body: 'Limited stock — half off while supplies last.',
+    heading: 'Sample Sale Item 2',
+    subheading: '$39  (was $79)',
+    body: 'Limited stock sample — replace with a real promo.',
     image:
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop&sig=2',
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop&sig=2',
     imagePosition: 'top',
     size: 'sm',
     tone: 'rose',
@@ -37,11 +36,11 @@ export const salesProducts = [
   },
   {
     layout: 'text',
-    heading: 'Clearance Item 3',
-    subheading: '$74.00  (was $148.00)',
-    body: 'Discounted demo unit, fully tested.',
+    heading: 'Sample Sale Item 3',
+    subheading: '$29  (was $59)',
+    body: 'Discounted sample unit — replace with your own.',
     image:
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop&sig=3',
+      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=800&auto=format&fit=crop&sig=3',
     imagePosition: 'top',
     size: 'sm',
     tone: 'rose',
@@ -49,11 +48,11 @@ export const salesProducts = [
   },
   {
     layout: 'text',
-    heading: 'Clearance Item 4',
-    subheading: '$49.00  (was $99.00)',
-    body: 'Open-box accessory, like-new condition.',
+    heading: 'Sample Sale Item 4',
+    subheading: '$19  (was $39)',
+    body: 'Open-box sample — replace with your own.',
     image:
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop&sig=4',
+      'https://images.unsplash.com/photo-1560343090-f0409e92791a?q=80&w=800&auto=format&fit=crop&sig=4',
     imagePosition: 'top',
     size: 'sm',
     tone: 'rose',

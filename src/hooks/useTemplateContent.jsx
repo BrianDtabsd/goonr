@@ -16,12 +16,49 @@ import {
   systemLogicIntro as systemLogicIntroBase,
   systemLogicSteps as systemLogicStepsBase,
 } from '../content/systemLogic';
+import { faqIntro as faqIntroBase, faqItems as faqItemsBase } from '../content/faq';
 
-const STORAGE_KEY = 'gaqo-template-content-overrides-v1';
+const STORAGE_KEY = 'shopsite-template-content-overrides-v1';
+const LEGACY_STORAGE_KEY = 'gaqo-template-content-overrides-v1';
+
+/** Section keys used by Studio restore / search. */
+export const TEMPLATE_SECTION_KEYS = [
+  'hero',
+  'home',
+  'systemLogic',
+  'pricing',
+  'store',
+  'blog',
+  'sales',
+  'faq',
+];
+
+export const TEMPLATE_SECTION_LABELS = {
+  hero: 'Hero',
+  home: 'Home sections & cards',
+  systemLogic: 'How it works',
+  pricing: 'Pricing',
+  store: 'Store',
+  blog: 'Learn (/learn)',
+  sales: 'Sales',
+  faq: 'FAQ',
+};
 
 function loadOverrides() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (legacy) {
+        raw = legacy;
+        try {
+          localStorage.setItem(STORAGE_KEY, legacy);
+          localStorage.removeItem(LEGACY_STORAGE_KEY);
+        } catch {
+          /* ignore migration write errors */
+        }
+      }
+    }
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     return parsed && typeof parsed === 'object' ? parsed : {};
@@ -92,6 +129,20 @@ export function TemplateContentProvider({ children }) {
     }
   }, [overrides]);
 
+  const bases = useMemo(
+    () => ({
+      hero: heroBase,
+      home: homeSectionsBase,
+      pricing: { intro: pricingIntroBase, tiers: pricingTiersBase },
+      store: { intro: storeIntroBase, products: storeProductsBase },
+      blog: { intro: blogIntroBase, posts: blogPostsBase },
+      sales: { intro: salesIntroBase, products: salesProductsBase },
+      systemLogic: { intro: systemLogicIntroBase, steps: systemLogicStepsBase },
+      faq: { intro: faqIntroBase, items: faqItemsBase },
+    }),
+    []
+  );
+
   const mergedHomeSections = useMemo(
     () => mergeHomeSections(homeSectionsBase, overrides.home),
     [overrides.home]
@@ -156,6 +207,17 @@ export function TemplateContentProvider({ children }) {
     if (!d) return systemLogicStepsBase;
     return systemLogicStepsBase.map((s, i) => mergeFlat(s, d[i]));
   }, [overrides.systemLogic?.steps]);
+
+  const mergedFaqIntro = useMemo(
+    () => mergeFlat(faqIntroBase, overrides.faq?.intro),
+    [overrides.faq?.intro]
+  );
+
+  const mergedFaqItems = useMemo(() => {
+    const d = overrides.faq?.items;
+    if (!d) return faqItemsBase;
+    return faqItemsBase.map((item, i) => mergeFlat(item, d[i]));
+  }, [overrides.faq?.items]);
 
   const patchHero = useCallback((partial) => {
     setOverrides((prev) => ({
@@ -326,13 +388,49 @@ export function TemplateContentProvider({ children }) {
     });
   }, []);
 
+  const patchFaqIntro = useCallback((partial) => {
+    setOverrides((prev) => ({
+      ...prev,
+      faq: {
+        ...prev.faq,
+        intro: mergeFlat(prev.faq?.intro || {}, partial),
+      },
+    }));
+  }, []);
+
+  const patchFaqItem = useCallback((index, partial) => {
+    setOverrides((prev) => {
+      const cur = prev.faq?.items?.[index] || {};
+      return {
+        ...prev,
+        faq: {
+          ...prev.faq,
+          items: {
+            ...prev.faq?.items,
+            [index]: mergeFlat(cur, partial),
+          },
+        },
+      };
+    });
+  }, []);
+
   const resetTemplateOverrides = useCallback(() => {
     setOverrides({});
     try {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
     } catch {
       /* ignore */
     }
+  }, []);
+
+  const resetTemplateSection = useCallback((sectionKey) => {
+    setOverrides((prev) => {
+      if (!(sectionKey in prev)) return prev;
+      const next = { ...prev };
+      delete next[sectionKey];
+      return next;
+    });
   }, []);
 
   const exportOverridesJson = useCallback(() => {
@@ -348,6 +446,7 @@ export function TemplateContentProvider({ children }) {
   const value = useMemo(
     () => ({
       overrides,
+      bases,
       mergedHomeSections,
       mergedHero,
       mergedPricingIntro,
@@ -360,6 +459,8 @@ export function TemplateContentProvider({ children }) {
       mergedSalesProducts,
       mergedSystemLogicIntro,
       mergedSystemLogicSteps,
+      mergedFaqIntro,
+      mergedFaqItems,
       patchHero,
       patchHomeSectionHeader,
       patchHomeCard,
@@ -373,12 +474,16 @@ export function TemplateContentProvider({ children }) {
       patchSalesProduct,
       patchSystemLogicIntro,
       patchSystemLogicStep,
+      patchFaqIntro,
+      patchFaqItem,
       resetTemplateOverrides,
+      resetTemplateSection,
       exportOverridesJson,
       importOverridesJson,
     }),
     [
       overrides,
+      bases,
       mergedHomeSections,
       mergedHero,
       mergedPricingIntro,
@@ -391,6 +496,8 @@ export function TemplateContentProvider({ children }) {
       mergedSalesProducts,
       mergedSystemLogicIntro,
       mergedSystemLogicSteps,
+      mergedFaqIntro,
+      mergedFaqItems,
       patchHero,
       patchHomeSectionHeader,
       patchHomeCard,
@@ -404,7 +511,10 @@ export function TemplateContentProvider({ children }) {
       patchSalesProduct,
       patchSystemLogicIntro,
       patchSystemLogicStep,
+      patchFaqIntro,
+      patchFaqItem,
       resetTemplateOverrides,
+      resetTemplateSection,
       exportOverridesJson,
       importOverridesJson,
     ]

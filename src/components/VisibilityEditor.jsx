@@ -39,7 +39,7 @@ function Toggle({ label, on, onChange, hint }) {
   );
 }
 
-export default function VisibilityEditor() {
+export default function VisibilityEditor({ embedded = false }) {
   const {
     pages,
     setPageVisible,
@@ -50,68 +50,77 @@ export default function VisibilityEditor() {
   } = useVisibility();
   const { mergedHomeSections } = useTemplateContent();
 
+  const body = (
+    <div className={embedded ? '' : 'border-t border-white/10 p-3'}>
+      <p className="text-[11px] text-slate-400 mb-2">
+        Hide instead of delete. Toggles are per-browser. To bake defaults into a deploy, use{' '}
+        <code className="font-mono text-[10px] bg-black/40 px-1 rounded">VITE_HIDE_PAGES</code> and{' '}
+        <code className="font-mono text-[10px] bg-black/40 px-1 rounded">
+          VITE_HIDE_HOME_SECTIONS
+        </code>
+        .
+      </p>
+
+      <div className="mt-3">
+        <h4 className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
+          Pages
+        </h4>
+        <div className="divide-y divide-white/5">
+          {pageKeys.map((key) => (
+            <Toggle
+              key={key}
+              label={PAGE_LABELS[key] || key}
+              on={pages[key] !== false}
+              onChange={(v) => setPageVisible(key, v)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4">
+        <h4 className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
+          Home sections
+        </h4>
+        <div className="divide-y divide-white/5">
+          {mergedHomeSections.map((section) => (
+            <Toggle
+              key={section.id}
+              label={section.header?.heading || section.id}
+              hint={`#${section.id}`}
+              on={isHomeSectionVisible(section.id)}
+              onChange={(v) => setHomeSectionVisible(section.id, v)}
+            />
+          ))}
+          {HOME_BUILTIN.map((s) => (
+            <Toggle
+              key={s.id}
+              label={s.label}
+              hint={`#${s.id}`}
+              on={isHomeSectionVisible(s.id)}
+              onChange={(v) => setHomeSectionVisible(s.id, v)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={resetVisibility}
+        className="mt-4 text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-md border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10"
+      >
+        Reset all to defaults
+      </button>
+    </div>
+  );
+
+  if (embedded) return body;
+
   return (
     <details className="mb-3 rounded-lg border border-white/10 bg-slate-900/40">
       <summary className="cursor-pointer px-3 py-2 text-xs font-semibold text-slate-200">
         Show / hide pages &amp; sections
       </summary>
-      <div className="border-t border-white/10 p-3">
-        <p className="text-[11px] text-slate-400 mb-2">
-          Hide instead of delete. Toggles are per-browser. To bake defaults into a deploy,
-          use <code className="font-mono text-[10px] bg-black/40 px-1 rounded">VITE_HIDE_PAGES</code>{' '}
-          and <code className="font-mono text-[10px] bg-black/40 px-1 rounded">VITE_HIDE_HOME_SECTIONS</code>.
-        </p>
-
-        <div className="mt-3">
-          <h4 className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
-            Pages
-          </h4>
-          <div className="divide-y divide-white/5">
-            {pageKeys.map((key) => (
-              <Toggle
-                key={key}
-                label={PAGE_LABELS[key] || key}
-                on={pages[key] !== false}
-                onChange={(v) => setPageVisible(key, v)}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-4">
-          <h4 className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
-            Home sections
-          </h4>
-          <div className="divide-y divide-white/5">
-            {mergedHomeSections.map((section) => (
-              <Toggle
-                key={section.id}
-                label={section.header?.heading || section.id}
-                hint={`#${section.id}`}
-                on={isHomeSectionVisible(section.id)}
-                onChange={(v) => setHomeSectionVisible(section.id, v)}
-              />
-            ))}
-            {HOME_BUILTIN.map((s) => (
-              <Toggle
-                key={s.id}
-                label={s.label}
-                hint={`#${s.id}`}
-                on={isHomeSectionVisible(s.id)}
-                onChange={(v) => setHomeSectionVisible(s.id, v)}
-              />
-            ))}
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={resetVisibility}
-          className="mt-4 text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-md border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10"
-        >
-          Reset all to defaults
-        </button>
-      </div>
+      {body}
     </details>
   );
 }

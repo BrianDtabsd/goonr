@@ -4,7 +4,7 @@ Guidance for cloud agents working in this repository.
 
 ## Product
 
-**GAQO** (Global Air Quality Observatory) / ShopSite — a React + Vite multi-page marketing and commerce site with studio theming, page visibility controls, and optional Stripe Embedded Checkout.
+**ShopSite** — a React + Vite multi-page marketing and commerce template with studio theming, page visibility controls, and optional Stripe Embedded Checkout. Default copy is generic placeholder content meant to be replaced per client.
 
 ## Commands
 

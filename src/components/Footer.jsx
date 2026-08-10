@@ -1,10 +1,10 @@
 import React from 'react';
 import Button from './Button';
-import { getSiteMeta } from '../config/siteMeta';
+import { useSiteMeta } from '../hooks/useSiteMeta';
 import { useVisibility } from '../hooks/useVisibility';
 
 export default function Footer() {
-  const { brandName, footerBlurb } = getSiteMeta();
+  const { brandName, footerBlurb } = useSiteMeta();
   const { isPageVisible } = useVisibility();
 
   return (

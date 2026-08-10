@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
 import { TemplateContentProvider } from './hooks/useTemplateContent';
+import { SiteMetaProvider } from './hooks/useSiteMeta';
 import { VisibilityProvider, useVisibility } from './hooks/useVisibility';
 import { StripeEmbeddedCheckoutProvider } from './context/StripeEmbeddedCheckoutContext';
 import Layout from './components/Layout';
@@ -42,14 +43,16 @@ function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
-        <TemplateContentProvider>
-          <VisibilityProvider>
-            <StripeEmbeddedCheckoutProvider>
-              <AppRoutes />
-              <SettingsPanel />
-            </StripeEmbeddedCheckoutProvider>
-          </VisibilityProvider>
-        </TemplateContentProvider>
+        <SiteMetaProvider>
+          <TemplateContentProvider>
+            <VisibilityProvider>
+              <StripeEmbeddedCheckoutProvider>
+                <AppRoutes />
+                <SettingsPanel />
+              </StripeEmbeddedCheckoutProvider>
+            </VisibilityProvider>
+          </TemplateContentProvider>
+        </SiteMetaProvider>
       </BrowserRouter>
     </ThemeProvider>
   );

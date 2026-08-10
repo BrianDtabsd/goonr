@@ -15,13 +15,13 @@ No test framework is configured.
 
 ## Architecture
 
-**GAQO** (Global Air Quality Observatory) is a single-page marketing/landing site for an environmental monitoring platform.
+**ShopSite** is a React + Vite multi-page marketing and commerce template with studio theming, page visibility controls, and optional Stripe Embedded Checkout.
 
-**Stack:** React 18 + Vite + Tailwind CSS. No routing library — navigation is hash-based anchor links (`#features`, `#pricing`, etc.).
+**Stack:** React 18 + Vite + Tailwind CSS + react-router-dom.
 
-**Entry flow:** `main.jsx` → `App.jsx` → section components rendered sequentially. `App.jsx` sets up the global background (gradient + SVG grid pattern) and calls `useScrollReveal()`.
+**Entry flow:** `main.jsx` → `App.jsx` → providers (theme, template content, visibility, Stripe) → routes via `Layout` (Header + Hero + Outlet + Footer). Studio gear mounts `SettingsPanel` when studio mode is on.
 
-**Components** (`src/components/`) are self-contained page sections. Each renders its own eyebrow label, heading, description, and content grid. All data is hardcoded inside the component files — no external data fetching is active.
+**Components** (`src/components/`) are self-contained page sections. Marketing copy lives in `src/content/*.js` and can be overridden live via Studio (localStorage). Brand defaults live in `src/config/siteMeta.js`.
 
 **Animation system:** CSS classes (`anim-trigger`, `anim-fade-up`, `anim-line`, `anim-wrap`) defined in `src/index.css` trigger via the `useScrollReveal` hook (`src/hooks/useScrollReveal.js`), which uses IntersectionObserver to add `.is-visible` at 15% threshold. Respects `prefers-reduced-motion`. Stagger delays are set via inline `transitionDelay` style props.
 

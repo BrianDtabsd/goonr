@@ -1,7 +1,9 @@
 import React from 'react';
-import { faqIntro, faqItems } from '../content/faq';
+import { useTemplateContent } from '../hooks/useTemplateContent';
 
 export default function FAQ() {
+  const { mergedFaqIntro: faqIntro, mergedFaqItems: faqItems } = useTemplateContent();
+
   return (
     <section
       id="faq"

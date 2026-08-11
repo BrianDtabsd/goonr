@@ -333,13 +333,13 @@ body::before {
 }
 
 .site-header-slot {
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  /* Flush top — Foundation-style bar (Glass uses the same chrome now) */
-  padding: 0 var(--shell-inset);
+  /* Content inset only — no outer frame gutter */
+  padding: 0.75rem var(--shell-inset) 0;
   pointer-events: none;
 }
 
@@ -348,46 +348,62 @@ body::before {
 }
 
 /*
- * Opaque occlusion under the sticky bar so scrolled copy disappears
- * into the page canvas / frost color.
+ * Full-viewport occlusion under the nav: scrolling copy is clipped visually
+ * before it reaches the bar. Theme-matched via frost / canvas tokens.
  */
 .site-header-mask {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: 0;
-  height: calc(var(--header-offset) + 1.35rem);
+  height: calc(var(--header-offset) + 1rem);
   background: linear-gradient(
     180deg,
-    var(--ds-color-canvas) 0%,
-    var(--ds-color-canvas) 82%,
-    color-mix(in srgb, var(--ds-color-canvas) 55%, transparent) 94%,
-    transparent 100%
+    rgba(var(--frost-rgb), 1) 0%,
+    rgba(var(--frost-rgb), 0.98) 78%,
+    rgba(var(--frost-rgb), 0.85) 90%,
+    rgba(var(--frost-rgb), 0) 100%
   );
   pointer-events: none;
   z-index: 0;
 }
 
-.site-header-slot.is-scrolled .site-header-mask {
-  height: calc(var(--header-offset) + 1.75rem);
+.site-header-mask--container {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(var(--header-offset) + 1rem);
+  border-radius: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(var(--frost-rgb), 1) 0%,
+    rgba(var(--frost-rgb), 0.98) 80%,
+    rgba(var(--frost-rgb), 0.7) 92%,
+    rgba(var(--frost-rgb), 0) 100%
+  );
 }
 
-/* Flat editorial nav — shared by Glass + Foundation (no floating glass pill) */
-.site-nav {
+.site-header-slot .glass-nav {
+  background-color: var(--nav-surface);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.site-header-slot.is-scrolled .glass-nav {
+  background-color: rgba(var(--frost-rgb), 0.96);
+}
+
+.site-header-slot.is-scrolled .site-header-mask,
+.site-header-slot.is-scrolled .site-header-mask--container {
+  height: calc(var(--header-offset) + 1.35rem);
+}
+
+.glass-nav--docked {
+  border-radius: 1rem;
   width: 100%;
-  background-color: var(--ds-color-canvas);
-  border: none;
-  border-bottom: 1px solid var(--ds-color-line);
-  border-radius: 0;
-  box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 
-/* Legacy class kept for any residual references */
-.glass-nav--docked,
 .glass-nav--floating {
-  border-radius: 0;
+  border-radius: 1rem;
   width: 100%;
 }
 
@@ -437,6 +453,40 @@ html[data-surface='foundation'] .glass-card .bg-slate-100 {
   background-color: var(--ds-color-surface-subtle) !important;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+}
+
+html[data-surface='foundation'] .glass-nav {
+  background-color: var(--ds-color-canvas) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  border-bottom: 1px solid var(--ds-color-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+html[data-surface='foundation'] .glass-nav--docked {
+  border-radius: 0;
+}
+
+html[data-surface='foundation'] .site-header-slot {
+  padding-top: 0;
+}
+
+html[data-surface='foundation'] .site-header-mask,
+html[data-surface='foundation'] .site-header-mask--container {
+  background: linear-gradient(
+    180deg,
+    var(--ds-color-canvas) 0%,
+    var(--ds-color-canvas) 85%,
+    transparent 100%
+  );
+}
+
+html[data-surface='foundation'] .site-header-slot .glass-nav,
+html[data-surface='foundation'] .site-header-slot.is-scrolled .glass-nav {
+  background-color: var(--ds-color-canvas);
+  box-shadow: none;
 }
 
 html[data-surface='foundation'] .card-subtitle,
@@ -753,8 +803,7 @@ html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundat
   width: 100%;
   height: 100vh;
   height: 100dvh;
-  max-height: 100vh;
-  max-height: 100dvh;
+  min-height: 100vh;
   align-items: stretch;
   overflow: hidden;
 }
@@ -774,8 +823,7 @@ html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundat
   min-width: 0;
   height: 100%;
   min-height: 0;
-  overflow-x: clip;
-  overflow-y: auto;
+  overflow: auto;
   position: relative;
   transition: width 0.15s ease;
 }

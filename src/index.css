@@ -171,7 +171,7 @@ html[data-serif-scope='none'] .font-display {
       box-shadow 0.35s ease;
     padding: var(--card-padding);
     border: 1px solid rgba(255, 255, 255, var(--card-border-opacity));
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, calc(0.35 * var(--card-opacity)));
   }
 
   .glass-card.glass-card--content-shell {
@@ -180,7 +180,7 @@ html[data-serif-scope='none'] .font-display {
 
   .glass-card.glass-card--radius-24 {
     border-radius: 1.5rem;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, calc(0.4 * var(--card-opacity)));
   }
 
   .glass-card.glass-card--radius-24::before {
@@ -189,7 +189,7 @@ html[data-serif-scope='none'] .font-display {
 
   .glass-card.glass-card--radius-22 {
     border-radius: 1.375rem;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, calc(0.4 * var(--card-opacity)));
   }
 
   .glass-card.glass-card--radius-22::before {
@@ -239,7 +239,7 @@ html[data-serif-scope='none'] .font-display {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
-  opacity: calc(var(--card-opacity) * 0.9 + 0.15);
+  opacity: var(--card-opacity);
   transition: opacity 0.35s ease, background 0.35s ease;
   z-index: 10;
 }

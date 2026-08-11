@@ -117,10 +117,12 @@ function applyGlassTheme(root, theme) {
   const colors = preset[mode];
   const page = (theme.pageColor || '').trim() || colors.canvas;
   const accent = theme.primaryColor || colors.accent;
-  const strength = Math.min(1, Math.max(0, Number(theme.panelStrength) || 0.48));
-  const blurPx = `${Math.round(8 + strength * 36)}px`;
-  const panelOpacity = 0.22 + strength * 0.5;
-  const navOpacity = Math.min(0.92, panelOpacity + 0.18);
+  const strength = Math.min(1, Math.max(0, Number(theme.panelStrength) ?? 0.48));
+  // Cards can go fully clear (0) so type floats with no panel behind it.
+  const panelOpacity = strength;
+  const blurPx = strength <= 0.02 ? '0px' : `${Math.round(8 + strength * 36)}px`;
+  // Nav stays readable even when cards are cleared.
+  const navOpacity = Math.min(0.92, Math.max(0.55, 0.4 + strength * 0.45));
   const panelRgb = hexToRgb(colors.surface);
   const isCards = theme.layoutMode === 'cards';
 
@@ -139,18 +141,21 @@ function applyGlassTheme(root, theme) {
   root.style.setProperty('--page-canvas', page);
   root.style.setProperty('--primary-color', accent);
   root.style.setProperty('--frost-rgb', panelRgb);
-  root.style.setProperty('--frost-level', blurPx);
+  root.style.setProperty('--frost-level', blurPx === '0px' ? '16px' : blurPx);
   root.style.setProperty('--transparency-level', String(panelOpacity));
   root.style.setProperty('--nav-surface', `rgba(${panelRgb}, ${navOpacity})`);
 
   root.style.setProperty('--card-padding', theme.cardPadding);
   root.style.setProperty('--card-radius', theme.cardRadius);
   root.style.setProperty('--card-opacity', isCards ? String(panelOpacity) : '0');
-  root.style.setProperty('--card-border-opacity', isCards ? '0.16' : '0');
+  root.style.setProperty(
+    '--card-border-opacity',
+    isCards ? String(panelOpacity * 0.18) : '0'
+  );
   root.style.setProperty('--card-frost', isCards ? blurPx : '0px');
   root.style.setProperty(
     '--container-opacity',
-    !isCards ? String(Math.min(0.88, Math.max(0.4, panelOpacity + 0.15))) : '0'
+    !isCards ? String(Math.min(0.88, Math.max(0, panelOpacity))) : '0'
   );
   root.style.setProperty('--container-frost', !isCards ? blurPx : '0px');
   root.style.setProperty('--container-border-opacity', '0');

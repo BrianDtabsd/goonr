@@ -242,15 +242,15 @@ export default function LookEditor() {
               Panel strength
             </label>
             <div className="flex justify-between mb-1 text-[11px]">
-              <span className="text-slate-400">Lighter</span>
+              <span className="text-slate-400">Clear / floating type</span>
               <span className="text-slate-300">
                 {Math.round((theme.panelStrength ?? 0.48) * 100)}%
               </span>
-              <span className="text-slate-400">Heavier</span>
+              <span className="text-slate-400">Solid panels</span>
             </div>
             <input
               type="range"
-              min="0.15"
+              min="0"
               max="1"
               step="0.05"
               value={theme.panelStrength ?? 0.48}
@@ -260,7 +260,7 @@ export default function LookEditor() {
               className="w-full accent-blue-500"
             />
             <p className="mt-1 text-[10px] text-slate-500">
-              One control for glass blur + opacity on cards and nav.
+              Drag left to fade cards away so type floats on the page. Nav stays put.
             </p>
           </div>
 

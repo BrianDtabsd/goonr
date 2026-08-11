@@ -265,7 +265,8 @@ html[data-serif-scope='none'] .font-display {
 html,
 body {
   overscroll-behavior-y: none;
-  overflow-x: hidden;
+  /* clip avoids creating a scrollport (hidden forces overflow-y to auto and breaks sticky) */
+  overflow-x: clip;
 }
 
 html {
@@ -337,8 +338,8 @@ body::before {
   left: 0;
   right: 0;
   z-index: 50;
-  /* Content inset only — no outer frame gutter */
-  padding: 0.75rem var(--shell-inset) 0;
+  /* Flush top — Foundation-style bar (Glass uses the same chrome now) */
+  padding: 0 var(--shell-inset);
   pointer-events: none;
 }
 
@@ -347,8 +348,8 @@ body::before {
 }
 
 /*
- * Theme-matched occlusion under the nav: scrolling copy disappears
- * into the same frost/canvas color as the page surface.
+ * Opaque occlusion under the sticky bar so scrolled copy disappears
+ * into the page canvas / frost color.
  */
 .site-header-mask {
   position: absolute;
@@ -358,52 +359,35 @@ body::before {
   height: calc(var(--header-offset) + 1.35rem);
   background: linear-gradient(
     180deg,
-    rgba(var(--frost-rgb), 1) 0%,
-    rgba(var(--frost-rgb), 0.98) 70%,
-    rgba(var(--frost-rgb), 0.78) 88%,
-    rgba(var(--frost-rgb), 0) 100%
+    var(--ds-color-canvas) 0%,
+    var(--ds-color-canvas) 82%,
+    color-mix(in srgb, var(--ds-color-canvas) 55%, transparent) 94%,
+    transparent 100%
   );
   pointer-events: none;
   z-index: 0;
 }
 
-.site-header-mask--container {
-  left: 0;
-  right: 0;
-  top: 0;
-  height: calc(var(--header-offset) + 1.35rem);
-  border-radius: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(var(--frost-rgb), 1) 0%,
-    rgba(var(--frost-rgb), 0.98) 74%,
-    rgba(var(--frost-rgb), 0.72) 90%,
-    rgba(var(--frost-rgb), 0) 100%
-  );
-}
-
-.site-header-slot .glass-nav {
-  background-color: var(--nav-surface);
-  transition: background-color 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.site-header-slot.is-scrolled .glass-nav {
-  background-color: rgba(var(--frost-rgb), 0.96);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-}
-
-.site-header-slot.is-scrolled .site-header-mask,
-.site-header-slot.is-scrolled .site-header-mask--container {
+.site-header-slot.is-scrolled .site-header-mask {
   height: calc(var(--header-offset) + 1.75rem);
 }
 
-.glass-nav--docked {
-  border-radius: 1rem;
+/* Flat editorial nav — shared by Glass + Foundation (no floating glass pill) */
+.site-nav {
   width: 100%;
+  background-color: var(--ds-color-canvas);
+  border: none;
+  border-bottom: 1px solid var(--ds-color-line);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
+/* Legacy class kept for any residual references */
+.glass-nav--docked,
 .glass-nav--floating {
-  border-radius: 1rem;
+  border-radius: 0;
   width: 100%;
 }
 
@@ -451,43 +435,6 @@ html[data-surface='foundation'] .glass-card .bg-white,
 html[data-surface='foundation'] .glass-card .bg-slate-50,
 html[data-surface='foundation'] .glass-card .bg-slate-100 {
   background-color: var(--ds-color-surface-subtle) !important;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-html[data-surface='foundation'] .glass-nav {
-  background-color: var(--ds-color-canvas) !important;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border: none;
-  border-bottom: 1px solid var(--ds-color-line);
-  border-radius: 0;
-  box-shadow: none;
-}
-
-html[data-surface='foundation'] .glass-nav--docked {
-  border-radius: 0;
-}
-
-html[data-surface='foundation'] .site-header-slot {
-  padding-top: 0;
-}
-
-html[data-surface='foundation'] .site-header-mask,
-html[data-surface='foundation'] .site-header-mask--container {
-  background: linear-gradient(
-    180deg,
-    var(--ds-color-canvas) 0%,
-    var(--ds-color-canvas) 82%,
-    color-mix(in srgb, var(--ds-color-canvas) 55%, transparent) 94%,
-    transparent 100%
-  );
-}
-
-html[data-surface='foundation'] .site-header-slot .glass-nav,
-html[data-surface='foundation'] .site-header-slot.is-scrolled .glass-nav {
-  background-color: var(--ds-color-canvas);
-  box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
@@ -660,37 +607,34 @@ html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundat
   margin-top: 0.1rem;
 }
 
-/* Color Consciousness diagonal pastels */
+/* Color Consciousness diagonal pastels — three parallel bands */
 .hero-visual--stripes .hero-visual__stripe {
   position: absolute;
-  left: -18%;
-  bottom: -10%;
-  width: 42%;
-  height: 145%;
+  left: -22%;
+  bottom: -18%;
+  width: 11.5%;
+  height: 160%;
   transform-origin: bottom left;
-  transform: rotate(-28deg);
-  opacity: 0.9;
+  transform: rotate(-32deg);
+  opacity: 0.88;
   animation: hero-stripe-in 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .hero-visual--stripes .hero-visual__stripe--a {
   background: var(--hero-stripe-a, #c4b5ce);
-  left: -14%;
-  width: 14%;
+  left: -18%;
   animation-delay: 0.05s;
 }
 
 .hero-visual--stripes .hero-visual__stripe--b {
   background: var(--hero-stripe-b, #7a9eab);
-  left: -2%;
-  width: 14%;
+  left: -4%;
   animation-delay: 0.14s;
 }
 
 .hero-visual--stripes .hero-visual__stripe--c {
   background: var(--hero-stripe-c, #8fa890);
   left: 10%;
-  width: 14%;
   animation-delay: 0.23s;
 }
 
@@ -751,11 +695,11 @@ html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundat
 @keyframes hero-stripe-in {
   from {
     opacity: 0;
-    transform: rotate(-28deg) translate3d(-12%, 8%, 0);
+    transform: rotate(-32deg) translate3d(-12%, 8%, 0);
   }
   to {
-    opacity: 0.9;
-    transform: rotate(-28deg);
+    opacity: 0.88;
+    transform: rotate(-32deg);
   }
 }
 
@@ -783,22 +727,20 @@ html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundat
   }
 
   .hero-visual--stripes .hero-visual__stripe {
-    width: 48%;
-    left: -22%;
+    width: 13%;
+    height: 155%;
   }
 
   .hero-visual--stripes .hero-visual__stripe--a {
-    width: 16%;
+    left: -20%;
   }
 
   .hero-visual--stripes .hero-visual__stripe--b {
-    left: -4%;
-    width: 16%;
+    left: -5%;
   }
 
   .hero-visual--stripes .hero-visual__stripe--c {
     left: 10%;
-    width: 16%;
   }
 }
 
@@ -809,8 +751,12 @@ html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundat
 .studio-split {
   display: flex;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
   align-items: stretch;
+  overflow: hidden;
 }
 
 .studio-split.is-dragging {
@@ -826,8 +772,10 @@ html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundat
 .studio-site-pane {
   flex: 1 1 auto;
   min-width: 0;
-  min-height: 100vh;
-  overflow: auto;
+  height: 100%;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
   position: relative;
   transition: width 0.15s ease;
 }

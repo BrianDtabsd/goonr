@@ -115,7 +115,7 @@ function applyGlassTheme(root, theme) {
   root.style.setProperty('--nav-border-color', theme.navOutlineColor);
 
   // Clear Foundation token aliases used by components
-  root.style.setProperty('--ds-color-canvas', '#0a0a0b');
+  root.style.setProperty('--ds-color-canvas', `rgb(${theme.frostColor})`);
   root.style.setProperty('--ds-color-surface', `rgba(${theme.frostColor}, ${surfaceOpacity})`);
   root.style.setProperty('--ds-color-ink', typo.headingColor);
   root.style.setProperty('--ds-color-ink-muted', typo.subtitleColor);
@@ -124,6 +124,9 @@ function applyGlassTheme(root, theme) {
   root.style.setProperty('--ds-color-accent-hover', theme.primaryColor);
   root.style.setProperty('--ds-button-ink', theme.primaryColor);
   root.style.setProperty('--ds-button-ink-text', '#ffffff');
+  root.style.setProperty('--hero-stripe-a', theme.primaryColor);
+  root.style.setProperty('--hero-stripe-b', theme.primaryColor);
+  root.style.setProperty('--hero-stripe-c', theme.primaryColor);
 }
 
 function applyFoundationTheme(root, theme) {
@@ -171,6 +174,20 @@ function applyFoundationTheme(root, theme) {
   root.style.setProperty('--nav-surface', colors.canvas);
   root.style.setProperty('--nav-border-width', '1px');
   root.style.setProperty('--nav-border-color', colors.line);
+
+  // Hero stripe accents (Color Consciousness + safe fallbacks for other presets)
+  root.style.setProperty(
+    '--hero-stripe-a',
+    colors.pastelLavender || colors.accentSoft || colors.accent
+  );
+  root.style.setProperty(
+    '--hero-stripe-b',
+    colors.pastelTeal || colors.accent
+  );
+  root.style.setProperty(
+    '--hero-stripe-c',
+    colors.pastelSage || colors.accentHover || colors.accent
+  );
 }
 
 const ThemeContext = createContext();

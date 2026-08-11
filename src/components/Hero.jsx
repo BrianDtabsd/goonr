@@ -1,13 +1,58 @@
 import React from 'react';
 import Button from './Button';
 import { useTemplateContent } from '../hooks/useTemplateContent';
+import { useTheme } from '../hooks/useTheme';
+
+/** Caserunr-style accent circle + rings (theme accent). */
+function HeroCircleVisual() {
+  return (
+    <div className="hero-visual hero-visual--circle" aria-hidden="true">
+      <div className="hero-visual__ring hero-visual__ring--outer" />
+      <div className="hero-visual__ring hero-visual__ring--inner" />
+      <div className="hero-visual__blob" />
+      <div className="hero-visual__explore">
+        <span>Explore</span>
+        <iconify-icon icon="solar:arrow-down-linear" width="14" height="14"></iconify-icon>
+      </div>
+    </div>
+  );
+}
+
+/** Color Consciousness–style diagonal pastel stripes. */
+function HeroStripeVisual() {
+  return (
+    <div className="hero-visual hero-visual--stripes" aria-hidden="true">
+      <div className="hero-visual__stripe hero-visual__stripe--a" />
+      <div className="hero-visual__stripe hero-visual__stripe--b" />
+      <div className="hero-visual__stripe hero-visual__stripe--c" />
+    </div>
+  );
+}
 
 export default function Hero() {
   const { mergedHero: h } = useTemplateContent();
-
+  const { theme } = useTheme();
+  const isFoundation = theme.surfaceSystem === 'foundation';
+  const preset = theme.foundationPreset || 'ember';
   return (
-    <section id="system-view" className="relative min-h-[760px] lg:min-h-[820px] overflow-hidden px-6 md:px-8 lg:px-12 border-b border-transparent">
-      <div className="z-10 max-w-7xl mr-auto ml-auto pt-16 pb-28 lg:pt-24 lg:pb-32 relative">
+    <section
+      id="system-view"
+      className={`relative min-h-[760px] lg:min-h-[820px] overflow-hidden px-6 md:px-8 lg:px-12 border-b ${
+        isFoundation ? 'border-[color:var(--ds-color-line)]' : 'border-transparent'
+      }`}
+    >
+      {isFoundation ? (
+        preset === 'consciousness' ? (
+          <HeroStripeVisual />
+        ) : (
+          <HeroCircleVisual />
+        )
+      ) : (
+        /* Subtle glass orb so the hero isn’t empty in Glass mode either */
+        <div className="hero-visual hero-visual--glass-orb" aria-hidden="true" />
+      )}
+
+      <div className="z-10 max-w-7xl mr-auto ml-auto pt-10 pb-28 lg:pt-16 lg:pb-32 relative">
         <div
           className="anim-trigger is-visible max-w-[760px]"
           style={{

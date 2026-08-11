@@ -81,8 +81,7 @@ body[data-layout-mode='container'] {
 body {
   font-family: var(--font-body);
   font-size: var(--text-body-size);
-  /* Fancy layered dark field (CaseLogic-style). Optional image sits under accents. */
-  background-color: #0a0a0b;
+  background-color: var(--page-canvas, #0a0a0b);
   background-image:
     radial-gradient(
       ellipse 85% 60% at 0% 100%,
@@ -94,8 +93,17 @@ body {
       color-mix(in srgb, var(--primary-color) 10%, transparent),
       transparent 50%
     ),
-    radial-gradient(ellipse 55% 45% at 70% 20%, rgba(255, 255, 255, 0.045), transparent 55%),
-    linear-gradient(160deg, #18181b 0%, #0c0c0e 38%, #111113 72%, #0a0a0b 100%),
+    radial-gradient(
+      ellipse 55% 45% at 70% 20%,
+      color-mix(in srgb, var(--page-canvas) 70%, #ffffff 30%),
+      transparent 55%
+    ),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--page-canvas) 88%, #ffffff 12%) 0%,
+      var(--page-canvas) 42%,
+      color-mix(in srgb, var(--page-canvas) 92%, #000000 8%) 100%
+    ),
     var(--bg-url);
   background-size: cover, cover, cover, cover, cover;
   background-position: center;
@@ -280,7 +288,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Depth veil — keeps layers readable without washing out the accent glow */
+/* Depth veil — dark Glass only (light Glass uses preset paper as-is) */
 body::before {
   content: '';
   position: fixed;
@@ -290,6 +298,10 @@ body::before {
     linear-gradient(0deg, rgba(0, 0, 0, 0.45) 0%, transparent 22%);
   z-index: -1;
   pointer-events: none;
+}
+
+html[data-surface='glass'][data-foundation-mode='light'] body::before {
+  display: none;
 }
 
 .glass-card section,

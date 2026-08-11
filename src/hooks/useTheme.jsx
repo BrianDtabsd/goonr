@@ -52,7 +52,7 @@ const typographyBundles = {
 const defaultTheme = {
   surfaceSystem: 'glass', // 'glass' | 'foundation'
   foundationMode: 'dark', // shared light/dark for Glass + Foundation presets
-  foundationPreset: 'ember', // shared 4-theme grid
+  foundationPreset: 'ember', // shared theme grid (Glass + Foundation)
 
   backgroundUrl: '',
   backgroundPattern: 'none',

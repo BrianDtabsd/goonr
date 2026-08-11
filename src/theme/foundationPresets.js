@@ -181,6 +181,51 @@ export const foundationPresets = {
       buttonInkText: '#0e1216',
     },
   },
+
+  /**
+   * Monochrome glass — charcoal field, gray frosted panels, white type,
+   * spare blue accent (status dots / studio chrome only).
+   */
+  monochrome: {
+    id: 'monochrome',
+    name: 'Monochrome',
+    blurb: 'Charcoal glass, Inter everywhere, white type, spare blue accent — no warm tints.',
+    serifScope: 'none',
+    fonts: {
+      display: 'Inter, "Helvetica Neue", Arial, sans-serif',
+      heading: 'Inter, "Helvetica Neue", Arial, sans-serif',
+      body: 'Inter, "Helvetica Neue", Arial, sans-serif',
+      label: 'Inter, "Helvetica Neue", Arial, sans-serif',
+    },
+    light: {
+      canvas: '#eceef1',
+      surface: '#ffffff',
+      surfaceSubtle: '#e2e5ea',
+      ink: '#0a0a0b',
+      inkMuted: '#5c6370',
+      inkFaint: '#8b929e',
+      line: 'rgba(10, 10, 11, 0.14)',
+      accent: '#3b82f6',
+      accentHover: '#2563eb',
+      accentSoft: '#dbeafe',
+      buttonInk: '#0a0a0b',
+      buttonInkText: '#ffffff',
+    },
+    dark: {
+      canvas: '#0a0a0b',
+      surface: '#1a1a1c',
+      surfaceSubtle: '#242428',
+      ink: '#ffffff',
+      inkMuted: '#a1a1aa',
+      inkFaint: '#71717a',
+      line: 'rgba(255, 255, 255, 0.12)',
+      accent: '#3b82f6',
+      accentHover: '#60a5fa',
+      accentSoft: '#1e3a5f',
+      buttonInk: '#ffffff',
+      buttonInkText: '#0a0a0b',
+    },
+  },
 };
 
 export const foundationPresetList = Object.values(foundationPresets);

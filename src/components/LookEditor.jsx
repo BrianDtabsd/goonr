@@ -17,23 +17,23 @@ export default function LookEditor() {
   const mode = theme.foundationMode === 'light' ? 'light' : 'dark';
 
   const accentSwatches = [
+    { label: 'Blue', hex: '#3b82f6' },
+    { label: 'Mono white', hex: '#ffffff' },
     { label: 'Ember', hex: '#e27348' },
     { label: 'Orange', hex: '#ff6b00' },
     { label: 'Mauve', hex: '#b9a4c0' },
     { label: 'Teal', hex: '#5faba4' },
     { label: 'Ink', hex: '#75b9ea' },
-    { label: 'Blue', hex: '#3b82f6' },
     { label: 'Rose', hex: '#f43f5e' },
-    { label: 'White', hex: '#ffffff' },
   ];
 
   const pageSwatches = [
+    { label: 'Mono black', hex: '#0a0a0b' },
     { label: 'Charcoal', hex: '#111111' },
     { label: 'Ink', hex: '#0e1216' },
     { label: 'Warm dark', hex: '#161513' },
     { label: 'Paper', hex: '#f3f2ee' },
     { label: 'Cream', hex: '#f5f2ea' },
-    { label: 'Black', hex: '#0a0a0b' },
   ];
 
   const setMode = (nextMode) => {
@@ -75,7 +75,7 @@ export default function LookEditor() {
           </button>
         </div>
         <p className="mt-2 text-[10px] text-slate-500 leading-relaxed">
-          Same four themes (fonts + accents) for both. Glass adds translucent panels;
+          Same themes (fonts + accents) for both. Glass adds translucent panels;
           Foundation is matte editorial paper.
         </p>
       </div>

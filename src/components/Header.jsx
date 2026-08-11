@@ -1,24 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Button from './Button';
 import { useSiteMeta } from '../hooks/useSiteMeta';
 import { useVisibility } from '../hooks/useVisibility';
 import { useTheme } from '../hooks/useTheme';
 
+function getScrollParent(node) {
+  let el = node?.parentElement;
+  while (el) {
+    const { overflowY } = getComputedStyle(el);
+    if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return window;
+}
+
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const headerRef = useRef(null);
   const { theme } = useTheme();
   const isContainer = theme.layoutMode === 'container';
   const isFoundation = theme.surfaceSystem === 'foundation';
 
   useEffect(() => {
+    const root = headerRef.current;
+    const scroller = getScrollParent(root);
+    const readY = () =>
+      scroller === window ? window.scrollY : scroller.scrollTop;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 12);
+      setIsScrolled(readY() > 12);
     };
     handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    scroller.addEventListener('scroll', handleScroll, { passive: true });
+    return () => scroller.removeEventListener('scroll', handleScroll);
   }, []);
 
   const { brandName } = useSiteMeta();
@@ -32,7 +50,11 @@ function Header() {
   ].filter((l) => l.show);
 
   return (
-    <header className="site-header-slot" data-scrolled={isScrolled ? 'true' : 'false'}>
+    <header
+      ref={headerRef}
+      className={`site-header-slot ${isScrolled ? 'is-scrolled' : ''}`}
+      data-scrolled={isScrolled ? 'true' : 'false'}
+    >
       <div
         className={`site-header-mask ${isContainer ? 'site-header-mask--container' : ''}`}
         aria-hidden="true"
@@ -45,15 +67,6 @@ function Header() {
             ${isFoundation ? 'px-0 sm:px-1 py-4' : 'px-4 sm:px-5 py-3'}
             w-full
           `}
-          style={
-            isFoundation
-              ? undefined
-              : {
-                  backgroundColor: isScrolled
-                    ? 'rgba(10, 10, 11, 0.98)'
-                    : 'rgba(14, 14, 16, 0.94)',
-                }
-          }
         >
           <Link to="/" className="flex items-center gap-3 group min-w-0 shrink-0">
             {isFoundation ? (
@@ -85,7 +98,7 @@ function Header() {
                     style={{ color: 'white' }}
                   ></iconify-icon>
                 </div>
-                <span className="font-semibold text-lg tracking-tight text-white truncate group-hover:opacity-90 transition-opacity">
+                <span className="font-semibold text-lg tracking-tight truncate group-hover:opacity-90 transition-opacity text-[color:var(--color-heading)]">
                   {brandName}
                 </span>
               </>
@@ -133,7 +146,7 @@ function Header() {
           </div>
 
           <button
-            className="md:hidden p-2 transition-colors"
+            className="md:hidden p-2 transition-colors text-[color:var(--color-heading)]"
             style={{ color: isFoundation ? 'var(--ds-color-ink)' : undefined }}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             type="button"
@@ -154,7 +167,7 @@ function Header() {
           className={`
             md:hidden absolute top-full left-0 right-0 mt-2
             border p-5 transition-all duration-300 origin-top z-20
-            ${isFoundation ? 'rounded-lg' : 'rounded-2xl bg-[#121214]/98 backdrop-blur-xl border-white/10'}
+            ${isFoundation ? 'rounded-lg' : 'rounded-2xl glass-nav'}
             ${isMobileMenuOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}
           `}
           style={
@@ -181,7 +194,9 @@ function Header() {
             <div
               className="h-px my-2"
               style={{
-                background: isFoundation ? 'var(--ds-color-line)' : 'rgba(255,255,255,0.1)',
+                background: isFoundation
+                  ? 'var(--ds-color-line)'
+                  : 'rgba(var(--frost-rgb), 0.2)',
               }}
             />
             {isPageVisible('checkout') ? (

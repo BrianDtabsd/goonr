@@ -89,22 +89,27 @@ function applyGlassTheme(root, theme) {
   root.style.setProperty('--transparency-level', theme.transparencyLevel);
   root.style.setProperty('--primary-color', theme.primaryColor);
   root.style.setProperty('--frost-rgb', theme.frostColor);
+  root.style.setProperty('--page-canvas', '#0a0a0b');
+  // Floating Cards: keep glass readable so frost tint + blur are visible.
+  // Global Container: denser shell so the page field stays quiet.
+  const isCards = theme.layoutMode === 'cards';
+  const surfaceOpacity = isCards
+    ? Math.min(0.72, Math.max(0.12, theme.transparencyLevel))
+    : theme.transparencyLevel;
   root.style.setProperty(
     '--nav-surface',
-    `rgba(${theme.frostColor}, ${Math.min(0.96, Math.max(0.72, theme.transparencyLevel + 0.1))})`
+    `rgba(${theme.frostColor}, ${Math.min(0.94, Math.max(0.55, surfaceOpacity + 0.12))})`
   );
 
   root.style.setProperty('--card-padding', theme.cardPadding);
   root.style.setProperty('--card-radius', theme.cardRadius);
 
-  const isCards = theme.layoutMode === 'cards';
-  const surfaceOpacity = theme.transparencyLevel;
   root.style.setProperty('--card-opacity', isCards ? surfaceOpacity : 0);
-  root.style.setProperty('--card-border-opacity', isCards ? 0.1 : 0);
+  root.style.setProperty('--card-border-opacity', isCards ? 0.14 : 0);
   root.style.setProperty('--card-frost', isCards ? theme.frostLevel : '0px');
   root.style.setProperty(
     '--container-opacity',
-    !isCards ? Math.min(0.88, Math.max(0.7, surfaceOpacity)) : 0
+    !isCards ? Math.min(0.88, Math.max(0.55, theme.transparencyLevel)) : 0
   );
   root.style.setProperty('--container-frost', !isCards ? theme.frostLevel : '0px');
   root.style.setProperty('--container-border-opacity', 0);
@@ -147,6 +152,7 @@ function applyFoundationTheme(root, theme) {
 
   root.style.setProperty('--primary-color', colors.accent);
   root.style.setProperty('--ds-color-canvas', colors.canvas);
+  root.style.setProperty('--page-canvas', colors.canvas);
   root.style.setProperty('--ds-color-surface', colors.surface);
   root.style.setProperty('--ds-color-surface-subtle', colors.surfaceSubtle);
   root.style.setProperty('--ds-color-ink', colors.ink);

@@ -32,6 +32,8 @@
   --nav-border-width: 1px;
   --nav-border-color: rgba(255, 255, 255, 0.08);
   --nav-surface: rgba(22, 22, 24, 0.92);
+  /* Page field behind glass — occlusion mask uses this, not frost tint */
+  --page-canvas: #0a0a0b;
 
   --ds-color-canvas: #0a0a0b;
   --ds-color-surface: #161618;
@@ -151,10 +153,14 @@ html[data-serif-scope='none'] .font-display {
   .glass-card {
     position: relative;
     background-color: rgba(var(--frost-rgb), var(--card-opacity));
-    backdrop-filter: blur(var(--card-frost));
-    -webkit-backdrop-filter: blur(var(--card-frost));
+    backdrop-filter: blur(var(--card-frost)) saturate(1.15);
+    -webkit-backdrop-filter: blur(var(--card-frost)) saturate(1.15);
     border-radius: var(--card-radius);
-    transition: all 0.7s ease-out;
+    transition:
+      background-color 0.35s ease,
+      backdrop-filter 0.35s ease,
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
     padding: var(--card-padding);
     border: 1px solid rgba(255, 255, 255, var(--card-border-opacity));
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
@@ -184,29 +190,30 @@ html[data-serif-scope='none'] .font-display {
 
   .glass-container {
     background-color: rgba(var(--frost-rgb), var(--container-opacity));
-    backdrop-filter: blur(var(--container-frost));
-    -webkit-backdrop-filter: blur(var(--container-frost));
+    backdrop-filter: blur(var(--container-frost)) saturate(1.15);
+    -webkit-backdrop-filter: blur(var(--container-frost)) saturate(1.15);
     border: none;
     border-radius: var(--shell-radius);
-    transition: background-color 0.7s ease-out, backdrop-filter 0.7s ease-out;
+    transition:
+      background-color 0.35s ease,
+      backdrop-filter 0.35s ease;
     /* Full-page surface — no gutter frame, no bottom-corner clip trap */
     box-shadow: none;
   }
 
   /*
-   * Nav is a solid docked bar (not a translucent pill content bleeds through).
-   * Shape (pill vs bar) is controlled by layout mode classes on the header.
+   * Nav glass follows frost color + frost blur slider (not a hardcoded 20px).
    */
   .glass-nav {
     background-color: var(--nav-surface);
-    backdrop-filter: blur(20px) saturate(1.2);
-    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    backdrop-filter: blur(var(--frost-level)) saturate(1.2);
+    -webkit-backdrop-filter: blur(var(--frost-level)) saturate(1.2);
     border: var(--nav-border-width) solid var(--nav-border-color);
     box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
   }
 }
 
-/* Soft edge highlight — muted so dark cards stay layered, not neon */
+/* Soft edge highlight — frost tint so color shifts read on cards */
 .glass-card::before {
   content: '';
   position: absolute;
@@ -215,8 +222,8 @@ html[data-serif-scope='none'] .font-display {
   padding: 1px;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.14) 0%,
-    rgba(255, 255, 255, 0.02) 45%,
+    rgba(var(--frost-rgb), 0.55) 0%,
+    rgba(255, 255, 255, 0.06) 45%,
     color-mix(in srgb, var(--primary-color) 28%, transparent) 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -224,8 +231,8 @@ html[data-serif-scope='none'] .font-display {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
-  opacity: calc(var(--card-opacity) * 0.85);
-  transition: opacity 0.7s ease, background 0.7s ease;
+  opacity: calc(var(--card-opacity) * 0.9 + 0.15);
+  transition: opacity 0.35s ease, background 0.35s ease;
   z-index: 10;
 }
 
@@ -348,8 +355,8 @@ body::before {
 }
 
 /*
- * Full-viewport occlusion under the nav: scrolling copy is clipped visually
- * before it reaches the bar. Theme-matched via frost / canvas tokens.
+ * Occlusion under the fixed nav — matches the page field, NOT frost tint.
+ * Frost color belongs on glass surfaces (nav bar, cards, container).
  */
 .site-header-mask {
   position: fixed;
@@ -359,10 +366,10 @@ body::before {
   height: calc(var(--header-offset) + 1rem);
   background: linear-gradient(
     180deg,
-    rgba(var(--frost-rgb), 1) 0%,
-    rgba(var(--frost-rgb), 0.98) 78%,
-    rgba(var(--frost-rgb), 0.85) 90%,
-    rgba(var(--frost-rgb), 0) 100%
+    var(--page-canvas) 0%,
+    var(--page-canvas) 78%,
+    color-mix(in srgb, var(--page-canvas) 85%, transparent) 90%,
+    transparent 100%
   );
   pointer-events: none;
   z-index: 0;
@@ -376,16 +383,21 @@ body::before {
   border-radius: 0;
   background: linear-gradient(
     180deg,
-    rgba(var(--frost-rgb), 1) 0%,
-    rgba(var(--frost-rgb), 0.98) 80%,
-    rgba(var(--frost-rgb), 0.7) 92%,
-    rgba(var(--frost-rgb), 0) 100%
+    var(--page-canvas) 0%,
+    var(--page-canvas) 80%,
+    color-mix(in srgb, var(--page-canvas) 70%, transparent) 92%,
+    transparent 100%
   );
 }
 
 .site-header-slot .glass-nav {
   background-color: var(--nav-surface);
-  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  backdrop-filter: blur(var(--frost-level)) saturate(1.2);
+  -webkit-backdrop-filter: blur(var(--frost-level)) saturate(1.2);
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease,
+    backdrop-filter 0.25s ease;
 }
 
 .site-header-slot.is-scrolled .glass-nav {

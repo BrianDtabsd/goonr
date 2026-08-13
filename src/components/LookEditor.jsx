@@ -94,6 +94,9 @@ export default function LookEditor() {
     cardPadding: '1.5rem',
     cardRadius: isFoundation ? '0.5rem' : '1.25rem',
   };
+  const surfaceBaseline = isFoundation
+    ? { panelStrength: theme.panelStrength }
+    : defaultTheme;
   const baselineChanged = (keys, defaults = defaultTheme) => keys.some((key) => (
     theme[key] !== defaults[key]
   ));
@@ -103,8 +106,12 @@ export default function LookEditor() {
     mode: false,
     layout: false,
     surface: presetOwnedChanged(['surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'])
-      || baselineChanged(['panelStrength'])
-      || baselineChanged(['cardPadding', 'cardRadius'], defaultSurfaceGeometry),
+      || baselineChanged(['panelStrength'], surfaceBaseline)
+      || (isFoundation
+        ? ['cardPadding', 'cardRadius'].some((key) => (
+          theme.customOverrides?.[key] && theme[key] !== defaultSurfaceGeometry[key]
+        ))
+        : baselineChanged(['cardPadding', 'cardRadius'], defaultSurfaceGeometry)),
     typography: baselineChanged(['typographyPreset', 'bodyTextSize']),
     colour: presetOwnedChanged(['pageColor', 'primaryColor']),
     buttons: baselineChanged(['buttonShape', 'buttonStyle', 'buttonGlow', 'buttonJump']),
@@ -191,7 +198,7 @@ export default function LookEditor() {
         <Row label="Body size">
           <Segmented value={theme.bodyTextSize} options={[['14px', '14'], ['16px', '16'], ['18px', '18']]} onChange={(bodyTextSize) => updateTheme({ bodyTextSize })} />
         </Row>
-        <Row label="Legacy type bundle">
+        <Row label="Font style">
           <select value={theme.typographyPreset} onChange={(event) => updateTheme({ typographyPreset: event.target.value })}>
             {['modern', 'elegant', 'tech'].map((value) => <option key={value} value={value}>{value}</option>)}
           </select>

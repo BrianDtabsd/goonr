@@ -860,7 +860,7 @@ export default function TemplateContentEditor({ embedded = false }) {
         <p className="text-[11px] text-slate-500 mb-3">No sections match “{query}”.</p>
       ) : null}
 
-      <div className="space-y-2 rounded-lg border border-white/10 bg-slate-900/40 p-3 sticky bottom-0">
+      <div className="space-y-2 rounded-lg border border-white/10 bg-slate-900 p-3 sticky bottom-0">
         <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
           Backup &amp; reset
         </p>

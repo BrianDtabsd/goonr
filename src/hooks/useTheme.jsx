@@ -119,6 +119,7 @@ const CUSTOMIZABLE_KEYS = new Set([
   'cardPadding',
   'cardRadius',
   'bodyTextSize',
+  'typographyPreset',
 ]);
 
 const FOUNDATION_SURFACE_DEFAULTS = {
@@ -204,10 +205,24 @@ function themeValue(theme, key, fallback) {
   return theme.customOverrides?.[key] ? theme[key] : fallback;
 }
 
+function resolveFonts(theme, preset) {
+  const bundle = theme.customOverrides?.typographyPreset
+    ? typographyBundles[theme.typographyPreset]
+    : null;
+  if (!bundle) return preset.fonts;
+  return {
+    display: bundle.headingFont,
+    heading: bundle.headingFont,
+    body: bundle.bodyFont,
+    label: bundle.bodyFont,
+  };
+}
+
 function applyGlassTheme(root, theme) {
   const preset = resolvePreset(theme);
   const mode = resolveMode(theme);
   const colors = preset[mode];
+  const fonts = resolveFonts(theme, preset);
   const page = (theme.pageColor || '').trim() || colors.canvas;
   const accent = theme.primaryColor || colors.accent;
   const panelStrength = Number(theme.panelStrength);
@@ -241,10 +256,10 @@ function applyGlassTheme(root, theme) {
   const bg = (theme.backgroundUrl || '').trim();
   root.style.setProperty('--bg-url', bg ? `url('${bg}')` : 'none');
 
-  root.style.setProperty('--font-display', preset.fonts.display);
-  root.style.setProperty('--font-heading', preset.fonts.heading);
-  root.style.setProperty('--font-body', preset.fonts.body);
-  root.style.setProperty('--font-label', preset.fonts.label);
+  root.style.setProperty('--font-display', fonts.display);
+  root.style.setProperty('--font-heading', fonts.heading);
+  root.style.setProperty('--font-body', fonts.body);
+  root.style.setProperty('--font-label', fonts.label);
   root.style.setProperty('--color-heading', colors.ink);
   root.style.setProperty('--color-subtitle', colors.inkMuted);
   root.style.setProperty('--color-body', colors.ink);
@@ -308,6 +323,7 @@ function applyFoundationTheme(root, theme) {
   const preset = resolvePreset(theme);
   const mode = resolveMode(theme);
   const colors = preset[mode];
+  const fonts = resolveFonts(theme, preset);
   const page = (theme.pageColor || '').trim() || colors.canvas;
   const accent = theme.primaryColor || colors.accent;
   const configuredOpacity = Number(theme.surfaceOpacity);
@@ -340,10 +356,10 @@ function applyFoundationTheme(root, theme) {
   const bg = (theme.backgroundUrl || '').trim();
 
   root.style.setProperty('--bg-url', bg ? `url('${bg}')` : 'none');
-  root.style.setProperty('--font-display', preset.fonts.display);
-  root.style.setProperty('--font-heading', preset.fonts.heading);
-  root.style.setProperty('--font-body', preset.fonts.body);
-  root.style.setProperty('--font-label', preset.fonts.label);
+  root.style.setProperty('--font-display', fonts.display);
+  root.style.setProperty('--font-heading', fonts.heading);
+  root.style.setProperty('--font-body', fonts.body);
+  root.style.setProperty('--font-label', fonts.label);
   root.style.setProperty('--color-heading', colors.ink);
   root.style.setProperty('--color-subtitle', colors.inkMuted);
   root.style.setProperty('--color-body', colors.ink);
@@ -399,7 +415,12 @@ function applyFoundationTheme(root, theme) {
     theme.layoutMode === 'container' ? blurPx : '0px'
   );
   root.style.setProperty('--container-border-opacity', '0');
-  root.style.setProperty('--nav-surface', `rgba(${panelRgb}, ${navOpacity})`);
+  root.style.setProperty(
+    '--nav-surface',
+    theme.customOverrides?.navOpacity
+      ? `rgba(${panelRgb}, ${navOpacity})`
+      : colors.canvas
+  );
   root.style.setProperty('--nav-opacity', String(navOpacity));
   const navBorderWidth =
     theme.navOutline === 'none' ? '0px' : theme.navOutline === 'thin' ? '1px' : '2px';

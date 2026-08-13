@@ -94,9 +94,6 @@ export default function LookEditor() {
     cardPadding: '1.5rem',
     cardRadius: isFoundation ? '0.5rem' : '1.25rem',
   };
-  const surfaceBaseline = isFoundation
-    ? { panelStrength: theme.panelStrength }
-    : defaultTheme;
   const baselineChanged = (keys, defaults = defaultTheme) => keys.some((key) => (
     theme[key] !== defaults[key]
   ));
@@ -106,7 +103,8 @@ export default function LookEditor() {
     mode: false,
     layout: false,
     surface: presetOwnedChanged(['surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'])
-      || baselineChanged(['panelStrength'], surfaceBaseline)
+      // Quick strength is a Glass baseline; on Foundation its derived values carry the flag.
+      || (!isFoundation && baselineChanged(['panelStrength']))
       || (isFoundation
         ? ['cardPadding', 'cardRadius'].some((key) => (
           theme.customOverrides?.[key] && theme[key] !== defaultSurfaceGeometry[key]

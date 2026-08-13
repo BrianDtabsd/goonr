@@ -202,6 +202,10 @@ function SettingsPanel() {
       >
         <div className="studio-panel__header">
           <div>
+            <div className="studio-panel__eyebrow">
+              <span className="studio-panel__status" />
+              LIVE PREVIEW
+            </div>
             <h2 className="studio-panel__title">ShopSite Studio</h2>
             <p className="studio-panel__sub">Edit live · drag the edge to resize</p>
           </div>

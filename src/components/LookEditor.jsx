@@ -1,372 +1,235 @@
 import React from 'react';
-import { useTheme } from '../hooks/useTheme';
+import { defaultTheme, useTheme } from '../hooks/useTheme';
 
-/**
- * Studio Look tab — shared theme grid for Glass + Foundation.
- * Glass adds Page / Accent / Panel strength instead of the old frost toybox.
- */
+const accentSwatches = [
+  ['Blue', '#3b82f6'], ['Mono white', '#ffffff'], ['Ember', '#e27348'],
+  ['Orange', '#ff6b00'], ['Mauve', '#b9a4c0'], ['Teal', '#5faba4'],
+  ['Ink', '#75b9ea'], ['Rose', '#f43f5e'],
+];
+const pageSwatches = [
+  ['Mono black', '#0a0a0b'], ['Charcoal', '#111111'], ['Ink', '#0e1216'],
+  ['Warm dark', '#161513'], ['Paper', '#f3f2ee'], ['Cream', '#f5f2ea'],
+];
+const tintSwatches = [
+  ['Slate', '22, 22, 24'], ['Paper', '255, 255, 255'], ['Warm', '42, 35, 31'],
+  ['Ink', '20, 30, 40'], ['Mauve', '54, 46, 58'],
+];
+
+function Group({ title, children, customized, resetPresetGroup, id }) {
+  return (
+    <details className="studio-section" open>
+      <summary className="studio-section__summary">
+        <span>{title}</span>
+        <span className="studio-section__meta">
+          {customized ? <b className="studio-custom-badge">Custom</b> : null}
+          {customized ? (
+            <button type="button" className="studio-reset-link" onClick={(event) => {
+              event.preventDefault();
+              resetPresetGroup(id);
+            }}>Reset</button>
+          ) : null}
+          <span className="studio-chevron">⌄</span>
+        </span>
+      </summary>
+      <div className="studio-section__body">{children}</div>
+    </details>
+  );
+}
+
+function Row({ label, hint, children }) {
+  return (
+    <div className="studio-control-row">
+      <div className="studio-control-label">
+        <span>{label}</span>
+        {hint ? <small>{hint}</small> : null}
+      </div>
+      <div className="studio-control">{children}</div>
+    </div>
+  );
+}
+
+function Segmented({ value, options, onChange }) {
+  return (
+    <div className="studio-segmented">
+      {options.map(([option, label = option]) => (
+        <button key={option} type="button" className={value === option ? 'is-active' : ''} onClick={() => onChange(option)}>
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Swatches({ value, options, onChange }) {
+  return (
+    <div className="studio-swatches">
+      {options.map(([label, color]) => (
+        <button
+          key={label}
+          type="button"
+          title={label}
+          aria-label={label}
+          className={value === color ? 'is-active' : ''}
+          style={{ backgroundColor: color }}
+          onClick={() => onChange(color)}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function LookEditor() {
   const {
     theme,
     updateTheme,
     applyLookPreset,
+    setFoundationMode,
+    resetPresetGroup,
     resetTheme,
     foundationPresetList,
   } = useTheme();
-  const isFoundation = theme.surfaceSystem === 'foundation';
   const mode = theme.foundationMode === 'light' ? 'light' : 'dark';
-
-  const accentSwatches = [
-    { label: 'Blue', hex: '#3b82f6' },
-    { label: 'Mono white', hex: '#ffffff' },
-    { label: 'Ember', hex: '#e27348' },
-    { label: 'Orange', hex: '#ff6b00' },
-    { label: 'Mauve', hex: '#b9a4c0' },
-    { label: 'Teal', hex: '#5faba4' },
-    { label: 'Ink', hex: '#75b9ea' },
-    { label: 'Rose', hex: '#f43f5e' },
-  ];
-
-  const pageSwatches = [
-    { label: 'Mono black', hex: '#0a0a0b' },
-    { label: 'Charcoal', hex: '#111111' },
-    { label: 'Ink', hex: '#0e1216' },
-    { label: 'Warm dark', hex: '#161513' },
-    { label: 'Paper', hex: '#f3f2ee' },
-    { label: 'Cream', hex: '#f5f2ea' },
-  ];
-
-  const setMode = (nextMode) => {
-    const preset =
-      foundationPresetList.find((p) => p.id === theme.foundationPreset) ||
-      foundationPresetList[0];
-    const colors = preset[nextMode];
-    updateTheme({
-      foundationMode: nextMode,
-      primaryColor: colors.accent,
-      pageColor: colors.canvas,
-    });
+  const isFoundation = theme.surfaceSystem === 'foundation';
+  const defaultSurfaceGeometry = {
+    cardPadding: '1.5rem',
+    cardRadius: isFoundation ? '0.5rem' : '1.25rem',
   };
+  const baselineChanged = (keys, defaults = defaultTheme) => keys.some((key) => (
+    theme[key] !== defaults[key]
+  ));
+  const presetOwnedChanged = (keys) => keys.some((key) => theme.customOverrides?.[key]);
+  const groupCustomized = {
+    theme: false,
+    mode: false,
+    layout: false,
+    surface: presetOwnedChanged(['surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'])
+      // Quick strength is a Glass baseline; on Foundation its derived values carry the flag.
+      || (!isFoundation && baselineChanged(['panelStrength']))
+      || (isFoundation
+        ? ['cardPadding', 'cardRadius'].some((key) => (
+          theme.customOverrides?.[key] && theme[key] !== defaultSurfaceGeometry[key]
+        ))
+        : baselineChanged(['cardPadding', 'cardRadius'], defaultSurfaceGeometry)),
+    typography: baselineChanged(['typographyPreset', 'bodyTextSize']),
+    colour: presetOwnedChanged(['pageColor', 'primaryColor']),
+    buttons: baselineChanged(['buttonShape', 'buttonStyle', 'buttonGlow', 'buttonJump']),
+    navigation: baselineChanged(['navOutline', 'navOutlineColor']),
+    background: baselineChanged(['backgroundUrl', 'backgroundPattern']),
+  };
+  const surfaceOpacity = Number.isFinite(Number(theme.surfaceOpacity))
+    ? Number(theme.surfaceOpacity)
+    : Number(theme.panelStrength ?? 0.48);
+  const frostValue = parseFloat(theme.frostLevel) || 0;
+  const navOpacity = Number.isFinite(Number(theme.navOpacity)) ? Number(theme.navOpacity) : 0.616;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Surface
-        </label>
-        <div className="flex bg-slate-800 rounded-lg p-1">
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              !isFoundation ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
-            }`}
-            onClick={() => updateTheme({ surfaceSystem: 'glass' })}
-          >
-            Glass
-          </button>
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              isFoundation ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
-            }`}
-            onClick={() => updateTheme({ surfaceSystem: 'foundation' })}
-          >
-            Foundation
-          </button>
-        </div>
-        <p className="mt-2 text-[10px] text-slate-500 leading-relaxed">
-          Same themes (fonts + accents) for both. Glass adds translucent panels;
-          Foundation is matte editorial paper.
-        </p>
-      </div>
-
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Mode
-        </label>
-        <div className="flex bg-slate-800 rounded-lg p-1">
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              mode === 'light' ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
-            }`}
-            onClick={() => setMode('light')}
-          >
-            Light
-          </button>
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              mode === 'dark' ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
-            }`}
-            onClick={() => setMode('dark')}
-          >
-            Dark
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Theme
-        </label>
-        <div className="space-y-2">
+    <div className="studio-look">
+      <Group id="theme" title="Theme preset" customized={groupCustomized.theme} resetPresetGroup={resetPresetGroup}>
+        <div className="studio-preset-grid">
           {foundationPresetList.map((preset) => {
             const active = theme.foundationPreset === preset.id;
             const preview = preset[mode];
             return (
-              <button
-                key={preset.id}
-                type="button"
-                onClick={() => applyLookPreset(preset.id)}
-                className={`w-full text-left rounded-lg border px-3 py-2.5 transition-colors ${
-                  active
-                    ? 'border-blue-400/60 bg-blue-500/15'
-                    : 'border-white/10 bg-slate-900/40 hover:bg-white/5'
-                }`}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span
-                    className="text-sm font-semibold text-white"
-                    style={{ fontFamily: preset.fonts.display }}
-                  >
-                    {preset.name}
-                  </span>
-                  <span className="text-[9px] font-mono uppercase tracking-wider text-slate-500">
-                    serif: {preset.serifScope}
-                  </span>
-                </div>
-                <p
-                  className="mt-1 text-[11px] text-slate-400 leading-snug"
-                  style={{ fontFamily: preset.fonts.body }}
-                >
-                  {preset.blurb}
-                </p>
-                <div className="mt-2 flex gap-1.5">
-                  {[preview.canvas, preview.surface, preview.ink, preview.accent].map(
-                    (hex) => (
-                      <span
-                        key={`${preset.id}-${hex}`}
-                        className="h-3.5 w-3.5 rounded-full border border-white/20"
-                        style={{ backgroundColor: hex }}
-                        title={hex}
-                      />
-                    )
-                  )}
-                </div>
+              <button key={preset.id} type="button" onClick={() => applyLookPreset(preset.id)} className={`studio-preset ${active ? 'is-active' : ''}`}>
+                <span className="studio-preset__top">
+                  <strong style={{ fontFamily: preset.fonts.display }}>{preset.name}</strong>
+                  <small>{preset.serifScope}</small>
+                </span>
+                <span className="studio-preset__blurb">{preset.blurb}</span>
+                <span className="studio-preset__swatches">
+                  {[preview.canvas, preview.surface, preview.ink, preview.accent].map((color) => <i key={`${preset.id}-${color}`} style={{ backgroundColor: color }} />)}
+                </span>
               </button>
             );
           })}
         </div>
-      </div>
+      </Group>
 
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-          Layout Mode
-        </label>
-        <div className="flex bg-slate-800 rounded-lg p-1">
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              theme.layoutMode === 'cards' ? 'bg-blue-500 text-white' : 'hover:bg-slate-700'
-            }`}
-            onClick={() => updateTheme({ layoutMode: 'cards' })}
-          >
-            {isFoundation ? 'Cards' : 'Floating Cards'}
-          </button>
-          <button
-            type="button"
-            className={`flex-1 py-1.5 px-3 rounded-md transition-colors ${
-              theme.layoutMode === 'container'
-                ? 'bg-blue-500 text-white'
-                : 'hover:bg-slate-700'
-            }`}
-            onClick={() => updateTheme({ layoutMode: 'container' })}
-          >
-            {isFoundation ? 'Full page' : 'Global Container'}
-          </button>
-        </div>
-      </div>
+      <Group id="mode" title="Mode" customized={groupCustomized.mode} resetPresetGroup={resetPresetGroup}>
+        <Row label="Surface system">
+          <Segmented value={isFoundation ? 'foundation' : 'glass'} options={[['glass', 'Glass'], ['foundation', 'Foundation']]} onChange={(surfaceSystem) => updateTheme({ surfaceSystem })} />
+        </Row>
+        <Row label="Colour mode">
+          <Segmented value={mode} options={[['light', 'Light'], ['dark', 'Dark']]} onChange={setFoundationMode} />
+        </Row>
+      </Group>
 
-      {!isFoundation ? (
-        <>
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-              Page color
-            </label>
-            <div className="flex gap-2 flex-wrap mb-2">
-              {pageSwatches.map((color) => (
-                <button
-                  key={color.label}
-                  type="button"
-                  title={color.label}
-                  onClick={() => updateTheme({ pageColor: color.hex })}
-                  className={`w-8 h-8 rounded-full border-2 transition-transform ${
-                    theme.pageColor === color.hex
-                      ? 'border-white scale-110'
-                      : 'border-transparent hover:scale-105'
-                  }`}
-                  style={{ backgroundColor: color.hex }}
-                />
-              ))}
-            </div>
-            <p className="text-[10px] text-slate-500">
-              Background field. Picking a theme resets this to that preset&apos;s canvas.
-            </p>
+      <Group id="layout" title="Layout" customized={groupCustomized.layout} resetPresetGroup={resetPresetGroup}>
+        <Row label="Content layout" hint="How sections sit on the page">
+          <Segmented value={theme.layoutMode} options={[['cards', isFoundation ? 'Cards' : 'Floating cards'], ['container', isFoundation ? 'Full page' : 'Global container']]} onChange={(layoutMode) => updateTheme({ layoutMode })} />
+        </Row>
+      </Group>
+
+      <Group id="surface" title="Surface & depth" customized={groupCustomized.surface} resetPresetGroup={resetPresetGroup}>
+        <Row label="Quick strength" hint="Updates opacity, frost and nav together">
+          <div className="studio-range">
+            <input type="range" min="0" max="1" step="0.01" value={theme.panelStrength ?? 0.48} onChange={(event) => updateTheme({ panelStrength: Number(event.target.value) })} />
+            <output>{Math.round((theme.panelStrength ?? 0.48) * 100)}%</output>
           </div>
-
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-              Accent color
-            </label>
-            <div className="flex gap-2 flex-wrap mb-2">
-              {accentSwatches.map((color) => (
-                <button
-                  key={color.label}
-                  type="button"
-                  title={color.label}
-                  onClick={() => updateTheme({ primaryColor: color.hex })}
-                  className={`w-8 h-8 rounded-full border-2 transition-transform ${
-                    theme.primaryColor === color.hex
-                      ? 'border-white scale-110'
-                      : 'border-transparent hover:scale-105'
-                  }`}
-                  style={{ backgroundColor: color.hex }}
-                />
-              ))}
-            </div>
+        </Row>
+        <Row label="Surface opacity" hint="Card and container fill">
+          <div className="studio-range">
+            <input type="range" min="0" max="1" step="0.01" value={surfaceOpacity} onChange={(event) => updateTheme({ surfaceOpacity: Number(event.target.value) })} />
+            <output>{Math.round(surfaceOpacity * 100)}%</output>
           </div>
-
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-              Panel strength
-            </label>
-            <div className="flex justify-between mb-1 text-[11px]">
-              <span className="text-slate-400">Clear / floating type</span>
-              <span className="text-slate-300">
-                {Math.round((theme.panelStrength ?? 0.48) * 100)}%
-              </span>
-              <span className="text-slate-400">Solid panels</span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={theme.panelStrength ?? 0.48}
-              onChange={(e) =>
-                updateTheme({ panelStrength: parseFloat(e.target.value) })
-              }
-              className="w-full accent-blue-500"
-            />
-            <p className="mt-1 text-[10px] text-slate-500">
-              Drag left to fade cards away so type floats on the page. Nav stays put.
-            </p>
+        </Row>
+        <Row label="Frost" hint="Backdrop blur, independent of opacity">
+          <div className="studio-range">
+            <input type="range" min="0" max="48" step="1" value={frostValue} onChange={(event) => updateTheme({ frostLevel: `${event.target.value}px` })} />
+            <output>{Math.round(frostValue)}px</output>
           </div>
-
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-              Background URL
-            </label>
-            <input
-              type="text"
-              value={theme.backgroundUrl}
-              onChange={(e) => updateTheme({ backgroundUrl: e.target.value })}
-              onFocus={(e) => e.target.select()}
-              placeholder="Optional photo under the glass"
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
-            />
+        </Row>
+        <Row label="Nav opacity">
+          <div className="studio-range">
+            <input type="range" min="0" max="1" step="0.01" value={navOpacity} onChange={(event) => updateTheme({ navOpacity: Number(event.target.value) })} />
+            <output>{Math.round(navOpacity * 100)}%</output>
           </div>
+        </Row>
+        <Row label="Surface tint">
+          <Swatches value={theme.frostColor} options={tintSwatches} onChange={(frostColor) => updateTheme({ frostColor })} />
+        </Row>
+        <Row label="Card padding"><Segmented value={theme.cardPadding} options={[['1rem', 'S'], ['1.5rem', 'M'], ['2rem', 'L']]} onChange={(cardPadding) => updateTheme({ cardPadding })} /></Row>
+        <Row label="Card radius"><Segmented value={theme.cardRadius} options={[['0.5rem', 'S'], ['1.25rem', 'M'], ['1.5rem', 'L']]} onChange={(cardRadius) => updateTheme({ cardRadius })} /></Row>
+      </Group>
 
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-              Nav Outline
-            </label>
-            <div className="flex bg-slate-800 rounded-lg p-1">
-              {['none', 'thin', 'thick'].map((style) => (
-                <button
-                  key={style}
-                  type="button"
-                  className={`flex-1 py-1.5 px-2 rounded-md transition-colors capitalize ${
-                    theme.navOutline === style
-                      ? 'bg-blue-500 text-white'
-                      : 'hover:bg-slate-700'
-                  }`}
-                  onClick={() => updateTheme({ navOutline: style })}
-                >
-                  {style}
-                </button>
-              ))}
-            </div>
+      <Group id="typography" title="Typography" customized={groupCustomized.typography} resetPresetGroup={resetPresetGroup}>
+        <Row label="Body size">
+          <Segmented value={theme.bodyTextSize} options={[['14px', '14'], ['16px', '16'], ['18px', '18']]} onChange={(bodyTextSize) => updateTheme({ bodyTextSize })} />
+        </Row>
+        <Row label="Font style">
+          <select value={theme.typographyPreset} onChange={(event) => updateTheme({ typographyPreset: event.target.value })}>
+            {['modern', 'elegant', 'tech'].map((value) => <option key={value} value={value}>{value}</option>)}
+          </select>
+        </Row>
+      </Group>
+
+      <Group id="colour" title="Colour" customized={groupCustomized.colour} resetPresetGroup={resetPresetGroup}>
+        <Row label="Page colour"><Swatches value={theme.pageColor} options={pageSwatches} onChange={(pageColor) => updateTheme({ pageColor })} /></Row>
+        <Row label="Accent"><Swatches value={theme.primaryColor} options={accentSwatches} onChange={(primaryColor) => updateTheme({ primaryColor })} /></Row>
+      </Group>
+
+      <Group id="buttons" title="Buttons" customized={groupCustomized.buttons} resetPresetGroup={resetPresetGroup}>
+        <Row label="Shape"><Segmented value={theme.buttonShape} options={['pill', 'rounded', 'sharp'].map((value) => [value])} onChange={(buttonShape) => updateTheme({ buttonShape })} /></Row>
+        <Row label="Style"><Segmented value={theme.buttonStyle} options={['filled', 'outline', 'empty'].map((value) => [value])} onChange={(buttonStyle) => updateTheme({ buttonStyle })} /></Row>
+        <Row label="Interaction">
+          <div className="studio-checks">
+            <label><input type="checkbox" checked={theme.buttonGlow} onChange={(event) => updateTheme({ buttonGlow: event.target.checked })} /> Glow</label>
+            <label><input type="checkbox" checked={theme.buttonJump} onChange={(event) => updateTheme({ buttonJump: event.target.checked })} /> Jump</label>
           </div>
+        </Row>
+      </Group>
 
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-              Button Style
-            </label>
-            <div className="flex bg-slate-800 rounded-lg p-1 mb-2">
-              {['pill', 'rounded', 'sharp'].map((shape) => (
-                <button
-                  key={shape}
-                  type="button"
-                  className={`flex-1 py-1.5 px-2 rounded-md transition-colors capitalize ${
-                    theme.buttonShape === shape
-                      ? 'bg-blue-500 text-white'
-                      : 'hover:bg-slate-700'
-                  }`}
-                  onClick={() => updateTheme({ buttonShape: shape })}
-                >
-                  {shape}
-                </button>
-              ))}
-            </div>
-            <div className="flex bg-slate-800 rounded-lg p-1 mb-3">
-              {['filled', 'outline', 'empty'].map((style) => (
-                <button
-                  key={style}
-                  type="button"
-                  className={`flex-1 py-1.5 px-2 rounded-md transition-colors capitalize ${
-                    theme.buttonStyle === style
-                      ? 'bg-blue-500 text-white'
-                      : 'hover:bg-slate-700'
-                  }`}
-                  onClick={() => updateTheme({ buttonStyle: style })}
-                >
-                  {style}
-                </button>
-              ))}
-            </div>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={theme.buttonGlow}
-                  onChange={(e) => updateTheme({ buttonGlow: e.target.checked })}
-                  className="rounded bg-slate-800 border-slate-700 text-blue-500 focus:ring-blue-500"
-                />
-                <span>Glow on click</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={theme.buttonJump}
-                  onChange={(e) => updateTheme({ buttonJump: e.target.checked })}
-                  className="rounded bg-slate-800 border-slate-700 text-blue-500 focus:ring-blue-500"
-                />
-                <span>Jump on hover</span>
-              </label>
-            </div>
-          </div>
-        </>
-      ) : null}
+      <Group id="navigation" title="Navigation" customized={groupCustomized.navigation} resetPresetGroup={resetPresetGroup}>
+        <Row label="Outline"><Segmented value={theme.navOutline} options={['none', 'thin', 'thick'].map((value) => [value])} onChange={(navOutline) => updateTheme({ navOutline })} /></Row>
+        <Row label="Outline colour"><input type="text" value={theme.navOutlineColor} onChange={(event) => updateTheme({ navOutlineColor: event.target.value })} /></Row>
+      </Group>
 
-      <button
-        type="button"
-        onClick={() => {
-          if (window.confirm('Reset Look to defaults?')) resetTheme();
-        }}
-        className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-[11px] uppercase tracking-wider text-slate-200 hover:bg-white/10"
-      >
+      <Group id="background" title="Background" customized={groupCustomized.background} resetPresetGroup={resetPresetGroup}>
+        <Row label="Image URL"><input type="text" value={theme.backgroundUrl} onChange={(event) => updateTheme({ backgroundUrl: event.target.value })} placeholder="Optional image URL" /></Row>
+        <Row label="Pattern"><Segmented value={theme.backgroundPattern} options={[['none', 'None'], ['mesh', 'Mesh']]} onChange={(backgroundPattern) => updateTheme({ backgroundPattern })} /></Row>
+      </Group>
+
+      <button type="button" className="studio-reset-all" onClick={() => { if (window.confirm('Reset Look to defaults?')) resetTheme(); }}>
         Restore look defaults
       </button>
     </div>

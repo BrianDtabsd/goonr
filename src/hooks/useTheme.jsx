@@ -86,14 +86,37 @@ const defaultTheme = {
 
 const PRESET_GROUP_KEYS = {
   theme: ['foundationPreset'],
-  mode: ['foundationMode'],
-  layout: ['layoutMode'],
+  mode: [],
+  layout: [],
   surface: ['panelStrength', 'surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'],
-  typography: ['typographyPreset', 'bodyTextSize'],
+  typography: [],
   colour: ['pageColor', 'primaryColor'],
-  buttons: ['buttonShape', 'buttonStyle', 'buttonGlow', 'buttonJump'],
-  navigation: ['navOutline', 'navOutlineColor'],
-  background: ['backgroundUrl', 'backgroundPattern', 'cardPadding', 'cardRadius'],
+  buttons: [],
+  navigation: [],
+  background: [],
+};
+
+const PRESET_OWNED_KEYS = new Set([
+  'foundationPreset',
+  'pageColor',
+  'primaryColor',
+  'frostColor',
+  'surfaceOpacity',
+  'frostLevel',
+  'navOpacity',
+]);
+
+const CUSTOMIZABLE_KEYS = new Set([
+  ...PRESET_OWNED_KEYS,
+  'cardPadding',
+  'cardRadius',
+  'bodyTextSize',
+]);
+
+const FOUNDATION_SURFACE_DEFAULTS = {
+  cardPadding: '1.5rem',
+  cardRadius: '0.5rem',
+  bodyTextSize: '16px',
 };
 
 function deriveSurfaceValues(strength) {
@@ -130,20 +153,24 @@ function loadTheme() {
     const parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== 'object') return { ...defaultTheme };
     const merged = { ...defaultTheme, ...parsed };
+    const legacySurfaceKeysWereLive = sourceKey !== 'shopsite-theme-v4';
     const strength = Number(parsed.panelStrength);
     const safeStrength = Math.min(
       1,
       Math.max(0, Number.isFinite(strength) ? strength : defaultTheme.panelStrength)
     );
     const derivedBlur = safeStrength <= 0.02 ? '0px' : `${Math.round(8 + safeStrength * 36)}px`;
-    if (parsed.surfaceOpacity == null) {
+    if (parsed.surfaceOpacity == null || !legacySurfaceKeysWereLive) {
       const legacyOpacity = Number(parsed.transparencyLevel);
       merged.surfaceOpacity = Number.isFinite(legacyOpacity)
+        && legacySurfaceKeysWereLive
         ? Math.min(1, Math.max(0, legacyOpacity))
         : safeStrength;
     }
-    if (parsed.frostLevel == null) merged.frostLevel = derivedBlur;
-    if (parsed.frostColor == null) {
+    if (parsed.frostLevel == null || !legacySurfaceKeysWereLive) {
+      merged.frostLevel = derivedBlur;
+    }
+    if (parsed.frostColor == null || !legacySurfaceKeysWereLive) {
       const preset = foundationPresets[parsed.foundationPreset] || foundationPresets.ember;
       const mode = parsed.foundationMode === 'light' ? 'light' : 'dark';
       merged.frostColor = hexToRgb(preset[mode].surface);
@@ -163,6 +190,10 @@ function resolvePreset(theme) {
 
 function resolveMode(theme) {
   return theme.foundationMode === 'light' ? 'light' : 'dark';
+}
+
+function themeValue(theme, key, fallback) {
+  return theme.customOverrides?.[key] ? theme[key] : fallback;
 }
 
 function applyGlassTheme(root, theme) {
@@ -296,7 +327,10 @@ function applyFoundationTheme(root, theme) {
   root.style.setProperty('--color-heading', colors.ink);
   root.style.setProperty('--color-subtitle', colors.inkMuted);
   root.style.setProperty('--color-body', colors.ink);
-  root.style.setProperty('--text-body-size', theme.bodyTextSize || '16px');
+  root.style.setProperty(
+    '--text-body-size',
+    themeValue(theme, 'bodyTextSize', FOUNDATION_SURFACE_DEFAULTS.bodyTextSize)
+  );
 
   root.style.setProperty('--primary-color', accent);
   root.style.setProperty('--ds-color-canvas', page);
@@ -328,8 +362,14 @@ function applyFoundationTheme(root, theme) {
     '--card-frost',
     theme.layoutMode === 'cards' ? blurPx : '0px'
   );
-  root.style.setProperty('--card-padding', theme.cardPadding);
-  root.style.setProperty('--card-radius', theme.cardRadius);
+  root.style.setProperty(
+    '--card-padding',
+    themeValue(theme, 'cardPadding', FOUNDATION_SURFACE_DEFAULTS.cardPadding)
+  );
+  root.style.setProperty(
+    '--card-radius',
+    themeValue(theme, 'cardRadius', FOUNDATION_SURFACE_DEFAULTS.cardRadius)
+  );
   root.style.setProperty(
     '--container-opacity',
     theme.layoutMode === 'container' ? String(panelOpacity) : '0'
@@ -401,28 +441,36 @@ export function ThemeProvider({ children }) {
       const customOverrides = { ...(prev.customOverrides || {}) };
       if (options.track !== false) {
         Object.keys(next).forEach((key) => {
-          if (key !== 'customOverrides') customOverrides[key] = true;
+          if (CUSTOMIZABLE_KEYS.has(key)) customOverrides[key] = true;
         });
       }
       return { ...prev, ...next, customOverrides };
     });
   }, []);
 
+  const applyPresetValues = useCallback((prev, presetId, mode = resolveMode(prev)) => {
+    const preset = foundationPresets[presetId] || foundationPresets.ember;
+    const values = presetThemeValues(preset, mode, prev.surfaceSystem);
+    const customOverrides = prev.customOverrides || {};
+    const next = { ...prev, foundationPreset: preset.id };
+    Object.entries(values).forEach(([key, value]) => {
+      if (!customOverrides[key] || key === 'foundationPreset') next[key] = value;
+    });
+    return next;
+  }, []);
+
   const applyLookPreset = useCallback((presetId) => {
     setTheme((prev) => {
-      const preset = foundationPresets[presetId] || foundationPresets.ember;
-      const mode = prev.foundationMode === 'light' ? 'light' : 'dark';
-      const values = presetThemeValues(preset, mode, prev.surfaceSystem);
-      const customOverrides = prev.customOverrides || {};
-      const next = { ...prev, foundationPreset: preset.id };
-      Object.entries(values).forEach(([key, value]) => {
-        if (!customOverrides[key] || key === 'foundationPreset') next[key] = value;
-      });
-      return {
-        ...next,
-      };
+      return applyPresetValues(prev, presetId);
     });
-  }, []);
+  }, [applyPresetValues]);
+
+  const setFoundationMode = useCallback((mode) => {
+    setTheme((prev) => {
+      const next = { ...prev, foundationMode: mode };
+      return applyPresetValues(next, prev.foundationPreset, mode);
+    });
+  }, [applyPresetValues]);
 
   const resetPresetGroup = useCallback((group) => {
     setTheme((prev) => {
@@ -434,7 +482,7 @@ export function ThemeProvider({ children }) {
       const next = { ...prev };
       keys.forEach((key) => {
         delete customOverrides[key];
-        if (values[key] !== undefined) next[key] = values[key];
+        next[key] = values[key] !== undefined ? values[key] : defaultTheme[key];
       });
       next.customOverrides = customOverrides;
       return next;
@@ -456,6 +504,7 @@ export function ThemeProvider({ children }) {
         theme,
         updateTheme,
         applyLookPreset,
+        setFoundationMode,
         resetPresetGroup,
         resetTheme,
         typographyBundles,

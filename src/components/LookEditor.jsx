@@ -3,14 +3,14 @@ import { useTheme } from '../hooks/useTheme';
 
 const GROUP_KEYS = {
   theme: ['foundationPreset'],
-  mode: ['foundationMode', 'surfaceSystem'],
-  layout: ['layoutMode'],
+  mode: [],
+  layout: [],
   surface: ['panelStrength', 'surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'],
-  typography: ['typographyPreset', 'bodyTextSize'],
+  typography: [],
   colour: ['pageColor', 'primaryColor'],
-  buttons: ['buttonShape', 'buttonStyle', 'buttonGlow', 'buttonJump'],
-  navigation: ['navOutline', 'navOutlineColor'],
-  background: ['backgroundUrl', 'backgroundPattern', 'cardPadding', 'cardRadius'],
+  buttons: [],
+  navigation: [],
+  background: [],
 };
 
 const accentSwatches = [
@@ -96,6 +96,7 @@ export default function LookEditor() {
     theme,
     updateTheme,
     applyLookPreset,
+    setFoundationMode,
     resetPresetGroup,
     resetTheme,
     foundationPresetList,
@@ -136,7 +137,7 @@ export default function LookEditor() {
           <Segmented value={isFoundation ? 'foundation' : 'glass'} options={[['glass', 'Glass'], ['foundation', 'Foundation']]} onChange={(surfaceSystem) => updateTheme({ surfaceSystem })} />
         </Row>
         <Row label="Colour mode">
-          <Segmented value={mode} options={[['light', 'Light'], ['dark', 'Dark']]} onChange={(foundationMode) => updateTheme({ foundationMode })} />
+          <Segmented value={mode} options={[['light', 'Light'], ['dark', 'Dark']]} onChange={setFoundationMode} />
         </Row>
       </Group>
 

@@ -4,7 +4,8 @@ import {
   foundationPresetList,
 } from '../theme/foundationPresets';
 
-const THEME_STORAGE_KEY = 'shopsite-theme-v4';
+const THEME_STORAGE_KEY = 'shopsite-theme-v5';
+const LEGACY_THEME_KEYS = ['shopsite-theme-v4', 'shopsite-theme-v3', 'shopsite-theme-v2'];
 
 function hexToRgb(hex) {
   if (!hex || typeof hex !== 'string') return '22, 22, 24';
@@ -60,13 +61,15 @@ const defaultTheme = {
 
   /** Page field color — empty means use the active preset canvas */
   pageColor: '',
-  /** 0–1: glass panel weight (blur + opacity together) */
+  /** 0–1 quick control that updates shared surface values together */
   panelStrength: 0.48,
+  surfaceOpacity: 0.48,
+  navOpacity: 0.616,
   primaryColor: '#e27348',
 
-  // Kept for older saves / button chrome; not primary Glass Look controls
-  frostLevel: '20px',
+  // Kept as migration aliases for older saves.
   transparencyLevel: 0.55,
+  frostLevel: '25px',
   frostColor: '25, 25, 27',
   typographyPreset: 'modern',
   bodyTextSize: '16px',
@@ -82,20 +85,36 @@ const defaultTheme = {
 
 function loadTheme() {
   try {
-    const raw =
-      localStorage.getItem(THEME_STORAGE_KEY) ||
-      localStorage.getItem('shopsite-theme-v3') ||
-      localStorage.getItem('shopsite-theme-v2');
+    const sourceKey = [THEME_STORAGE_KEY, ...LEGACY_THEME_KEYS].find((key) =>
+      localStorage.getItem(key)
+    );
+    const raw = sourceKey ? localStorage.getItem(sourceKey) : null;
     if (!raw) return { ...defaultTheme };
     const parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== 'object') return { ...defaultTheme };
     const merged = { ...defaultTheme, ...parsed };
-    // Migrate old frost sliders → panelStrength once
-    if (parsed.panelStrength == null && parsed.transparencyLevel != null) {
-      merged.panelStrength = Math.min(
-        1,
-        Math.max(0.15, Number(parsed.transparencyLevel) || 0.48)
-      );
+    const strength = Number(parsed.panelStrength);
+    const safeStrength = Math.min(
+      1,
+      Math.max(0, Number.isFinite(strength) ? strength : defaultTheme.panelStrength)
+    );
+    const derivedBlur = safeStrength <= 0.02 ? '0px' : `${Math.round(8 + safeStrength * 36)}px`;
+    if (parsed.surfaceOpacity == null) {
+      const legacyOpacity = Number(parsed.transparencyLevel);
+      merged.surfaceOpacity = Number.isFinite(legacyOpacity)
+        ? Math.min(1, Math.max(0, legacyOpacity))
+        : safeStrength;
+    }
+    if (parsed.frostLevel == null) {
+      merged.frostLevel = derivedBlur === '0px' ? '16px' : derivedBlur;
+    }
+    if (parsed.frostColor == null) {
+      const preset = foundationPresets[parsed.foundationPreset] || foundationPresets.ember;
+      const mode = parsed.foundationMode === 'light' ? 'light' : 'dark';
+      merged.frostColor = hexToRgb(preset[mode].surface);
+    }
+    if (parsed.navOpacity == null) {
+      merged.navOpacity = Math.min(0.92, Math.max(0.55, 0.4 + safeStrength * 0.45));
     }
     return merged;
   } catch {
@@ -123,11 +142,26 @@ function applyGlassTheme(root, theme) {
     Math.max(0, Number.isFinite(panelStrength) ? panelStrength : 0.48)
   );
   // Cards can go fully clear (0) so type floats with no panel behind it.
-  const panelOpacity = strength;
-  const blurPx = strength <= 0.02 ? '0px' : `${Math.round(8 + strength * 36)}px`;
-  // Nav stays readable even when cards are cleared.
-  const navOpacity = Math.min(0.92, Math.max(0.55, 0.4 + strength * 0.45));
-  const panelRgb = hexToRgb(colors.surface);
+  const configuredOpacity = Number(theme.surfaceOpacity);
+  const panelOpacity = Math.min(
+    1,
+    Math.max(0, Number.isFinite(configuredOpacity) ? configuredOpacity : strength)
+  );
+  const blurPx =
+    typeof theme.frostLevel === 'number'
+      ? `${Math.max(0, theme.frostLevel)}px`
+      : theme.frostLevel || '0px';
+  const panelRgb = theme.frostColor || hexToRgb(colors.surface);
+  const configuredNavOpacity = Number(theme.navOpacity);
+  const navOpacity = Math.min(
+    1,
+    Math.max(
+      0,
+      Number.isFinite(configuredNavOpacity)
+        ? configuredNavOpacity
+        : 0.4 + strength * 0.45
+    )
+  );
   const isCards = theme.layoutMode === 'cards';
 
   const bg = (theme.backgroundUrl || '').trim();
@@ -145,9 +179,10 @@ function applyGlassTheme(root, theme) {
   root.style.setProperty('--page-canvas', page);
   root.style.setProperty('--primary-color', accent);
   root.style.setProperty('--frost-rgb', panelRgb);
-  root.style.setProperty('--frost-level', blurPx === '0px' ? '16px' : blurPx);
+  root.style.setProperty('--frost-level', blurPx);
   root.style.setProperty('--transparency-level', String(panelOpacity));
   root.style.setProperty('--nav-surface', `rgba(${panelRgb}, ${navOpacity})`);
+  root.style.setProperty('--nav-opacity', String(navOpacity));
 
   root.style.setProperty('--card-padding', theme.cardPadding);
   root.style.setProperty('--card-radius', theme.cardRadius);
@@ -199,8 +234,26 @@ function applyFoundationTheme(root, theme) {
   const preset = resolvePreset(theme);
   const mode = resolveMode(theme);
   const colors = preset[mode];
+  const page = (theme.pageColor || '').trim() || colors.canvas;
+  const accent = theme.primaryColor || colors.accent;
+  const configuredOpacity = Number(theme.surfaceOpacity);
+  const panelOpacity = Math.min(
+    1,
+    Math.max(0, Number.isFinite(configuredOpacity) ? configuredOpacity : 1)
+  );
+  const configuredNavOpacity = Number(theme.navOpacity);
+  const navOpacity = Math.min(
+    1,
+    Math.max(0, Number.isFinite(configuredNavOpacity) ? configuredNavOpacity : 0.92)
+  );
+  const blurPx =
+    typeof theme.frostLevel === 'number'
+      ? `${Math.max(0, theme.frostLevel)}px`
+      : theme.frostLevel || '0px';
+  const panelRgb = theme.frostColor || hexToRgb(colors.surface);
+  const bg = (theme.backgroundUrl || '').trim();
 
-  root.style.setProperty('--bg-url', 'none');
+  root.style.setProperty('--bg-url', bg ? `url('${bg}')` : 'none');
   root.style.setProperty('--font-display', preset.fonts.display);
   root.style.setProperty('--font-heading', preset.fonts.heading);
   root.style.setProperty('--font-body', preset.fonts.body);
@@ -208,37 +261,55 @@ function applyFoundationTheme(root, theme) {
   root.style.setProperty('--color-heading', colors.ink);
   root.style.setProperty('--color-subtitle', colors.inkMuted);
   root.style.setProperty('--color-body', colors.ink);
-  root.style.setProperty('--text-body-size', '16px');
+  root.style.setProperty('--text-body-size', theme.bodyTextSize || '16px');
 
-  root.style.setProperty('--primary-color', colors.accent);
-  root.style.setProperty('--ds-color-canvas', colors.canvas);
-  root.style.setProperty('--page-canvas', colors.canvas);
+  root.style.setProperty('--primary-color', accent);
+  root.style.setProperty('--ds-color-canvas', page);
+  root.style.setProperty('--page-canvas', page);
   root.style.setProperty('--ds-color-surface', colors.surface);
   root.style.setProperty('--ds-color-surface-subtle', colors.surfaceSubtle);
   root.style.setProperty('--ds-color-ink', colors.ink);
   root.style.setProperty('--ds-color-ink-muted', colors.inkMuted);
   root.style.setProperty('--ds-color-ink-faint', colors.inkFaint);
   root.style.setProperty('--ds-color-line', colors.line);
-  root.style.setProperty('--ds-color-accent', colors.accent);
+  root.style.setProperty('--ds-color-accent', accent);
   root.style.setProperty('--ds-color-accent-hover', colors.accentHover);
   root.style.setProperty('--ds-color-accent-soft', colors.accentSoft);
   root.style.setProperty('--ds-button-ink', colors.buttonInk);
   root.style.setProperty('--ds-button-ink-text', colors.buttonInkText);
 
-  root.style.setProperty('--frost-level', '0px');
-  root.style.setProperty('--transparency-level', '1');
-  root.style.setProperty('--frost-rgb', '255, 255, 255');
-  root.style.setProperty('--card-opacity', '1');
-  root.style.setProperty('--card-border-opacity', '1');
-  root.style.setProperty('--card-frost', '0px');
-  root.style.setProperty('--card-padding', '1.5rem');
-  root.style.setProperty('--card-radius', '0.5rem');
-  root.style.setProperty('--container-opacity', '1');
-  root.style.setProperty('--container-frost', '0px');
+  root.style.setProperty('--frost-level', blurPx);
+  root.style.setProperty('--transparency-level', String(panelOpacity));
+  root.style.setProperty('--frost-rgb', panelRgb);
+  root.style.setProperty(
+    '--card-opacity',
+    theme.layoutMode === 'cards' ? String(panelOpacity) : '0'
+  );
+  root.style.setProperty(
+    '--card-border-opacity',
+    theme.layoutMode === 'cards' ? String(panelOpacity * 0.18) : '0'
+  );
+  root.style.setProperty(
+    '--card-frost',
+    theme.layoutMode === 'cards' ? blurPx : '0px'
+  );
+  root.style.setProperty('--card-padding', theme.cardPadding);
+  root.style.setProperty('--card-radius', theme.cardRadius);
+  root.style.setProperty(
+    '--container-opacity',
+    theme.layoutMode === 'container' ? String(panelOpacity) : '0'
+  );
+  root.style.setProperty(
+    '--container-frost',
+    theme.layoutMode === 'container' ? blurPx : '0px'
+  );
   root.style.setProperty('--container-border-opacity', '0');
-  root.style.setProperty('--nav-surface', colors.canvas);
-  root.style.setProperty('--nav-border-width', '1px');
-  root.style.setProperty('--nav-border-color', colors.line);
+  root.style.setProperty('--nav-surface', `rgba(${panelRgb}, ${navOpacity})`);
+  root.style.setProperty('--nav-opacity', String(navOpacity));
+  const navBorderWidth =
+    theme.navOutline === 'none' ? '0px' : theme.navOutline === 'thin' ? '1px' : '2px';
+  root.style.setProperty('--nav-border-width', navBorderWidth);
+  root.style.setProperty('--nav-border-color', theme.navOutlineColor || colors.line);
 
   root.style.setProperty(
     '--hero-stripe-a',

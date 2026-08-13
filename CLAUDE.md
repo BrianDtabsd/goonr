@@ -11,7 +11,7 @@ npm run preview   # Preview production build
 npm run lint      # Run ESLint
 ```
 
-No test framework is configured.
+Lint uses ESLint's flat config in `eslint.config.js` and covers the app and Worker source. No test framework is configured.
 
 ## Architecture
 

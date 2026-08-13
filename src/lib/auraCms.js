@@ -149,6 +149,7 @@ export const useAuraCMSCollection = (collectionSlug, options = {}) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { publishedOnly } = options;
 
   useEffect(() => {
     let isActive = true;
@@ -183,7 +184,7 @@ export const useAuraCMSCollection = (collectionSlug, options = {}) => {
     return () => {
       isActive = false;
     };
-  }, [collectionSlug, options.publishedOnly]);
+  }, [collectionSlug, publishedOnly]);
 
   const featuredItems = items.filter((item) => item?.featured);
 

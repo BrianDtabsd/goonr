@@ -117,7 +117,11 @@ function applyGlassTheme(root, theme) {
   const colors = preset[mode];
   const page = (theme.pageColor || '').trim() || colors.canvas;
   const accent = theme.primaryColor || colors.accent;
-  const strength = Math.min(1, Math.max(0, Number(theme.panelStrength) ?? 0.48));
+  const panelStrength = Number(theme.panelStrength);
+  const strength = Math.min(
+    1,
+    Math.max(0, Number.isFinite(panelStrength) ? panelStrength : 0.48)
+  );
   // Cards can go fully clear (0) so type floats with no panel behind it.
   const panelOpacity = strength;
   const blurPx = strength <= 0.02 ? '0px' : `${Math.round(8 + strength * 36)}px`;

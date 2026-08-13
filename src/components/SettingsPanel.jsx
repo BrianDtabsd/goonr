@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSiteMeta } from '../hooks/useSiteMeta';
 import { useStudioShell } from '../hooks/useStudioShell';
 import TemplateContentEditor, { TextField } from './TemplateContentEditor';
@@ -106,8 +106,19 @@ function BrandEditor() {
 
 function SettingsPanel() {
   const [tab, setTab] = useState('look');
-  const { isOpen, openStudio, closeStudio, panelWidth, beginResize, isDragging } =
-    useStudioShell();
+  const {
+    isOpen,
+    openStudio,
+    closeStudio,
+    panelWidth,
+    beginResize,
+    toggleSheet,
+    resizeSheet,
+    endSheetResize,
+    isSheetExpanded,
+    isDragging,
+  } = useStudioShell();
+  const sheetInteraction = useRef(null);
 
   if (!isStudioMode()) return null;
 
@@ -148,15 +159,46 @@ function SettingsPanel() {
         title="Drag to resize"
         onPointerDown={(e) => {
           e.preventDefault();
-          beginResize(e.clientX);
+          if (window.matchMedia('(max-width: 900px)').matches) {
+            sheetInteraction.current = {
+              pointerId: e.pointerId,
+              startY: e.clientY,
+              moved: false,
+            };
+            e.currentTarget.setPointerCapture(e.pointerId);
+          } else {
+            beginResize(e.clientX);
+          }
+        }}
+        onPointerMove={(e) => {
+          const interaction = sheetInteraction.current;
+          if (!interaction || interaction.pointerId !== e.pointerId) return;
+          if (Math.abs(e.clientY - interaction.startY) > 5) {
+            interaction.moved = true;
+            resizeSheet(window.innerHeight - e.clientY);
+          }
+        }}
+        onPointerUp={(e) => {
+          const interaction = sheetInteraction.current;
+          if (!interaction || interaction.pointerId !== e.pointerId) return;
+          if (!interaction.moved) toggleSheet();
+          endSheetResize();
+          sheetInteraction.current = null;
+          if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+          }
+        }}
+        onPointerCancel={() => {
+          sheetInteraction.current = null;
+          endSheetResize();
         }}
         className={`studio-resize-handle ${isDragging ? 'is-dragging' : ''}`}
       />
       <aside
         id="settings-panel"
-        className="studio-panel"
+        className={`studio-panel ${isSheetExpanded ? 'is-sheet-expanded' : ''}`}
         style={{ width: panelWidth }}
-        contentEditable="false"
+        contentEditable={false}
       >
         <div className="studio-panel__header">
           <div>

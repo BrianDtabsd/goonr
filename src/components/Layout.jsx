@@ -1,16 +1,27 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import DocumentHead from '../components/DocumentHead';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { useTheme } from '../hooks/useTheme';
+import { useScrollContainer } from '../context/ScrollContainerContext';
 
 function Layout() {
   useScrollReveal();
+  const location = useLocation();
+  const { scrollElementRef, hasScrollElement, scrollToHash } = useScrollContainer();
   const { theme } = useTheme();
   const isContainer = theme.layoutMode === 'container';
+
+  React.useEffect(() => {
+    if (!location.hash || !hasScrollElement || !scrollElementRef.current) return;
+    const timer = window.setTimeout(() => {
+      scrollToHash(location.hash, 'auto');
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [hasScrollElement, location.hash, scrollElementRef, scrollToHash]);
 
   return (
     <div className="relative min-h-screen flex flex-col overflow-x-clip">

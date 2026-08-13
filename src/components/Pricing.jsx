@@ -9,7 +9,7 @@ export default function Pricing() {
   return (
     <div
       id="pricing"
-      className="relative z-10 max-w-7xl mx-auto anim-trigger w-full scroll-mt-28"
+      className="relative z-10 max-w-7xl mx-auto anim-trigger w-full"
     >
       <div className="text-center max-w-3xl mx-auto mb-16 lg:mb-20">
         <div

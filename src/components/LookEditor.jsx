@@ -1,16 +1,18 @@
 import React from 'react';
 import { useTheme } from '../hooks/useTheme';
 
-const GROUP_KEYS = {
-  theme: ['foundationPreset'],
-  mode: [],
-  layout: [],
-  surface: ['panelStrength', 'surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'],
-  typography: [],
-  colour: ['pageColor', 'primaryColor'],
-  buttons: [],
-  navigation: [],
-  background: [],
+const DEFAULT_VALUES = {
+  panelStrength: 0.48,
+  bodyTextSize: '16px',
+  typographyPreset: 'modern',
+  buttonShape: 'rounded',
+  buttonStyle: 'filled',
+  buttonGlow: false,
+  buttonJump: true,
+  navOutline: 'thin',
+  navOutlineColor: 'rgba(255,255,255,0.08)',
+  backgroundUrl: '',
+  backgroundPattern: 'none',
 };
 
 const accentSwatches = [
@@ -27,8 +29,7 @@ const tintSwatches = [
   ['Ink', '20, 30, 40'], ['Mauve', '54, 46, 58'],
 ];
 
-function Group({ id, title, children, theme, resetPresetGroup }) {
-  const customized = (GROUP_KEYS[id] || []).some((key) => theme.customOverrides?.[key]);
+function Group({ title, children, customized, resetPresetGroup, id }) {
   return (
     <details className="studio-section" open>
       <summary className="studio-section__summary">
@@ -103,6 +104,27 @@ export default function LookEditor() {
   } = useTheme();
   const mode = theme.foundationMode === 'light' ? 'light' : 'dark';
   const isFoundation = theme.surfaceSystem === 'foundation';
+  const defaultSurfaceGeometry = {
+    cardPadding: '1.5rem',
+    cardRadius: isFoundation ? '0.5rem' : '1.25rem',
+  };
+  const baselineChanged = (keys, defaults = DEFAULT_VALUES) => keys.some((key) => (
+    theme[key] !== defaults[key]
+  ));
+  const presetOwnedChanged = (keys) => keys.some((key) => theme.customOverrides?.[key]);
+  const groupCustomized = {
+    theme: false,
+    mode: false,
+    layout: false,
+    surface: presetOwnedChanged(['surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'])
+      || baselineChanged(['panelStrength'], DEFAULT_VALUES)
+      || baselineChanged(['cardPadding', 'cardRadius'], defaultSurfaceGeometry),
+    typography: baselineChanged(['typographyPreset', 'bodyTextSize']),
+    colour: presetOwnedChanged(['pageColor', 'primaryColor']),
+    buttons: baselineChanged(['buttonShape', 'buttonStyle', 'buttonGlow', 'buttonJump']),
+    navigation: baselineChanged(['navOutline', 'navOutlineColor']),
+    background: baselineChanged(['backgroundUrl', 'backgroundPattern']),
+  };
   const surfaceOpacity = Number.isFinite(Number(theme.surfaceOpacity))
     ? Number(theme.surfaceOpacity)
     : Number(theme.panelStrength ?? 0.48);
@@ -111,7 +133,7 @@ export default function LookEditor() {
 
   return (
     <div className="studio-look">
-      <Group id="theme" title="Theme preset" theme={theme} resetPresetGroup={resetPresetGroup}>
+      <Group id="theme" title="Theme preset" customized={groupCustomized.theme} resetPresetGroup={resetPresetGroup}>
         <div className="studio-preset-grid">
           {foundationPresetList.map((preset) => {
             const active = theme.foundationPreset === preset.id;
@@ -132,7 +154,7 @@ export default function LookEditor() {
         </div>
       </Group>
 
-      <Group id="mode" title="Mode" theme={theme} resetPresetGroup={resetPresetGroup}>
+      <Group id="mode" title="Mode" customized={groupCustomized.mode} resetPresetGroup={resetPresetGroup}>
         <Row label="Surface system">
           <Segmented value={isFoundation ? 'foundation' : 'glass'} options={[['glass', 'Glass'], ['foundation', 'Foundation']]} onChange={(surfaceSystem) => updateTheme({ surfaceSystem })} />
         </Row>
@@ -141,13 +163,13 @@ export default function LookEditor() {
         </Row>
       </Group>
 
-      <Group id="layout" title="Layout" theme={theme} resetPresetGroup={resetPresetGroup}>
+      <Group id="layout" title="Layout" customized={groupCustomized.layout} resetPresetGroup={resetPresetGroup}>
         <Row label="Content layout" hint="How sections sit on the page">
           <Segmented value={theme.layoutMode} options={[['cards', isFoundation ? 'Cards' : 'Floating cards'], ['container', isFoundation ? 'Full page' : 'Global container']]} onChange={(layoutMode) => updateTheme({ layoutMode })} />
         </Row>
       </Group>
 
-      <Group id="surface" title="Surface & depth" theme={theme} resetPresetGroup={resetPresetGroup}>
+      <Group id="surface" title="Surface & depth" customized={groupCustomized.surface} resetPresetGroup={resetPresetGroup}>
         <Row label="Quick strength" hint="Updates opacity, frost and nav together">
           <div className="studio-range">
             <input type="range" min="0" max="1" step="0.01" value={theme.panelStrength ?? 0.48} onChange={(event) => updateTheme({ panelStrength: Number(event.target.value) })} />
@@ -175,9 +197,11 @@ export default function LookEditor() {
         <Row label="Surface tint">
           <Swatches value={theme.frostColor} options={tintSwatches} onChange={(frostColor) => updateTheme({ frostColor })} />
         </Row>
+        <Row label="Card padding"><Segmented value={theme.cardPadding} options={[['1rem', 'S'], ['1.5rem', 'M'], ['2rem', 'L']]} onChange={(cardPadding) => updateTheme({ cardPadding })} /></Row>
+        <Row label="Card radius"><Segmented value={theme.cardRadius} options={[['0.5rem', 'S'], ['1.25rem', 'M'], ['1.5rem', 'L']]} onChange={(cardRadius) => updateTheme({ cardRadius })} /></Row>
       </Group>
 
-      <Group id="typography" title="Typography" theme={theme} resetPresetGroup={resetPresetGroup}>
+      <Group id="typography" title="Typography" customized={groupCustomized.typography} resetPresetGroup={resetPresetGroup}>
         <Row label="Body size">
           <Segmented value={theme.bodyTextSize} options={[['14px', '14'], ['16px', '16'], ['18px', '18']]} onChange={(bodyTextSize) => updateTheme({ bodyTextSize })} />
         </Row>
@@ -188,12 +212,12 @@ export default function LookEditor() {
         </Row>
       </Group>
 
-      <Group id="colour" title="Colour" theme={theme} resetPresetGroup={resetPresetGroup}>
+      <Group id="colour" title="Colour" customized={groupCustomized.colour} resetPresetGroup={resetPresetGroup}>
         <Row label="Page colour"><Swatches value={theme.pageColor} options={pageSwatches} onChange={(pageColor) => updateTheme({ pageColor })} /></Row>
         <Row label="Accent"><Swatches value={theme.primaryColor} options={accentSwatches} onChange={(primaryColor) => updateTheme({ primaryColor })} /></Row>
       </Group>
 
-      <Group id="buttons" title="Buttons" theme={theme} resetPresetGroup={resetPresetGroup}>
+      <Group id="buttons" title="Buttons" customized={groupCustomized.buttons} resetPresetGroup={resetPresetGroup}>
         <Row label="Shape"><Segmented value={theme.buttonShape} options={['pill', 'rounded', 'sharp'].map((value) => [value])} onChange={(buttonShape) => updateTheme({ buttonShape })} /></Row>
         <Row label="Style"><Segmented value={theme.buttonStyle} options={['filled', 'outline', 'empty'].map((value) => [value])} onChange={(buttonStyle) => updateTheme({ buttonStyle })} /></Row>
         <Row label="Interaction">
@@ -204,16 +228,14 @@ export default function LookEditor() {
         </Row>
       </Group>
 
-      <Group id="navigation" title="Navigation" theme={theme} resetPresetGroup={resetPresetGroup}>
+      <Group id="navigation" title="Navigation" customized={groupCustomized.navigation} resetPresetGroup={resetPresetGroup}>
         <Row label="Outline"><Segmented value={theme.navOutline} options={['none', 'thin', 'thick'].map((value) => [value])} onChange={(navOutline) => updateTheme({ navOutline })} /></Row>
         <Row label="Outline colour"><input type="text" value={theme.navOutlineColor} onChange={(event) => updateTheme({ navOutlineColor: event.target.value })} /></Row>
       </Group>
 
-      <Group id="background" title="Background" theme={theme} resetPresetGroup={resetPresetGroup}>
+      <Group id="background" title="Background" customized={groupCustomized.background} resetPresetGroup={resetPresetGroup}>
         <Row label="Image URL"><input type="text" value={theme.backgroundUrl} onChange={(event) => updateTheme({ backgroundUrl: event.target.value })} placeholder="Optional image URL" /></Row>
         <Row label="Pattern"><Segmented value={theme.backgroundPattern} options={[['none', 'None'], ['mesh', 'Mesh']]} onChange={(backgroundPattern) => updateTheme({ backgroundPattern })} /></Row>
-        <Row label="Card padding"><Segmented value={theme.cardPadding} options={[['1rem', 'S'], ['1.5rem', 'M'], ['2rem', 'L']]} onChange={(cardPadding) => updateTheme({ cardPadding })} /></Row>
-        <Row label="Card radius"><Segmented value={theme.cardRadius} options={[['0.5rem', 'S'], ['1.25rem', 'M'], ['1.5rem', 'L']]} onChange={(cardRadius) => updateTheme({ cardRadius })} /></Row>
       </Group>
 
       <button type="button" className="studio-reset-all" onClick={() => { if (window.confirm('Reset Look to defaults?')) resetTheme(); }}>

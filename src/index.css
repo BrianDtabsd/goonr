@@ -320,6 +320,8 @@ html[data-surface='glass'][data-foundation-mode='light'] body::before {
   cursor: default;
 }
 
+[style*='--btn-glow']:hover,
+[style*='--btn-glow']:focus-visible,
 [style*='--btn-glow']:active {
   box-shadow: var(--btn-glow);
 }

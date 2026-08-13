@@ -57,11 +57,12 @@ function Button({ children, onClick, href, to, className = '', variant = 'primar
       baseClass += ' hover:-translate-y-1';
     }
 
-    if (theme.buttonGlow) {
-      const glowColor = `${theme.primaryColor}99`;
-      baseClass += ' transition-shadow';
-      styleObj['--btn-glow'] = `0 0 0 4px ${theme.primaryColor}33, 0 0 20px ${glowColor}`;
-    }
+  }
+
+  if (theme.buttonGlow) {
+    const glowColor = `${theme.primaryColor}99`;
+    baseClass += ' transition-shadow';
+    styleObj['--btn-glow'] = `0 0 0 4px ${theme.primaryColor}33, 0 0 20px ${glowColor}`;
   }
 
   const hoverHandlers = isFoundation

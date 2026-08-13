@@ -88,12 +88,20 @@ const PRESET_GROUP_KEYS = {
   theme: ['foundationPreset'],
   mode: [],
   layout: [],
-  surface: ['panelStrength', 'surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'],
-  typography: [],
+  surface: [
+    'panelStrength',
+    'surfaceOpacity',
+    'frostLevel',
+    'frostColor',
+    'navOpacity',
+    'cardPadding',
+    'cardRadius',
+  ],
+  typography: ['typographyPreset', 'bodyTextSize'],
   colour: ['pageColor', 'primaryColor'],
-  buttons: [],
-  navigation: [],
-  background: [],
+  buttons: ['buttonShape', 'buttonStyle', 'buttonGlow', 'buttonJump'],
+  navigation: ['navOutline', 'navOutlineColor'],
+  background: ['backgroundUrl', 'backgroundPattern'],
 };
 
 const PRESET_OWNED_KEYS = new Set([

@@ -50,7 +50,7 @@ const typographyBundles = {
   },
 };
 
-const defaultTheme = {
+export const defaultTheme = {
   surfaceSystem: 'glass', // 'glass' | 'foundation'
   foundationMode: 'dark', // shared light/dark for Glass + Foundation presets
   foundationPreset: 'ember', // shared theme grid (Glass + Foundation)

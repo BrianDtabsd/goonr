@@ -1,19 +1,5 @@
 import React from 'react';
-import { useTheme } from '../hooks/useTheme';
-
-const DEFAULT_VALUES = {
-  panelStrength: 0.48,
-  bodyTextSize: '16px',
-  typographyPreset: 'modern',
-  buttonShape: 'rounded',
-  buttonStyle: 'filled',
-  buttonGlow: false,
-  buttonJump: true,
-  navOutline: 'thin',
-  navOutlineColor: 'rgba(255,255,255,0.08)',
-  backgroundUrl: '',
-  backgroundPattern: 'none',
-};
+import { defaultTheme, useTheme } from '../hooks/useTheme';
 
 const accentSwatches = [
   ['Blue', '#3b82f6'], ['Mono white', '#ffffff'], ['Ember', '#e27348'],
@@ -108,7 +94,7 @@ export default function LookEditor() {
     cardPadding: '1.5rem',
     cardRadius: isFoundation ? '0.5rem' : '1.25rem',
   };
-  const baselineChanged = (keys, defaults = DEFAULT_VALUES) => keys.some((key) => (
+  const baselineChanged = (keys, defaults = defaultTheme) => keys.some((key) => (
     theme[key] !== defaults[key]
   ));
   const presetOwnedChanged = (keys) => keys.some((key) => theme.customOverrides?.[key]);
@@ -117,7 +103,7 @@ export default function LookEditor() {
     mode: false,
     layout: false,
     surface: presetOwnedChanged(['surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'])
-      || baselineChanged(['panelStrength'], DEFAULT_VALUES)
+      || baselineChanged(['panelStrength'])
       || baselineChanged(['cardPadding', 'cardRadius'], defaultSurfaceGeometry),
     typography: baselineChanged(['typographyPreset', 'bodyTextSize']),
     colour: presetOwnedChanged(['pageColor', 'primaryColor']),

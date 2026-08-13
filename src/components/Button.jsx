@@ -56,7 +56,6 @@ function Button({ children, onClick, href, to, className = '', variant = 'primar
     if (theme.buttonJump) {
       baseClass += ' hover:-translate-y-1';
     }
-
   }
 
   if (theme.buttonGlow) {

@@ -18,7 +18,7 @@
 const STRIPE_API = 'https://api.stripe.com/v1';
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     const url = new URL(request.url);
     const origin = request.headers.get('Origin') || '';
     const corsHeaders = buildCorsHeaders(origin, env);

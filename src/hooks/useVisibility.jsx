@@ -65,7 +65,7 @@ export function VisibilityProvider({ children }) {
     }
   }, [overrides]);
 
-  const env = useMemo(defaultsFromEnv, []);
+  const env = useMemo(() => defaultsFromEnv(), []);
 
   const pages = useMemo(() => {
     const merged = { ...env.pages };

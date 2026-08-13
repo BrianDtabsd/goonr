@@ -42,7 +42,9 @@ export default function SellerOnboarding() {
   );
 
   useEffect(() => {
-    if (accountId) refreshStatus(accountId);
+    if (accountId) {
+      void refreshStatus(accountId);
+    }
   }, [accountId, refreshStatus]);
 
   const createAccount = async () => {
@@ -110,12 +112,12 @@ export default function SellerOnboarding() {
           Connect Stripe to receive payouts
         </h1>
         <p className="text-slate-300 text-sm md:text-base leading-relaxed mb-8">
-          One-time setup. We'll create a Stripe Express account for this site, then send you to
+          One-time setup. We&apos;ll create a Stripe Express account for this site, then send you to
           Stripe to add bank details and verify identity. After you return, copy the{' '}
           <code className="font-mono text-xs text-slate-200 bg-black/30 px-1.5 py-0.5 rounded">
             acct_…
           </code>{' '}
-          ID below into the deploy's{' '}
+          ID below into the deploy&apos;s{' '}
           <code className="font-mono text-xs text-slate-200 bg-black/30 px-1.5 py-0.5 rounded">
             STRIPE_CONNECT_DESTINATION_ACCOUNT
           </code>
@@ -147,7 +149,7 @@ export default function SellerOnboarding() {
               <p className="font-mono text-sm text-white break-all select-all">{accountId}</p>
               <p className="text-xs text-slate-400 mt-2">
                 Paste this into <code className="text-slate-200">STRIPE_CONNECT_DESTINATION_ACCOUNT</code>{' '}
-                for this client's deploy.
+                for this client&apos;s deploy.
               </p>
             </div>
 

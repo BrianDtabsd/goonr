@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useTheme } from '../hooks/useTheme';
 import { useSiteMeta } from '../hooks/useSiteMeta';
 import { useStudioShell } from '../hooks/useStudioShell';
 import TemplateContentEditor, { TextField } from './TemplateContentEditor';

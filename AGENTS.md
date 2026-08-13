@@ -15,7 +15,7 @@ Standard scripts are in `package.json` and `CLAUDE.md`:
 | `npm run dev` | Dev server at http://localhost:5173 |
 | `npm run build` | Production build to `dist/` |
 | `npm run preview` | Serve `dist/` (default http://localhost:4173) |
-| `npm run lint` | ESLint — **currently broken**: `eslint` is not listed in `devDependencies` |
+| `npm run lint` | ESLint static analysis |
 
 No test framework is configured.
 
@@ -51,6 +51,6 @@ The app uses `react-router-dom` (not hash-only anchors). Routes include `/`, `/s
 
 **Gotcha:** `Layout` renders the `<Hero />` section on *every* route, then the page-specific component below it via `<Outlet />`. So on `/store` (and other routes) the homepage hero appears first — scroll past it to see the page content. The page is not "stuck on the homepage"; the route content renders below the hero.
 
-### Lint caveat
+### Lint
 
-`npm run lint` fails with `eslint: not found` because ESLint is referenced in scripts but not installed. Use `npm run build` as the primary static check until ESLint is added to `devDependencies`.
+`npm run lint` runs ESLint across the app and Worker source.

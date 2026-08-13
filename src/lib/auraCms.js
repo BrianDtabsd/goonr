@@ -6,6 +6,7 @@ const AURA_CMS_REQUEST_TIMEOUT_MS = 15000;
 const PLACEHOLDER_CMS_IMAGE_HOST_PATTERN = /https?:\/\/images\.example\.com\//i;
 const cmsCollectionCache = new Map();
 const cmsCollectionInflightRequests = new Map();
+const EMPTY_OPTIONS = {};
 
 const isPlaceholderCmsImageUrl = (value) =>
   typeof value === "string" && PLACEHOLDER_CMS_IMAGE_HOST_PATTERN.test(value);
@@ -145,7 +146,7 @@ export const fetchAuraCMSCollection = async (collectionSlug, options = {}) => {
   return request;
 };
 
-export const useAuraCMSCollection = (collectionSlug, options = {}) => {
+export const useAuraCMSCollection = (collectionSlug, options = EMPTY_OPTIONS) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -183,7 +184,7 @@ export const useAuraCMSCollection = (collectionSlug, options = {}) => {
     return () => {
       isActive = false;
     };
-  }, [collectionSlug, options.publishedOnly]);
+  }, [collectionSlug, options]);
 
   const featuredItems = items.filter((item) => item?.featured);
 

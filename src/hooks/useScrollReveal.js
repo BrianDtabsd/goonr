@@ -1,11 +1,21 @@
 import { useEffect } from 'react';
+import { useScrollContainer } from '../context/ScrollContainerContext';
 
 export function useScrollReveal() {
+  const { scrollElementRef, hasScrollElement } = useScrollContainer();
+
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const scrollElement = scrollElementRef.current;
+    if (
+      !hasScrollElement ||
+      !scrollElement ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return undefined;
+    }
 
     // --- Intersection Observer for Reveal Animations ---
-    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.12 };
+    const observerOptions = { root: scrollElement, rootMargin: '0px', threshold: 0.12 };
     
     const observer = new IntersectionObserver((entries, observerInstance) => {
       entries.forEach(entry => {
@@ -18,9 +28,9 @@ export function useScrollReveal() {
     }, observerOptions);
 
     const observeElements = () => {
-      document.querySelectorAll('.anim-trigger:not(.is-visible)').forEach(el => {
-        observer.observe(el);
-      });
+      scrollElement
+        .querySelectorAll('.anim-trigger:not(.is-visible)')
+        .forEach((el) => observer.observe(el));
     };
 
     // Initial check with a slight delay to ensure DOM layout is complete
@@ -30,12 +40,12 @@ export function useScrollReveal() {
       observeElements();
     });
 
-    mutationObserver.observe(document.body, { childList: true, subtree: true });
+    mutationObserver.observe(scrollElement, { childList: true, subtree: true });
 
     return () => {
       clearTimeout(timer);
       observer.disconnect();
       mutationObserver.disconnect();
     };
-  }, []);
+  }, [hasScrollElement, scrollElementRef]);
 }

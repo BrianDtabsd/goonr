@@ -6,6 +6,10 @@ import { SiteMetaProvider } from './hooks/useSiteMeta';
 import { VisibilityProvider, useVisibility } from './hooks/useVisibility';
 import { StudioShellProvider, useStudioShell } from './hooks/useStudioShell';
 import { StripeEmbeddedCheckoutProvider } from './context/StripeEmbeddedCheckoutContext';
+import {
+  ScrollContainerProvider,
+  useScrollContainer,
+} from './context/ScrollContainerContext';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Store from './pages/Store';
@@ -42,18 +46,19 @@ function AppRoutes() {
 
 function StudioSplitShell({ children }) {
   const studioEnabled = isStudioMode();
-  const { isOpen, panelWidth, isDragging } = useStudioShell();
-
-  if (!studioEnabled) {
-    return children;
-  }
+  const { isOpen, panelWidth, sheetHeight, isDragging } = useStudioShell();
+  const { setScrollElement } = useScrollContainer();
 
   return (
     <div
-      className={`studio-split ${isOpen ? 'is-open' : ''} ${isDragging ? 'is-dragging' : ''}`}
+      className={`studio-split ${studioEnabled ? '' : 'is-site-only'} ${
+        isOpen ? 'is-open' : ''
+      } ${isDragging ? 'is-dragging' : ''}`}
+      style={{ '--studio-sheet-height': `${sheetHeight}px` }}
     >
       <div
         className="studio-site-pane"
+        ref={setScrollElement}
         style={
           isOpen
             ? { width: `calc(100% - ${panelWidth}px)`, maxWidth: `calc(100% - ${panelWidth}px)` }
@@ -62,7 +67,7 @@ function StudioSplitShell({ children }) {
       >
         {children}
       </div>
-      <SettingsPanel />
+      {studioEnabled ? <SettingsPanel /> : null}
     </div>
   );
 }
@@ -76,9 +81,11 @@ function App() {
             <VisibilityProvider>
               <StudioShellProvider>
                 <StripeEmbeddedCheckoutProvider>
-                  <StudioSplitShell>
-                    <AppRoutes />
-                  </StudioSplitShell>
+                  <ScrollContainerProvider>
+                    <StudioSplitShell>
+                      <AppRoutes />
+                    </StudioSplitShell>
+                  </ScrollContainerProvider>
                 </StripeEmbeddedCheckoutProvider>
               </StudioShellProvider>
             </VisibilityProvider>

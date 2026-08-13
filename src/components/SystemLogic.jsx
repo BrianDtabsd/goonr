@@ -26,7 +26,7 @@ export default function SystemLogic() {
   };
 
   return (
-    <div id="methodology" className="relative z-10 max-w-[1360px] mx-auto w-full scroll-mt-28">
+    <div id="methodology" className="relative z-10 max-w-[1360px] mx-auto w-full">
       <div className="max-w-4xl mx-auto mb-16 lg:mb-20 text-center anim-trigger">
         <div
           className="inline-flex items-center justify-center px-4 py-2 rounded-full border border-white/10 bg-black/5 mb-6 anim-fade-up"

@@ -7,7 +7,7 @@ export default function FAQ() {
   return (
     <section
       id="faq"
-      className="scroll-mt-28 max-w-3xl mx-auto w-full anim-trigger"
+      className="max-w-3xl mx-auto w-full anim-trigger"
     >
       <div className="mb-10 lg:mb-12 text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/5 px-4 py-2 mb-6 anim-fade-up">

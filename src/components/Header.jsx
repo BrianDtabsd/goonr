@@ -1,43 +1,58 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Button from './Button';
 import { useSiteMeta } from '../hooks/useSiteMeta';
 import { useVisibility } from '../hooks/useVisibility';
 import { useTheme } from '../hooks/useTheme';
-
-function getScrollParent(node) {
-  let el = node?.parentElement;
-  while (el) {
-    const { overflowY } = getComputedStyle(el);
-    if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') {
-      return el;
-    }
-    el = el.parentElement;
-  }
-  return window;
-}
+import { useScrollContainer } from '../context/ScrollContainerContext';
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const headerRef = useRef(null);
+  const {
+    scrollElementRef,
+    hasScrollElement,
+    scrollToHash,
+    setScrollPaddingTop,
+  } = useScrollContainer();
+  const location = useLocation();
   const { theme } = useTheme();
-  const isContainer = theme.layoutMode === 'container';
   const isFoundation = theme.surfaceSystem === 'foundation';
 
   useEffect(() => {
-    const root = headerRef.current;
-    const scroller = getScrollParent(root);
-    const readY = () =>
-      scroller === window ? window.scrollY : scroller.scrollTop;
+    const scrollElement = scrollElementRef.current;
+    if (!hasScrollElement || !scrollElement) return undefined;
 
     const handleScroll = () => {
-      setIsScrolled(readY() > 12);
+      setIsScrolled(scrollElement.scrollTop > 12);
     };
     handleScroll();
-    scroller.addEventListener('scroll', handleScroll, { passive: true });
-    return () => scroller.removeEventListener('scroll', handleScroll);
-  }, []);
+    scrollElement.addEventListener('scroll', handleScroll, { passive: true });
+    return () => scrollElement.removeEventListener('scroll', handleScroll);
+  }, [hasScrollElement, scrollElementRef]);
+
+  useEffect(() => {
+    const scrollElement = scrollElementRef.current;
+    const header = headerRef.current;
+    if (!hasScrollElement || !scrollElement || !header) return undefined;
+
+    const updateScrollPadding = () => {
+      setScrollPaddingTop(header.offsetHeight);
+    };
+    updateScrollPadding();
+
+    const observer = new ResizeObserver(updateScrollPadding);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, [hasScrollElement, scrollElementRef, setScrollPaddingTop]);
+
+  const handleHashClick = (event, href) => {
+    if (!href.startsWith('/#') || location.pathname !== '/') return;
+    if (scrollToHash(href.slice(1))) {
+      event.preventDefault();
+    }
+  };
 
   const { brandName } = useSiteMeta();
   const { isPageVisible } = useVisibility();
@@ -55,11 +70,6 @@ function Header() {
       className={`site-header-slot ${isScrolled ? 'is-scrolled' : ''}`}
       data-scrolled={isScrolled ? 'true' : 'false'}
     >
-      <div
-        className={`site-header-mask ${isContainer ? 'site-header-mask--container' : ''}`}
-        aria-hidden="true"
-      />
-
       <div className="relative z-10 w-full">
         <div
           className={`
@@ -111,6 +121,7 @@ function Header() {
                 key={link.name}
                 href={link.href}
                 variant="empty"
+                onClick={(event) => handleHashClick(event, link.href)}
                 className={
                   isFoundation
                     ? '!px-3 !py-2 !normal-case !tracking-[0.1em] !font-bold !text-[11px]'
@@ -140,6 +151,7 @@ function Header() {
               href="/#pricing"
               variant="primary"
               className={isFoundation ? '' : 'text-sm !rounded-xl'}
+              onClick={(event) => handleHashClick(event, '/#pricing')}
             >
               Subscribe
             </Button>
@@ -186,7 +198,10 @@ function Header() {
                 href={link.href}
                 variant="empty"
                 className="text-lg font-medium !justify-start w-full !rounded-xl"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(event) => {
+                  handleHashClick(event, link.href);
+                  setIsMobileMenuOpen(false);
+                }}
               >
                 {link.name}
               </Button>
@@ -213,7 +228,10 @@ function Header() {
               href="/#pricing"
               variant="primary"
               className="w-full mt-2 !rounded-xl"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={(event) => {
+                handleHashClick(event, '/#pricing');
+                setIsMobileMenuOpen(false);
+              }}
             >
               Subscribe
             </Button>

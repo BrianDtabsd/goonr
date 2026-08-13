@@ -1,6 +1,7 @@
 ---
 name: testing-shopsite-scroll-studio
 description: How to browser-test the ShopSite (goonr) React+Vite app — starting the dev server, switching Studio modes, reaching the mobile ≤900px Studio bottom sheet with a real window resize, verifying the unified `.studio-site-pane` scrollport / sticky header / scroll reveals / hash navigation, A/B-ing a branch against its base for theme-migration parity, and avoiding known false-failure traps.
+description: How to browser-test the ShopSite (goonr) React+Vite app — starting the dev server, switching Studio modes, reaching the mobile ≤900px Studio bottom sheet with a real window resize, verifying the unified `.studio-site-pane` scrollport / sticky header / scroll reveals / hash navigation, and avoiding known false-failure traps.
 ---
 
 # Testing ShopSite (goonr) scroll + Studio behaviour
@@ -54,6 +55,7 @@ The theme is persisted under a versioned key (currently `shopsite-theme-v5`, wit
 **Seeding rule:** before every migration test, delete *all* theme keys (`v5`, `v4`, `v3`, `v2`), then write only the one legacy fixture you want, then reload. A stale newest-version key silently masks the fixture and makes a broken migration look fine.
 
 Seed a *realistic full* legacy object (the base branch's `defaultTheme` shape, including keys that version's code never read), not a one-key stub — migration bugs usually live in how dead keys are or aren't adopted. Different legacy versions can legitimately be treated differently (e.g. keys that were dead in v4 are re-derived, but the same keys in v3 were real controls and must be adopted verbatim), so test at least two versions: a build that treats them identically must fail one of the two.
+- Panel strength is an `<input type="range">`: click it once, then use `Home` / `End` / arrow keys for exact 0% / 100% / intermediate values instead of pixel-precise dragging.
 
 ## The scroll architecture (what to assert against)
 

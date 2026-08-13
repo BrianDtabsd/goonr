@@ -52,7 +52,6 @@
   --shell-inset: 1rem;
   --frame-inset: 0px;
   --shell-radius: 0px;
-  --header-offset: 5.25rem;
 }
 
 @media (min-width: 640px) {
@@ -284,10 +283,6 @@ body {
   overflow-x: clip;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 /* Depth veil — dark Glass only (light Glass uses preset paper as-is) */
 body::before {
   content: '';
@@ -352,30 +347,10 @@ html[data-surface='glass'][data-foundation-mode='light'] body::before {
 }
 
 .site-header-slot {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 50;
-  /* Content inset only — no outer frame gutter */
   padding: 0.75rem var(--shell-inset) 0;
-  pointer-events: none;
-}
-
-.site-header-slot > * {
-  pointer-events: auto;
-}
-
-/*
- * Occlusion under the fixed nav — matches the page field, NOT frost tint.
- * Frost color belongs on glass surfaces (nav bar, cards, container).
- */
-.site-header-mask {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: calc(var(--header-offset) + 1rem);
   background: linear-gradient(
     180deg,
     var(--page-canvas) 0%,
@@ -384,22 +359,10 @@ html[data-surface='glass'][data-foundation-mode='light'] body::before {
     transparent 100%
   );
   pointer-events: none;
-  z-index: 0;
 }
 
-.site-header-mask--container {
-  left: 0;
-  right: 0;
-  top: 0;
-  height: calc(var(--header-offset) + 1rem);
-  border-radius: 0;
-  background: linear-gradient(
-    180deg,
-    var(--page-canvas) 0%,
-    var(--page-canvas) 80%,
-    color-mix(in srgb, var(--page-canvas) 70%, transparent) 92%,
-    transparent 100%
-  );
+.site-header-slot > * {
+  pointer-events: auto;
 }
 
 .site-header-slot .glass-nav {
@@ -414,11 +377,6 @@ html[data-surface='glass'][data-foundation-mode='light'] body::before {
 
 .site-header-slot.is-scrolled .glass-nav {
   background-color: rgba(var(--frost-rgb), 0.96);
-}
-
-.site-header-slot.is-scrolled .site-header-mask,
-.site-header-slot.is-scrolled .site-header-mask--container {
-  height: calc(var(--header-offset) + 1.35rem);
 }
 
 .glass-nav--docked {
@@ -495,10 +453,6 @@ html[data-surface='foundation'] .glass-nav--docked {
 
 html[data-surface='foundation'] .site-header-slot {
   padding-top: 0;
-}
-
-html[data-surface='foundation'] .site-header-mask,
-html[data-surface='foundation'] .site-header-mask--container {
   background: linear-gradient(
     180deg,
     var(--ds-color-canvas) 0%,
@@ -848,17 +802,13 @@ html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundat
   height: 100%;
   min-height: 0;
   overflow: auto;
+  scroll-behavior: smooth;
   position: relative;
   transition: width 0.15s ease;
 }
 
 .studio-split.is-dragging .studio-site-pane {
   transition: none;
-}
-
-.studio-split.is-open .studio-site-pane {
-  /* keep fixed layers (header/ambiance) clipped to the site pane */
-  contain: paint;
 }
 
 .studio-resize-handle {
@@ -1062,35 +1012,58 @@ html[data-surface='foundation'][data-foundation-preset='consciousness'] .foundat
 
 @media (max-width: 900px) {
   .studio-split.is-open {
-    flex-direction: column;
+    display: block;
+    position: relative;
   }
 
   .studio-split.is-open .studio-site-pane {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 45vh;
+    height: 100%;
+    padding-bottom: var(--studio-sheet-height, 72px);
+    scroll-padding-bottom: var(--studio-sheet-height, 72px);
   }
 
   .studio-resize-handle {
-    flex-basis: 8px;
+    position: absolute;
+    right: 0;
+    bottom: calc(var(--studio-sheet-height, 72px) - 9px);
+    left: 0;
     width: 100%;
-    height: 8px;
-    margin-left: 0;
-    cursor: row-resize;
+    height: 18px;
+    margin: 0;
+    z-index: 91;
+    cursor: ns-resize;
   }
 
   .studio-resize-handle::after {
-    top: 3px;
+    top: 8px;
     bottom: auto;
-    left: 0;
+    left: 50%;
     right: 0;
-    width: auto;
-    height: 2px;
+    width: 48px;
+    height: 3px;
+    border-radius: 999px;
+    transform: translateX(-50%);
   }
 
   .studio-panel {
+    position: absolute;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
     width: 100% !important;
-    height: 55vh;
-    position: relative;
+    height: var(--studio-sheet-height, 72px);
+    border-top: 1px solid #27272a;
+    border-left: 0;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.45);
+    transition: height 0.2s ease;
+  }
+
+  .studio-panel:not(.is-sheet-expanded) .studio-tabs,
+  .studio-panel:not(.is-sheet-expanded) .studio-panel__body {
+    visibility: hidden;
   }
 }

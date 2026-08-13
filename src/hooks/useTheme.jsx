@@ -101,7 +101,7 @@ function deriveSurfaceValues(strength) {
   const blur = safe <= 0.02 ? '0px' : `${Math.round(8 + safe * 36)}px`;
   return {
     surfaceOpacity: safe,
-    frostLevel: blur === '0px' ? '16px' : blur,
+    frostLevel: blur,
     navOpacity: Math.min(0.92, Math.max(0.55, 0.4 + safe * 0.45)),
   };
 }
@@ -142,9 +142,7 @@ function loadTheme() {
         ? Math.min(1, Math.max(0, legacyOpacity))
         : safeStrength;
     }
-    if (parsed.frostLevel == null) {
-      merged.frostLevel = derivedBlur === '0px' ? '16px' : derivedBlur;
-    }
+    if (parsed.frostLevel == null) merged.frostLevel = derivedBlur;
     if (parsed.frostColor == null) {
       const preset = foundationPresets[parsed.foundationPreset] || foundationPresets.ember;
       const mode = parsed.foundationMode === 'light' ? 'light' : 'dark';
@@ -216,7 +214,7 @@ function applyGlassTheme(root, theme) {
   root.style.setProperty('--page-canvas', page);
   root.style.setProperty('--primary-color', accent);
   root.style.setProperty('--frost-rgb', panelRgb);
-  root.style.setProperty('--frost-level', blurPx);
+  root.style.setProperty('--frost-level', blurPx === '0px' ? '16px' : blurPx);
   root.style.setProperty('--transparency-level', String(panelOpacity));
   root.style.setProperty('--nav-surface', `rgba(${panelRgb}, ${navOpacity})`);
   root.style.setProperty('--nav-opacity', String(navOpacity));
@@ -315,7 +313,7 @@ function applyFoundationTheme(root, theme) {
   root.style.setProperty('--ds-button-ink', colors.buttonInk);
   root.style.setProperty('--ds-button-ink-text', colors.buttonInkText);
 
-  root.style.setProperty('--frost-level', blurPx);
+  root.style.setProperty('--frost-level', blurPx === '0px' ? '16px' : blurPx);
   root.style.setProperty('--transparency-level', String(panelOpacity));
   root.style.setProperty('--frost-rgb', panelRgb);
   root.style.setProperty(

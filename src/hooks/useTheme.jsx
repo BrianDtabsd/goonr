@@ -81,7 +81,44 @@ const defaultTheme = {
   buttonStyle: 'filled',
   buttonGlow: false,
   buttonJump: true,
+  customOverrides: {},
 };
+
+const PRESET_GROUP_KEYS = {
+  theme: ['foundationPreset'],
+  mode: ['foundationMode'],
+  layout: ['layoutMode'],
+  surface: ['panelStrength', 'surfaceOpacity', 'frostLevel', 'frostColor', 'navOpacity'],
+  typography: ['typographyPreset', 'bodyTextSize'],
+  colour: ['pageColor', 'primaryColor'],
+  buttons: ['buttonShape', 'buttonStyle', 'buttonGlow', 'buttonJump'],
+  navigation: ['navOutline', 'navOutlineColor'],
+  background: ['backgroundUrl', 'backgroundPattern', 'cardPadding', 'cardRadius'],
+};
+
+function deriveSurfaceValues(strength) {
+  const safe = Math.min(1, Math.max(0, Number.isFinite(Number(strength)) ? Number(strength) : 0.48));
+  const blur = safe <= 0.02 ? '0px' : `${Math.round(8 + safe * 36)}px`;
+  return {
+    surfaceOpacity: safe,
+    frostLevel: blur === '0px' ? '16px' : blur,
+    navOpacity: Math.min(0.92, Math.max(0.55, 0.4 + safe * 0.45)),
+  };
+}
+
+function presetThemeValues(preset, mode, surfaceSystem) {
+  const colors = preset[mode];
+  const surface = surfaceSystem === 'foundation'
+    ? { surfaceOpacity: 1, frostLevel: '0px', navOpacity: 0.92 }
+    : { ...deriveSurfaceValues(0.48) };
+  return {
+    foundationPreset: preset.id,
+    pageColor: colors.canvas,
+    primaryColor: colors.accent,
+    frostColor: hexToRgb(colors.surface),
+    ...surface,
+  };
+}
 
 function loadTheme() {
   try {
@@ -357,21 +394,52 @@ export function ThemeProvider({ children }) {
     document.body.dataset.surface = root.dataset.surface;
   }, [theme]);
 
-  const updateTheme = useCallback((updates) => {
-    setTheme((prev) => ({ ...prev, ...updates }));
+  const updateTheme = useCallback((updates, options = {}) => {
+    setTheme((prev) => {
+      const next = { ...updates };
+      if (updates.panelStrength != null) {
+        Object.assign(next, deriveSurfaceValues(updates.panelStrength));
+      }
+      const customOverrides = { ...(prev.customOverrides || {}) };
+      if (options.track !== false) {
+        Object.keys(next).forEach((key) => {
+          if (key !== 'customOverrides') customOverrides[key] = true;
+        });
+      }
+      return { ...prev, ...next, customOverrides };
+    });
   }, []);
 
   const applyLookPreset = useCallback((presetId) => {
     setTheme((prev) => {
       const preset = foundationPresets[presetId] || foundationPresets.ember;
       const mode = prev.foundationMode === 'light' ? 'light' : 'dark';
-      const colors = preset[mode];
+      const values = presetThemeValues(preset, mode, prev.surfaceSystem);
+      const customOverrides = prev.customOverrides || {};
+      const next = { ...prev, foundationPreset: preset.id };
+      Object.entries(values).forEach(([key, value]) => {
+        if (!customOverrides[key] || key === 'foundationPreset') next[key] = value;
+      });
       return {
-        ...prev,
-        foundationPreset: preset.id,
-        primaryColor: colors.accent,
-        pageColor: colors.canvas,
+        ...next,
       };
+    });
+  }, []);
+
+  const resetPresetGroup = useCallback((group) => {
+    setTheme((prev) => {
+      const preset = foundationPresets[prev.foundationPreset] || foundationPresets.ember;
+      const mode = prev.foundationMode === 'light' ? 'light' : 'dark';
+      const values = presetThemeValues(preset, mode, prev.surfaceSystem);
+      const keys = PRESET_GROUP_KEYS[group] || [];
+      const customOverrides = { ...(prev.customOverrides || {}) };
+      const next = { ...prev };
+      keys.forEach((key) => {
+        delete customOverrides[key];
+        if (values[key] !== undefined) next[key] = values[key];
+      });
+      next.customOverrides = customOverrides;
+      return next;
     });
   }, []);
 
@@ -390,6 +458,7 @@ export function ThemeProvider({ children }) {
         theme,
         updateTheme,
         applyLookPreset,
+        resetPresetGroup,
         resetTheme,
         typographyBundles,
         foundationPresets,

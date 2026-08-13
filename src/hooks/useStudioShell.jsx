@@ -33,6 +33,7 @@ export function StudioShellProvider({ children }) {
     }
   });
   const [isDragging, setIsDragging] = useState(false);
+  const [sheetHeight, setSheetHeight] = useState(72);
 
   const resolvedWidth = useMemo(() => {
     if (typeof window === 'undefined') return 420;
@@ -60,6 +61,15 @@ export function StudioShellProvider({ children }) {
   const openStudio = useCallback(() => setIsOpen(true), []);
   const closeStudio = useCallback(() => setIsOpen(false), []);
   const toggleStudio = useCallback(() => setIsOpen((v) => !v), []);
+  const toggleSheet = useCallback(() => {
+    setSheetHeight((height) => (height <= 100 ? Math.min(window.innerHeight * 0.82, 720) : 72));
+  }, []);
+  const resizeSheet = useCallback((height) => {
+    setIsDragging(true);
+    const max = Math.min(window.innerHeight * 0.82, 720);
+    setSheetHeight(Math.min(max, Math.max(72, height)));
+  }, []);
+  const endSheetResize = useCallback(() => setIsDragging(false), []);
 
   const beginResize = useCallback(
     (clientX) => {
@@ -91,6 +101,11 @@ export function StudioShellProvider({ children }) {
       closeStudio,
       toggleStudio,
       beginResize,
+      toggleSheet,
+      resizeSheet,
+      endSheetResize,
+      sheetHeight,
+      isSheetExpanded: sheetHeight > 100,
       setPanelWidth: (w) => setPanelWidth(clampPanelWidth(w)),
     }),
     [
@@ -101,6 +116,10 @@ export function StudioShellProvider({ children }) {
       closeStudio,
       toggleStudio,
       beginResize,
+      toggleSheet,
+      resizeSheet,
+      endSheetResize,
+      sheetHeight,
     ]
   );
 

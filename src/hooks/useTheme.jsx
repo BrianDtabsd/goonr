@@ -305,18 +305,30 @@ function applyFoundationTheme(root, theme) {
   const configuredOpacity = Number(theme.surfaceOpacity);
   const panelOpacity = Math.min(
     1,
-    Math.max(0, Number.isFinite(configuredOpacity) ? configuredOpacity : 1)
+    Math.max(
+      0,
+      Number.isFinite(configuredOpacity)
+        ? themeValue(theme, 'surfaceOpacity', 1)
+        : 1
+    )
   );
   const configuredNavOpacity = Number(theme.navOpacity);
   const navOpacity = Math.min(
     1,
-    Math.max(0, Number.isFinite(configuredNavOpacity) ? configuredNavOpacity : 0.92)
+    Math.max(
+      0,
+      Number.isFinite(configuredNavOpacity)
+        ? themeValue(theme, 'navOpacity', 0.92)
+        : 0.92
+    )
   );
-  const blurPx =
+  const configuredFrostLevel =
     typeof theme.frostLevel === 'number'
       ? `${Math.max(0, theme.frostLevel)}px`
-      : theme.frostLevel || '0px';
-  const panelRgb = theme.frostColor || hexToRgb(colors.surface);
+      : theme.frostLevel;
+  const blurPx = themeValue(theme, 'frostLevel', '0px') || configuredFrostLevel || '0px';
+  const panelRgb = themeValue(theme, 'frostColor', hexToRgb(colors.surface))
+    || hexToRgb(colors.surface);
   const bg = (theme.backgroundUrl || '').trim();
 
   root.style.setProperty('--bg-url', bg ? `url('${bg}')` : 'none');
